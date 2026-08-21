@@ -1,6 +1,6 @@
 # L1-A — Architecture Context Views
 
-**Status:** Approved L1-A baseline candidate pending repository review/merge  
+**Status:** Approved L1-A baseline  
 **Architecture authority:** DR-021 (C4 is the adopted visual architecture model) remains below Contract v1.0 and may be superseded independently.
 
 ## 1. View strategy
@@ -49,7 +49,7 @@ flowchart LR
     PSP --> CAND
     ORG --> CAND
     CAND -->|demonstrates applicable requirements| PROOF
-    PROOF -->|pass / accepted disposition| CONF
+    PROOF -->|applicable Proof satisfied| CONF
 ```
 
 ### Key interpretation
@@ -104,7 +104,7 @@ flowchart TB
     PORTAL -.->|optional Human–AI interaction surface| AEI
 
     AEI -->|governed capability contracts / bindings| PROVIDERS
-    PROVIDERS -->|authorized operations on / evidence from| TARGET
+    AEI -->|governs engineering of; invokes applicable provider operations| TARGET
     AEI -->|maintains governed engineering representation and relationships about| TARGET
 ```
 

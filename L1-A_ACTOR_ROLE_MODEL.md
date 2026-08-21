@@ -1,6 +1,6 @@
 # L1-A — Actor & Role Model
 
-**Status:** Approved L1-A baseline candidate pending repository review/merge  
+**Status:** Approved L1-A baseline  
 **Scope:** Logical participation model only. Detailed Operational Authority (OA), Decision Authority (DA), entitlements, risk controls, and Validation independence rules are designed downstream.
 
 ## 1. Core distinction

@@ -1,6 +1,6 @@
 # L1-A — System Identity & Boundary Baseline
 
-**Status:** Approved L1-A baseline candidate pending repository review/merge  
+**Status:** Approved L1-A baseline  
 **Authority:** Agentic Engineering System Contract v1.0 + Human Owner L1-A decisions  
 **Scope:** System identity, vocabulary, system boundaries, distribution/implementation distinction, conformance boundary, and adopter-facing relationship model.
 

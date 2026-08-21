@@ -1,6 +1,6 @@
 # DR-018 — Canonical Core is normative; distribution support layers and implementations conform
 
-**Status:** Adopted by Human Owner — pending repository merge  
+**Status:** Adopted  
 **Decision Date:** 2026-08-21  
 **Decision Authority:** Human Owner
 
@@ -18,7 +18,7 @@ The **Adoption Starter Pack conforms to the Canonical Core**.
 
 The **Executable / Reference Layer conforms to the Canonical Core**.
 
-An **Organization-specific AE Implementation** is a conforming operational realization of the Canonical Core using organization-specific baselines, profiles, policies, authority configuration, capability/provider bindings, and technology.
+An **Organization-specific AE Implementation** is an operational realization of the Canonical Core using organization-specific baselines, profiles, policies, authority configuration, capability/provider bindings, and technology. It may be **Candidate** while being built or assessed and becomes **Conforming** only after applicable adoption/installation Proof is demonstrated for its declared scope.
 
 The Starter Pack helps instantiate the Core. The Executable / Reference Layer proves/reference-demonstrates that the semantics can operate. Neither may independently redefine canonical semantics.
 

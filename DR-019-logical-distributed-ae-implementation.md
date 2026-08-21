@@ -1,6 +1,6 @@
 # DR-019 — Canonical AE defines a logical system boundary, not a mandatory centralized runtime
 
-**Status:** Adopted by Human Owner — pending repository merge  
+**Status:** Adopted  
 **Decision Date:** 2026-08-21  
 **Decision Authority:** Human Owner
 

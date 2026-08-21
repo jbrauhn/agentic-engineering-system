@@ -1,6 +1,6 @@
 # L1-A — Design Forces / Quality Attributes
 
-**Status:** Approved L1-A baseline candidate pending repository review/merge  
+**Status:** Approved L1-A baseline  
 **Purpose:** Provide architecture evaluation forces for downstream L1 design without silently creating new Contract requirements.
 
 ## Classification rule
