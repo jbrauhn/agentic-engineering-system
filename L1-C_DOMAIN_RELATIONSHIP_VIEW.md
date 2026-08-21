@@ -12,7 +12,7 @@ flowchart TB
     PSP["A1: Product/System Profile"]
     IMPL["A1: AE Implementation Profile"]
     BIND["A1: Capability Binding"]
-    ADVAL["A2: Installation / Adoption Validation Record"]
+    ADVAL["A2: Validation Record\ninstallation/adoption use"]
 
     BASE["A1: Product/System Baseline — L1"]
     ARCH["A1: Architecture Model"]
@@ -41,7 +41,7 @@ flowchart TB
     OEB -->|used by exact revision| IMPL
     PSP -->|used by exact revision| IMPL
     BIND -->|used by exact revision| IMPL
-    IMPL -->|evaluated by| ADVAL
+    ADVAL -->|evaluates exact adoption inputs| IMPL
     ADVAL -->|supports conformance projection| IMPL
 
     PSP -->|constituent reference| BASE
@@ -72,7 +72,7 @@ flowchart TB
     VAL -->|uses| EVID
     VAL -->|routes outcome for| LOOP
 
-    CTX -.->|derived from authoritative/provenance-bearing state| LOOP
+    CTX -.->|derived context for work in| LOOP
     HAND -->|continues| LOOP
     HAND -->|references authoritative state| PLAN
     HAND -->|references authoritative state| TASK
@@ -82,6 +82,8 @@ flowchart TB
     VAL -->|failure may produce| LEARN
     LEARN -->|informs| ADR
 ```
+
+**Installation/adoption Validation above is not an additional A2 type. It is the existing A2 Validation Record semantics applied to adoption/conformance Proof.**
 
 ## 2. Interpretation rules
 
@@ -111,8 +113,8 @@ flowchart LR
     P -->|decomposes / guides| W
     W -->|produces| E
     E -->|supports Proof Criteria| C
-    C -->|evaluated using| V
-    E -->|used by| V
+    V -->|evaluates exact revision / Proof| C
+    V -->|uses| E
     V --> R
 ```
 
