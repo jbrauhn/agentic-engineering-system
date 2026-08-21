@@ -184,6 +184,8 @@ An issued Evidence Record preserves what evidence existed and its context/proven
 
 **Why independent identity is necessary:** independent outcome judgment must identify exactly what Contract revision/Proof was judged, which evidence was used, who/what performed Validation, independence provenance, rationale, outcome, and lifecycle route.
 
+**Installation/Adoption Validation is a use/subtype of this same A2 Validation Record semantics, not an additional first-class record type.** Its target and Proof context concern the Organization-specific AE Implementation and applicable adoption requirements rather than a normal engineering-work Contract outcome.
+
 ### Handoff Record
 
 **Why independent identity is necessary:** structured continuation across actors/sessions must durably preserve the continuation boundary and references to authoritative state. It is not equivalent to compaction or a Context Package.
