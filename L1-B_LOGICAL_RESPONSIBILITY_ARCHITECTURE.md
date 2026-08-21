@@ -56,7 +56,7 @@ flowchart TB
         VAL["Validation"]
     end
 
-    PEP["Policy Enforcement Point(s)\nat/near protected boundaries"]
+    PEP["Applicable Policy Enforcement Point\nat/near protected provider/resource boundary\n(distributed; not one universal PEP)"]
     TARGET["Target Product/System\nexternal engineered subject"]
     PORTAL["Future AE Portal\noptional client"]
 
@@ -76,11 +76,13 @@ flowchart TB
     AEI -->|governs engineering of; uses applicable provider operations| TARGET
 ```
 
+The PEP node is a **conceptual relationship placeholder**. Different capability operations may be enforced by different provider-, broker-, runtime-, or resource-local PEPs.
+
 ## 3. Interpretation rules
 
 1. **Boxes R1–R7 are responsibilities, not deployment units.** No box implies a service, microservice, agent persona, database, workflow engine, gateway, or network hop.
 2. **Planning and Execution are lifecycle behaviors.** Planning/execution actors use the responsibilities and capability bindings; there is no canonical Planner/Executor component.
-3. **R4 decision coordination and PEP enforcement are distinct.** R4 determines/preserves authority and policy outcomes. Enforcement can occur in a provider, broker, runtime, protected resource, or other boundary.
+3. **R4 decision coordination and PEP enforcement are distinct.** R4 determines/preserves authority and policy outcomes. Enforcement can occur in a provider, broker, runtime, protected resource, or other boundary; there is no canonical universal PEP.
 4. **R5 does not imply a universal gateway.** Direct governed integrations, adapters, MCP, APIs, brokers, agent-runtime tooling, and distributed mechanisms can realize the same canonical binding/invocation semantics.
 5. **R2 is not a central database.** It establishes semantic ownership, identity, provenance, and traceability across potentially federated systems of record.
 6. **Architecture remains first-class.** Architecture Model Stewardship is a named R2 sub-responsibility and supplies architecture state to R3/R6 and lifecycle work.
@@ -99,7 +101,7 @@ sequenceDiagram
     participant C as R3 Context Coordination
     participant D as R4 Authority/Decision Coordination
     participant B as R5 Capability Binding/Invocation
-    participant P as PEP
+    participant P as Applicable distributed PEP
     participant E as External Capability Provider
     participant S as R2 Durable State/Traceability
 
@@ -109,7 +111,7 @@ sequenceDiagram
     A->>B: canonical capability operation + task context
     B->>B: resolve organization binding
     B->>P: scoped provider operation + authority context
-    P->>P: enforce policy/entitlement
+    P->>P: enforce policy/entitlement at protected boundary
     alt authorized
         P->>E: provider-native operation
         E-->>B: result/evidence/reference
@@ -120,7 +122,7 @@ sequenceDiagram
     end
 ```
 
-The implementation can distribute every participant above. The sequence expresses required semantics, not mandatory network architecture.
+The implementation can distribute every participant above. The sequence expresses required semantics, not mandatory network architecture. The applicable PEP can differ by provider, resource, operation, environment, or policy boundary.
 
 ## 5. Independent Validation interaction
 
