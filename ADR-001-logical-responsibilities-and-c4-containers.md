@@ -25,7 +25,7 @@ The seven canonical logical responsibilities shall **not** be labeled C4 Contain
 
 The **Executable / Reference Layer** shall create a genuine C4 Container view once its concrete runnable/deployable topology exists.
 
-An **Organization-specific AE Implementation** shall require or strongly support a concrete implementation topology view; under the adopted C4 discipline, C4 Container is the default where its actual applications/services/data stores fit C4 Container semantics. Complementary views may be used for material non-software/process relationships rather than mislabeling them as Containers.
+**Adoption guidance** shall require or strongly support a concrete implementation topology view for an Organization-specific AE Implementation once its actual mechanisms are known. Under the adopted C4 discipline, C4 Container is the default where actual applications/services/data stores fit C4 Container semantics. Complementary views may be used for material non-software/process relationships rather than mislabeling them as Containers.
 
 Concrete architecture shall trace actual mechanisms/components back to the canonical logical responsibilities they realize.
 
