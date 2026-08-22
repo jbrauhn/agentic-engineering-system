@@ -15,6 +15,15 @@ It may represent:
 
 Independent identity is warranted because confusing assignments can cause material authorization, delegation, provenance, or security errors.
 
+### Relationship to the L1-C domain catalog
+
+DR-117 and this L1-F artifact **extend the canonical A2 record catalog established by L1-C** with `Authority Assignment [A2]`.
+
+The L1-C entity-admission rule is unchanged: independent identity is warranted here because confusing authority assignments can create material governance, authorization, delegation, provenance, and security errors. The original approved L1-C artifact remains the historical L1-C baseline; this later adopted L1-F decision is the authoritative extension rather than a silent rewrite of that baseline.
+
+**Primary logical responsibility:** R4 — Authority, Policy & Decision Coordination.  
+**Collaborators:** R2 for durable identity/traceability and R5 where an assignment participates in protected capability use.
+
 ## 2. Minimum semantics
 
 An assignment supports as applicable:
