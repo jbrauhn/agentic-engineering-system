@@ -1,0 +1,128 @@
+{
+  "meta": {
+    "name": "Canonical AE Planning / Execution Coordination Protocol",
+    "version": "L1-H-stage1",
+    "representation_status": "conforming_machine_representation",
+    "semantic_authority": "human_semantic_specification",
+    "technology_semantics": "JSON is a repository/reference representation choice, not Canonical AE meaning"
+  },
+  "plan_required_semantics_as_applicable": [
+    "contract_exact_revision",
+    "product_system_baseline_exact_revision",
+    "declared_scope_outcome",
+    "affected_architecture",
+    "decomposition_or_progressive_elaboration",
+    "dependencies_sequencing_barriers",
+    "parallelizable_topology",
+    "planning_depth",
+    "planning_method",
+    "context_requirements",
+    "required_capability_operations_bindings",
+    "authority_policy_approval_requirements",
+    "verification_test_strategy",
+    "evidence_expectations",
+    "validation_readiness_handoff_expectations",
+    "risks_constraints_assumptions",
+    "adaptation_boundaries",
+    "deferred_detail_elaboration_envelope"
+  ],
+  "elaboration_envelope_dimensions": [
+    "SCOPE",
+    "DEPENDENCIES_BARRIERS",
+    "ARCHITECTURE_ASSUMPTIONS",
+    "AUTHORITY_CAPABILITY_REQUIREMENTS",
+    "VERIFICATION_EVIDENCE_ROUTE",
+    "SEQUENCING",
+    "RISK_CONSTRAINT_ASSUMPTIONS",
+    "ADAPTATION_BOUNDARY"
+  ],
+  "execution_readiness_requirements": [
+    "APPROVED_EFFECTIVE_CONTRACT",
+    "EXACT_PLAN_AND_SCOPED_REVIEW",
+    "EFFECTIVE_PRODUCT_SYSTEM_BASELINE",
+    "DEPENDENCIES_BARRIERS_RESOLVED",
+    "CONTEXT_REQUIREMENT_SATISFIABLE",
+    "CAPABILITY_BINDINGS_RESOLVED",
+    "AUTHORITY_EVALUABLE",
+    "TECHNICAL_PREREQUISITES_AVAILABLE",
+    "VERIFICATION_EVIDENCE_STRATEGY_DEFINED",
+    "ADAPTATION_BOUNDARY_KNOWN",
+    "NO_BLOCKING_CONDITION"
+  ],
+  "work_topology_relationships": [
+    "DEPENDS_ON",
+    "ORDER_BEFORE",
+    "BARRIER",
+    "INDEPENDENT_BRANCH",
+    "SHARED_RESOURCE_CONFLICT",
+    "RECONCILIATION_POINT",
+    "EVIDENCE_AGGREGATION"
+  ],
+  "execution_routes": [
+    "LOCAL_ADAPTATION",
+    "RETRY_EXECUTION",
+    "REPLAN",
+    "PROPOSE_CONTRACT_CHANGE",
+    "ESCALATE"
+  ],
+  "route_decision_semantics": {
+    "LOCAL_ADAPTATION": "inside reviewed Plan adaptation boundaries; reviewed engineering route remains materially unchanged",
+    "RETRY_EXECUTION": "execution failed but reviewed route remains valid",
+    "REPLAN": "reviewed engineering route materially changes while Contract remains valid",
+    "PROPOSE_CONTRACT_CHANGE": "Goal/Spec/Proof or another Contract-level semantic must change",
+    "ESCALATE": "required authority/risk/decision/policy issue cannot be resolved within current governed route"
+  },
+  "worker_result_signals": [
+    "PLAN_DEFICIENCY",
+    "CONTRACT_DEFICIENCY",
+    "ARCHITECTURE_DECISION_REQUIRED",
+    "DEPENDENCY_CONFLICT",
+    "RESOURCE_CONFLICT",
+    "AUTHORITY_BLOCK",
+    "CAPABILITY_BLOCK",
+    "CONTEXT_BLOCK",
+    "MATERIAL_PROMOTION_REQUIRED"
+  ],
+  "verification_chain": [
+    "CONTRACT_PROOF",
+    "PLAN_VERIFICATION_TEST_STRATEGY",
+    "EXECUTION_VERIFICATION_AND_EVIDENCE",
+    "INDEPENDENT_VALIDATION"
+  ],
+  "rules": {
+    "plan_not_provider_workflow": true,
+    "plan_multiple_representations_one_entity": true,
+    "rolling_wave_planning_allowed": true,
+    "within_reviewed_elaboration_envelope_no_new_plan_revision_required": true,
+    "outside_reviewed_elaboration_envelope_requires_new_plan_revision_and_review": true,
+    "changed_scope_no_stale_review_inheritance": true,
+    "unaffected_scope_may_continue_after_deterministic_impact_analysis": true,
+    "provider_ready_not_ae_readiness": true,
+    "parallel_independent_scopes_allowed": true,
+    "blocked_branch_not_global_block_by_default": true,
+    "shared_conflict_may_block_unsafe_parallelism": true,
+    "local_adaptation_not_plan_mutation": true,
+    "executor_cannot_silently_change_plan_or_contract": true,
+    "executor_evidence_not_validation_acceptance": true,
+    "provider_done_not_acceptance": true,
+    "affected_architecture_identified_in_plan": true,
+    "architecture_route_change_requires_replan": true,
+    "contract_deficiency_routes_to_contract_change": true,
+    "baseline_not_silently_mutated_mid_execution": true,
+    "worker_context_bounded_by_context_requirement": true,
+    "worker_result_subordinate_by_default": true,
+    "l4_micro_plan_ephemeral_by_default": true,
+    "material_worker_discovery_promoted_to_durable_owner": true,
+    "material_state_survives_orchestrator_session_loss": true,
+    "human_judgment_valid_clerical_proxy_deficiency": true,
+    "no_central_orchestrator_required": true,
+    "no_new_execution_a1_a2_required": true,
+    "correct_effective_revision_beats_latest": true
+  },
+  "cross_domain_expectations": {
+    "lifecycle_routes": ["RETRY_EXECUTION", "REPLAN", "PROPOSE_CONTRACT_CHANGE", "ESCALATE"],
+    "required_capability_operations": ["execution.start", "execution.status", "execution.result.read", "work.create", "work.read", "work.update", "work.relationship.manage", "work.complete", "validation.request"],
+    "authority_runtime_outcomes": ["ALLOWED", "DENIED", "BLOCKED"],
+    "context_rules": ["replacement_actor_reconstructable", "hidden_session_state_not_material_source", "context_package_not_authoritative"]
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "meta": {"name":"L1-H Planning / Execution semantic scenarios","version":"L1-H-stage1"},
+  "scenarios": [
+    {"id":"valid_plan_exact_control","type":"PLAN_CONTROL","expect":"PASS","facts":{"approved_contract":true,"contract_exact":"C@2","baseline_exact":"B@8","architecture_applicable":true,"affected_architecture":true}},
+    {"id":"invalid_unapproved_contract_executable","type":"PLAN_CONTROL","expect":"FAIL","expected_error":"CONTRACT_NOT_APPROVED","facts":{"approved_contract":false,"contract_exact":"C@2","baseline_exact":"B@8"}},
+    {"id":"invalid_plan_missing_exact_baseline","type":"PLAN_CONTROL","expect":"FAIL","expected_error":"EXACT_BASELINE_REQUIRED","facts":{"approved_contract":true,"contract_exact":"C@2","baseline_exact":null}},
+    {"id":"invalid_plan_missing_affected_architecture","type":"PLAN_CONTROL","expect":"FAIL","expected_error":"AFFECTED_ARCHITECTURE_REQUIRED","facts":{"approved_contract":true,"contract_exact":"C@2","baseline_exact":"B@8","architecture_applicable":true,"affected_architecture":false}},
+
+    {"id":"valid_rolling_wave_scope_a_exec_b_plan","type":"ROLLING_WAVE","expect":"PASS","facts":{"scope_a_reviewed":true,"scope_a_executes":true,"scope_b_planning":true,"changed_scope_inherits_review":false}},
+    {"id":"invalid_changed_scope_inherits_review","type":"ROLLING_WAVE","expect":"FAIL","expected_error":"STALE_PLAN_REVIEW_INHERITANCE","facts":{"scope_a_reviewed":true,"scope_b_planning":false,"changed_scope_inherits_review":true}},
+    {"id":"valid_unaffected_scope_old_plan_continues","type":"ROLLING_WAVE","expect":"PASS","facts":{"old_scope_continues":true,"later_revision_future_only":true,"impact_analysis":"NO_EFFECT","changed_scope_inherits_review":false}},
+    {"id":"invalid_old_scope_continues_without_impact_analysis","type":"ROLLING_WAVE","expect":"FAIL","expected_error":"IMPACT_ANALYSIS_REQUIRED","facts":{"old_scope_continues":true,"later_revision_future_only":true,"impact_analysis":"UNKNOWN","changed_scope_inherits_review":false}},
+
+    {"id":"valid_elaboration_inside_envelope","type":"ELABORATION","expect":"PASS","facts":{"inside_envelope":true,"new_plan_revision":false}},
+    {"id":"invalid_elaboration_outside_without_revision","type":"ELABORATION","expect":"FAIL","expected_error":"ELABORATION_REQUIRES_NEW_PLAN_REVIEW","facts":{"inside_envelope":false,"new_plan_revision":false}},
+    {"id":"valid_elaboration_outside_with_revision_review","type":"ELABORATION","expect":"PASS","facts":{"inside_envelope":false,"new_plan_revision":true,"new_review":true}},
+
+    {"id":"valid_execution_readiness","type":"READINESS","expect":"PASS","facts":{"approved_effective_contract":true,"scoped_plan_review":true,"effective_baseline":true,"dependencies_resolved":true,"context_ready":true,"capabilities_ready":true,"authority_outcome":"ALLOWED","technical_ready":true,"verification_strategy":true,"adaptation_boundary":true,"blocking":false}},
+    {"id":"invalid_readiness_missing_context","type":"READINESS","expect":"FAIL","expected_error":"CONTEXT_NOT_READY","facts":{"approved_effective_contract":true,"scoped_plan_review":true,"effective_baseline":true,"dependencies_resolved":true,"context_ready":false,"capabilities_ready":true,"authority_outcome":"ALLOWED","technical_ready":true,"verification_strategy":true,"adaptation_boundary":true,"blocking":false}},
+    {"id":"invalid_readiness_missing_capability_no_human_proxy","type":"READINESS","expect":"FAIL","expected_error":"CAPABILITY_NOT_READY","facts":{"approved_effective_contract":true,"scoped_plan_review":true,"effective_baseline":true,"dependencies_resolved":true,"context_ready":true,"capabilities_ready":false,"authority_outcome":"ALLOWED","technical_ready":true,"verification_strategy":true,"adaptation_boundary":true,"blocking":false,"human_mechanical_proxy":true}},
+    {"id":"invalid_readiness_authority_denied","type":"READINESS","expect":"FAIL","expected_error":"AUTHORITY_NOT_ALLOWED","facts":{"approved_effective_contract":true,"scoped_plan_review":true,"effective_baseline":true,"dependencies_resolved":true,"context_ready":true,"capabilities_ready":true,"authority_outcome":"DENIED","technical_ready":true,"verification_strategy":true,"adaptation_boundary":true,"blocking":false}},
+
+    {"id":"valid_dependency_change_reassessed","type":"DEPENDENCY","expect":"PASS","facts":{"dependency_changed":true,"affects_executing_scope":true,"reassessed":true,"route":"REPLAN"}},
+    {"id":"invalid_dependency_change_silent_continue","type":"DEPENDENCY","expect":"FAIL","expected_error":"DEPENDENCY_REASSESSMENT_REQUIRED","facts":{"dependency_changed":true,"affects_executing_scope":true,"reassessed":false,"silent_continue":true}},
+
+    {"id":"valid_local_adaptation","type":"ROUTE","expect":"PASS","facts":{"inside_adaptation_boundary":true,"execution_failure":false,"material_plan_change":false,"contract_semantic_change":false,"unresolved_authority_risk":false,"selected_route":"LOCAL_ADAPTATION"}},
+    {"id":"valid_retry_route","type":"ROUTE","expect":"PASS","facts":{"inside_adaptation_boundary":false,"execution_failure":true,"reviewed_route_still_valid":true,"material_plan_change":false,"contract_semantic_change":false,"unresolved_authority_risk":false,"selected_route":"RETRY_EXECUTION"}},
+    {"id":"valid_replan_route","type":"ROUTE","expect":"PASS","facts":{"execution_failure":false,"material_plan_change":true,"contract_semantic_change":false,"unresolved_authority_risk":false,"selected_route":"REPLAN"}},
+    {"id":"valid_contract_change_route","type":"ROUTE","expect":"PASS","facts":{"contract_semantic_change":true,"selected_route":"PROPOSE_CONTRACT_CHANGE"}},
+    {"id":"valid_escalate_route","type":"ROUTE","expect":"PASS","facts":{"unresolved_authority_risk":true,"contract_semantic_change":false,"selected_route":"ESCALATE"}},
+    {"id":"invalid_material_plan_change_local_adaptation","type":"ROUTE","expect":"FAIL","expected_error":"ROUTE_MISMATCH","facts":{"material_plan_change":true,"contract_semantic_change":false,"selected_route":"LOCAL_ADAPTATION"}},
+    {"id":"invalid_contract_change_hidden_as_replan","type":"ROUTE","expect":"FAIL","expected_error":"ROUTE_MISMATCH","facts":{"contract_semantic_change":true,"selected_route":"REPLAN"}},
+
+    {"id":"valid_worker_result_promotes_plan_issue","type":"WORKER","expect":"PASS","facts":{"changes_governed_plan_directly":false,"material_discovery":true,"promoted_to_owner":true,"signal":"PLAN_DEFICIENCY"}},
+    {"id":"invalid_worker_silently_changes_plan","type":"WORKER","expect":"FAIL","expected_error":"WORKER_CANNOT_MUTATE_GOVERNED_PLAN_CONTRACT","facts":{"changes_governed_plan_directly":true}},
+    {"id":"invalid_worker_hides_material_issue","type":"WORKER","expect":"FAIL","expected_error":"MATERIAL_DISCOVERY_NOT_PROMOTED","facts":{"changes_governed_plan_directly":false,"material_discovery":true,"promoted_to_owner":false}},
+
+    {"id":"valid_l4_ephemeral_after_promotion","type":"MICROPLAN","expect":"PASS","facts":{"l4_discarded":true,"material_state_elsewhere":true}},
+    {"id":"invalid_l4_only_material_copy_lost","type":"MICROPLAN","expect":"FAIL","expected_error":"EPHEMERAL_MICROPLAN_STATE_LOSS","facts":{"l4_discarded":true,"material_state_elsewhere":false}},
+
+    {"id":"valid_provider_done_not_acceptance","type":"VALIDATION_BOUNDARY","expect":"PASS","facts":{"provider_done":true,"ae_acceptance":false,"independent_validation":false}},
+    {"id":"invalid_provider_done_self_accepts","type":"VALIDATION_BOUNDARY","expect":"FAIL","expected_error":"PROVIDER_STATUS_NOT_VALIDATION","facts":{"provider_done":true,"ae_acceptance":true,"independent_validation":false}},
+    {"id":"invalid_executor_evidence_self_validates","type":"VALIDATION_BOUNDARY","expect":"FAIL","expected_error":"EXECUTOR_CANNOT_SELF_VALIDATE","facts":{"executor_created_evidence":true,"ae_acceptance":true,"independent_validation":false}},
+    {"id":"valid_independent_validation_after_evidence","type":"VALIDATION_BOUNDARY","expect":"PASS","facts":{"executor_created_evidence":true,"ae_acceptance":true,"independent_validation":true}},
+
+    {"id":"valid_parallel_independent_branches","type":"PARALLEL","expect":"PASS","facts":{"independent":true,"blocked_branch":false,"unrelated_branch_continues":true,"shared_conflict":false}},
+    {"id":"valid_blocked_branch_unrelated_continues","type":"PARALLEL","expect":"PASS","facts":{"independent":true,"blocked_branch":true,"unrelated_branch_continues":true,"shared_conflict":false}},
+    {"id":"invalid_blocked_branch_freezes_unrelated","type":"PARALLEL","expect":"FAIL","expected_error":"UNRELATED_SCOPE_MUST_NOT_AUTO_FREEZE","facts":{"independent":true,"blocked_branch":true,"unrelated_branch_continues":false,"shared_conflict":false}},
+    {"id":"invalid_shared_conflict_continues_unsafely","type":"PARALLEL","expect":"FAIL","expected_error":"SHARED_CONFLICT_MUST_BLOCK","facts":{"independent":false,"shared_conflict":true,"conflicting_branches_continue":true}},
+
+    {"id":"valid_proof_verification_trace","type":"VERIFICATION","expect":"PASS","facts":{"proof_trace":true,"verification_strategy":true,"parallel_evidence_reconciled":true}},
+    {"id":"invalid_verification_not_traceable_to_proof","type":"VERIFICATION","expect":"FAIL","expected_error":"VERIFICATION_NOT_TRACEABLE_TO_PROOF","facts":{"proof_trace":false,"verification_strategy":true}},
+    {"id":"invalid_parallel_evidence_not_reconciled","type":"VERIFICATION","expect":"FAIL","expected_error":"PARALLEL_EVIDENCE_NOT_RECONCILED","facts":{"proof_trace":true,"verification_strategy":true,"parallel_work":true,"parallel_evidence_reconciled":false}},
+
+    {"id":"valid_architecture_inside_route","type":"ARCHITECTURE","expect":"PASS","facts":{"architecture_applicable":true,"affected_architecture_identified":true,"consequential_choice":false,"route_material_change":false,"baseline_silent_mutation":false}},
+    {"id":"invalid_consequential_architecture_without_adr","type":"ARCHITECTURE","expect":"FAIL","expected_error":"ADR_REQUIRED","facts":{"architecture_applicable":true,"affected_architecture_identified":true,"consequential_choice":true,"adr_created":false}},
+    {"id":"invalid_architecture_route_change_without_replan","type":"ARCHITECTURE","expect":"FAIL","expected_error":"ARCHITECTURE_CHANGE_REQUIRES_REPLAN","facts":{"architecture_applicable":true,"affected_architecture_identified":true,"route_material_change":true,"route":"LOCAL_ADAPTATION"}},
+    {"id":"invalid_silent_baseline_mutation_mid_execution","type":"ARCHITECTURE","expect":"FAIL","expected_error":"BASELINE_SILENT_MUTATION_PROHIBITED","facts":{"baseline_silent_mutation":true}},
+
+    {"id":"valid_orchestrator_loss_recoverable","type":"RECOVERY","expect":"PASS","facts":{"orchestrator_lost":true,"material_state_durable":true,"reconstructable":true}},
+    {"id":"invalid_orchestrator_only_material_state","type":"RECOVERY","expect":"FAIL","expected_error":"MATERIAL_STATE_NOT_RECOVERABLE","facts":{"orchestrator_lost":true,"material_state_durable":false,"reconstructable":false}},
+
+    {"id":"valid_effective_old_plan_beats_latest","type":"REVISION_EFFECTIVITY","expect":"PASS","facts":{"effective_revision":"P@4","latest_revision":"P@5","selected_revision":"P@4"}},
+    {"id":"invalid_latest_selected_over_effective","type":"REVISION_EFFECTIVITY","expect":"FAIL","expected_error":"WRONG_EFFECTIVE_REVISION","facts":{"effective_revision":"P@4","latest_revision":"P@5","selected_revision":"P@5"}},
+
+    {"id":"valid_human_engineering_judgment","type":"HUMAN_COLLABORATION","expect":"PASS","facts":{"human_role":"JUDGMENT","agent_operable_operation":true,"human_required":true}},
+    {"id":"invalid_human_clerical_proxy","type":"HUMAN_COLLABORATION","expect":"FAIL","expected_error":"MECHANICAL_HUMAN_MIDDLEWARE","facts":{"human_role":"CLERICAL_PROXY","agent_operable_operation":true,"human_required":true}},
+
+    {"id":"valid_no_new_execution_entities","type":"ENTITY_ADMISSION","expect":"PASS","facts":{"new_a1_a2_execution_entity":false}},
+    {"id":"invalid_execution_attempt_entity_by_convenience","type":"ENTITY_ADMISSION","expect":"FAIL","expected_error":"EXECUTION_ENTITY_INFLATION","facts":{"new_a1_a2_execution_entity":true,"identity_need_proven":false}}
+  ]
+}
