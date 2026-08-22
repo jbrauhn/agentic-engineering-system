@@ -59,6 +59,8 @@ def expand_binding(raw,profiles):
     b["access_paths"]=[{"context":ctx,"mechanism":mechmap.get(ctx,b.get("mechanism","GOVERNED_API")),"discovery_ref":f"DISC::{b['binding_id']}::{ctx}","operations":list(ops),"evidence_ref":f"EVIDENCE::ACCESS::{b['binding_id']}::{ctx}"} for ctx in contexts]
     profile=profiles[b.get("readiness_profile","PROVEN_HEALTHY")]
     b["readiness"]={d:{"state":profile[d],"evidence_ref":f"EVIDENCE::{b['binding_id']}::{d}",**({"validation_ref":f"VALIDATION::{b['binding_id']}"} if d=="PROVEN" and profile[d]=="SATISFIED" else {})} for d in READINESS_DIMS}
+    if b.get("omit_proven_validation"): b["readiness"]["PROVEN"].pop("validation_ref",None)
+    if b.get("omit_readiness_evidence_dimension") in b["readiness"]: b["readiness"][b["omit_readiness_evidence_dimension"]].pop("evidence_ref",None)
     b.setdefault("proof_environment","sandbox"); b.setdefault("actual_binding_exercised",True)
     return b
 
