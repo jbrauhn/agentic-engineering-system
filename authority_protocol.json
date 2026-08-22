@@ -1,0 +1,90 @@
+{
+  "meta": {
+    "name": "Canonical AE Authority / Policy / Enforcement Protocol",
+    "version": "L1-F-stage1",
+    "representation_status": "conforming_machine_representation",
+    "semantic_authority": "human_semantic_specification",
+    "technology_semantics": "JSON is a repository/reference representation choice, not Canonical AE meaning"
+  },
+  "policy_results": ["PERMIT", "DENY", "INDETERMINATE"],
+  "subordinate_policy_results": ["PERMIT", "DENY", "INDETERMINATE", "NOT_APPLICABLE"],
+  "runtime_outcomes": ["ALLOWED", "DENIED", "BLOCKED"],
+  "authority_kinds": ["OPERATIONAL", "DECISION"],
+  "authority_validity_states": ["NOT_YET_VALID", "ACTIVE", "EXPIRED", "REVOKED", "SUPERSEDED", "CONDITION_INVALID"],
+  "authority_basis_types": ["AUTHORITY_ASSIGNMENT", "EXTERNAL_REFERENCE", "DYNAMIC_DERIVATION", "RELATIONSHIP_TASK_RESOURCE_POLICY", "OTHER_AUTHORITATIVE_MECHANISM"],
+  "canonical_human_reserved_decision_classes": [
+    {"decision_class":"engineering.intent","source":"CONTRACT.md#Spec-2"},
+    {"decision_class":"risk.material_acceptance","source":"CONTRACT.md#Spec-2"},
+    {"decision_class":"tradeoff.consequential","source":"CONTRACT.md#Spec-2"},
+    {"decision_class":"contract.approval","source":"CONTRACT.md#Spec-2/G1"},
+    {"decision_class":"contract.change.approval","source":"CONTRACT.md#Spec-1-2/G5"}
+  ],
+  "higher_authority_extension_rule": "Other universally Human-reserved decision classes require explicit higher canonical authority; L1-F does not infer them.",
+  "authorization_request_common_core": ["request_id","actor","authenticated_identity","canonical_operation_or_decision_class","target_resource_or_decision_target","organization_product_scope","evaluation_time","capability_binding_or_binding_plan","access_path_if_applicable"],
+  "governed_work_context_optional": ["ae_loop","execution_increment","executable_task","contract_exact_revision","plan_exact_revision_and_review_scope","product_system_baseline_revision","oeb_exact_revision","product_system_profile_exact_revision"],
+  "authority_security_context_optional": ["provider_entitlement","oa_basis","da_basis","authority_assignment","authority_decision","policy_sources","classification","environment","risk","conditions","validity","delegation","revocation"],
+  "operation_authority_requirements": {
+    "default_for_l1e_protected_operation": {
+      "identity_required": true,
+      "oa_required": true,
+      "provider_entitlement_requirement": "BINDING_DETERMINED",
+      "canonical_human_da_required": false,
+      "organization_policy_may_require_da": true,
+      "policy_evaluation_required": true,
+      "pep_required": true,
+      "conditions_must_reach_enforcement": true,
+      "provenance_retention": "RISK_POLICY_SENSITIVE"
+    },
+    "overrides": {}
+  },
+  "decision_requirements": {
+    "contract.approval": {"human_da_required":true,"exact_target_revision_required":true,"lifecycle_gate":"G1_CONTRACT_APPROVAL"},
+    "contract.change.approval": {"human_da_required":true,"exact_target_revision_required":true,"lifecycle_gate":"G5_CONTRACT_CHANGE"}
+  },
+  "authority_assignment_semantics": {
+    "record_type": "A2",
+    "required_when_explicitly_issued": true,
+    "ae_owned_shadow_copy_required_for_external_assignment": false,
+    "issued_history_non_destructive": true,
+    "fields_as_applicable": ["assignment_id","authority_kind","subject_holder","issuer_authoritative_source","operations_or_decision_classes","resource_scope","organization_product_scope","loop_task_scope","conditions","valid_from","valid_until","delegation_semantics","source_assignment","provenance"]
+  },
+  "runtime_mapping": {
+    "DENY": "DENIED",
+    "INDETERMINATE": "BLOCKED",
+    "PERMIT_WITH_MISSING_TECHNICAL_PREREQUISITE": "BLOCKED",
+    "PERMIT_WITH_ENFORCEABLE_PREREQUISITES": "ALLOWED"
+  },
+  "policy_precedence_rules": ["canonical_constraints_cannot_be_weakened_downstream","organization_product_combination_must_be_deterministic","product_specialization_may_tighten_not_silently_weaken","exceptions_explicit_authorized_scoped_provenanced","unresolved_applicable_conflict_never_permits"],
+  "pep_proof_requirements": ["enforcement_boundary","pep_mechanism","authority_identity_facts_consumed","conditions_obligations_enforced","unauthorized_denial_evidence","fail_closed_when_required_authority_unknown","governed_actor_bypass_path_assessment"],
+  "authorization_provenance_fields_as_applicable": ["requester_actor","authenticated_identity","canonical_operation","target_resource","loop_task_scope","contract_plan_oeb_revisions","entitlement_source","oa_basis","da_authority_decision_basis","policy_sources_revisions","effective_policy_decision","conditions_obligations","pep","runtime_result","provider_effect_reference","evidence_references"],
+  "provenance_retention_rule": "risk_operation_policy_sensitive",
+  "oeb_authority_reference_categories": ["identity_sources","entitlement_sources","oa_baseline_policy","da_assignments_reservations","human_reserved_constraints","delegation_policy","validity_revocation_expectations","policy_sources","policy_precedence_combination","protected_operation_classes","pep_enforcement_mappings","provenance_audit_expectations","governed_exception_mechanisms"],
+  "rules": {
+    "entitlement_is_not_authority": true,
+    "oa_is_effective_not_storage_specific": true,
+    "da_is_not_provider_execution_permission": true,
+    "authority_decision_is_exercise_not_authority_source_by_itself": true,
+    "no_explicit_grant_may_deterministically_deny": true,
+    "indeterminate_never_permits_protected_operation": true,
+    "canonical_constraints_not_weakened_downstream": true,
+    "policy_combination_deterministic": true,
+    "unresolved_policy_conflict_not_permit": true,
+    "permit_conditions_must_be_enforced": true,
+    "credential_entitlement_oa_da_lifetimes_independent": true,
+    "historical_authorization_non_destructive": true,
+    "delegation_optional": true,
+    "delegation_non_amplifying": true,
+    "canonical_human_da_not_delegable_to_ai": true,
+    "authority_change_uses_pre_change_state": true,
+    "self_escalation_prohibited": true,
+    "authority_state_federated": true,
+    "authorization_cache_not_authoritative": true,
+    "distributed_peps_allowed": true,
+    "protected_operation_requires_enforcement": true,
+    "bypass_assessment_scoped_to_governed_actor_context": true,
+    "authorization_provenance_retention_risk_policy_sensitive": true,
+    "technical_entitlement_requirement_is_binding_specific": true,
+    "no_policy_dsl_required": true,
+    "no_central_pdp_or_pep_required": true
+  }
+}
