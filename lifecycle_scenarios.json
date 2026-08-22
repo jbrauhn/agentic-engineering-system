@@ -1,0 +1,274 @@
+{
+  "meta": {
+    "name": "L1-D lifecycle scenario fixtures",
+    "version": "L1-D-stage1"
+  },
+  "scenarios": [
+    {
+      "id": "valid_happy_path",
+      "expect": "PASS",
+      "initial": {
+        "loop": {"id": "LOOP-1", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {
+          "INC-A": {
+            "position": "PLANNING",
+            "contract_revision": "C@2",
+            "plan_revision": "P@4",
+            "baseline_revision": "B@8",
+            "tasks": {"TASK-A1": {"state": "NOT_STARTED"}}
+          }
+        }
+      },
+      "steps": [
+        {"action": "set_gate", "scope": "INC-A", "gate": "G1_CONTRACT_APPROVAL", "status": "SATISFIED", "record": "AUTH-C2", "target_contract_revision": "C@2"},
+        {"action": "set_gate", "scope": "INC-A", "gate": "G2_PLAN_REVIEW", "status": "SATISFIED", "record": "PR-4A", "target_plan_revision": "P@4", "review_scope": [{"type": "EXECUTION_INCREMENT", "id": "INC-A"}]},
+        {"action": "transition", "scope": "INC-A", "transition": "increment.plan_to_ready", "presented_contract_revision": "C@2", "presented_plan_revision": "P@4", "presented_baseline_revision": "B@8"},
+        {"action": "set_gate", "scope": "INC-A", "gate": "G3_AUTHORITY", "status": "SATISFIED", "record": "OA-1"},
+        {"action": "transition", "scope": "INC-A", "transition": "increment.ready_to_executing", "actor": "agent-exec", "presented_contract_revision": "C@2", "presented_plan_revision": "P@4", "presented_baseline_revision": "B@8"},
+        {"action": "provider_status", "scope": "INC-A", "task": "TASK-A1", "provider_status": "Done"},
+        {"action": "set_task_state", "scope": "INC-A", "task": "TASK-A1", "state": "COMPLETE"},
+        {"action": "transition", "scope": "INC-A", "transition": "increment.executing_to_validating", "presented_contract_revision": "C@2", "presented_plan_revision": "P@4", "presented_baseline_revision": "B@8"},
+        {"action": "set_gate", "scope": "INC-A", "gate": "G4_VALIDATION_ACCEPTANCE", "status": "SATISFIED", "record": "VAL-A", "target_contract_revision": "C@2", "validator": "agent-val", "producer": "agent-exec"},
+        {"action": "transition", "scope": "INC-A", "transition": "increment.validating_accept", "presented_contract_revision": "C@2", "presented_plan_revision": "P@4", "presented_baseline_revision": "B@8"},
+        {"action": "set_gate", "scope": "LOOP-1", "gate": "G4_VALIDATION_ACCEPTANCE", "status": "SATISFIED", "record": "VAL-FINAL", "target_contract_revision": "C@2", "validator": "agent-val", "producer": "agent-exec", "final_contract_scope": true},
+        {"action": "final_reconciliation", "final_contract_revision": "C@2", "scope_contract_revisions": {"INC-A": "C@2"}},
+        {"action": "learning_disposition", "material_learning": false},
+        {"action": "transition", "scope": "LOOP-1", "transition": "loop.close_accepted", "presented_contract_revision": "C@2"}
+      ]
+    },
+    {
+      "id": "valid_retry",
+      "expect": "PASS",
+      "initial": {
+        "loop": {"id": "LOOP-R", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {"INC-R": {"position": "VALIDATING", "contract_revision": "C@2", "plan_revision": "P@4", "baseline_revision": "B@8"}}
+      },
+      "steps": [
+        {"action": "record_failed_validation", "scope": "INC-R", "record": "VAL-R1"},
+        {"action": "set_gate", "scope": "INC-R", "gate": "G3_AUTHORITY", "status": "SATISFIED", "record": "OA-R"},
+        {"action": "transition", "scope": "INC-R", "transition": "increment.validating_retry_to_executing", "presented_contract_revision": "C@2", "presented_plan_revision": "P@4", "presented_baseline_revision": "B@8"},
+        {"action": "transition", "scope": "INC-R", "transition": "increment.executing_to_validating", "presented_contract_revision": "C@2", "presented_plan_revision": "P@4", "presented_baseline_revision": "B@8"},
+        {"action": "set_gate", "scope": "INC-R", "gate": "G4_VALIDATION_ACCEPTANCE", "status": "SATISFIED", "record": "VAL-R2", "target_contract_revision": "C@2", "validator": "val", "producer": "exec"},
+        {"action": "transition", "scope": "INC-R", "transition": "increment.validating_accept", "presented_contract_revision": "C@2", "presented_plan_revision": "P@4", "presented_baseline_revision": "B@8"}
+      ]
+    },
+    {
+      "id": "valid_replan",
+      "expect": "PASS",
+      "initial": {
+        "loop": {"id": "LOOP-P", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {"INC-P": {"position": "VALIDATING", "contract_revision": "C@2", "plan_revision": "P@4", "baseline_revision": "B@8"}}
+      },
+      "steps": [
+        {"action": "transition", "scope": "INC-P", "transition": "increment.validating_replan_to_planning", "presented_contract_revision": "C@2", "presented_plan_revision": "P@4", "presented_baseline_revision": "B@8"},
+        {"action": "change_plan_revision", "scope": "INC-P", "new_plan_revision": "P@5"},
+        {"action": "set_gate", "scope": "INC-P", "gate": "G1_CONTRACT_APPROVAL", "status": "SATISFIED", "record": "AUTH-C2", "target_contract_revision": "C@2"},
+        {"action": "set_gate", "scope": "INC-P", "gate": "G2_PLAN_REVIEW", "status": "SATISFIED", "record": "PR-5P", "target_plan_revision": "P@5", "review_scope": [{"type": "EXECUTION_INCREMENT", "id": "INC-P"}]},
+        {"action": "transition", "scope": "INC-P", "transition": "increment.plan_to_ready", "presented_contract_revision": "C@2", "presented_plan_revision": "P@5", "presented_baseline_revision": "B@8"},
+        {"action": "set_gate", "scope": "INC-P", "gate": "G3_AUTHORITY", "status": "SATISFIED", "record": "OA-P"},
+        {"action": "transition", "scope": "INC-P", "transition": "increment.ready_to_executing", "presented_contract_revision": "C@2", "presented_plan_revision": "P@5", "presented_baseline_revision": "B@8"}
+      ]
+    },
+    {
+      "id": "valid_contract_change_effectivity",
+      "expect": "PASS",
+      "initial": {
+        "loop": {"id": "LOOP-C", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {
+          "INC-A": {"position": "EXECUTING", "contract_revision": "C@2", "plan_revision": "P@4", "baseline_revision": "B@8"},
+          "INC-B": {"position": "PLANNING", "contract_revision": "C@2", "plan_revision": "P@5", "baseline_revision": "B@8"}
+        }
+      },
+      "steps": [
+        {
+          "action": "contract_change_approved",
+          "proposal": "CCP-1",
+          "authority_decision_record": "AD-CCP1",
+          "new_contract_revision": "C@3",
+          "effectivity": {
+            "INC-A": {"classification": "UNAFFECTED", "governing_contract_revision": "C@2", "determination_record": "EFF-A"},
+            "INC-B": {"classification": "AFFECTED", "governing_contract_revision": "C@3", "determination_record": "EFF-B", "action": "REPLAN", "new_plan_revision": "P@6"}
+          }
+        },
+        {"action": "transition", "scope": "INC-A", "transition": "increment.executing_to_validating", "presented_contract_revision": "C@2", "presented_plan_revision": "P@4", "presented_baseline_revision": "B@8"},
+        {"action": "set_gate", "scope": "INC-B", "gate": "G1_CONTRACT_APPROVAL", "status": "SATISFIED", "record": "AUTH-C3", "target_contract_revision": "C@3"},
+        {"action": "set_gate", "scope": "INC-B", "gate": "G2_PLAN_REVIEW", "status": "SATISFIED", "record": "PR-6B", "target_plan_revision": "P@6", "review_scope": [{"type": "EXECUTION_INCREMENT", "id": "INC-B"}]},
+        {"action": "transition", "scope": "INC-B", "transition": "increment.plan_to_ready", "presented_contract_revision": "C@3", "presented_plan_revision": "P@6", "presented_baseline_revision": "B@8"}
+      ]
+    },
+    {
+      "id": "valid_escalation_scope_local",
+      "expect": "PASS",
+      "initial": {
+        "loop": {"id": "LOOP-E", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {"INC-E": {"position": "EXECUTING", "contract_revision": "C@2", "plan_revision": "P@4", "baseline_revision": "B@8"}}
+      },
+      "steps": [
+        {"action": "escalate", "scope": "INC-E", "reason": "authority clarification needed"},
+        {"action": "assert_loop_state", "state": "OPEN"},
+        {"action": "resolve_block", "scope": "INC-E"},
+        {"action": "transition", "scope": "INC-E", "transition": "increment.executing_to_validating", "presented_contract_revision": "C@2", "presented_plan_revision": "P@4", "presented_baseline_revision": "B@8"}
+      ]
+    },
+    {
+      "id": "valid_rolling_wave_parallel",
+      "expect": "PASS",
+      "initial": {
+        "loop": {"id": "LOOP-W", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {
+          "INC-A": {"position": "EXECUTING", "contract_revision": "C@2", "plan_revision": "P@4", "baseline_revision": "B@8"},
+          "INC-B": {"position": "PLANNING", "contract_revision": "C@2", "plan_revision": "P@5", "baseline_revision": "B@8"},
+          "INC-C": {"position": "VALIDATING", "contract_revision": "C@2", "plan_revision": "P@3", "baseline_revision": "B@8"}
+        }
+      },
+      "steps": [
+        {"action": "assert_concurrency", "positions": {"INC-A": "EXECUTING", "INC-B": "PLANNING", "INC-C": "VALIDATING"}}
+      ]
+    },
+    {
+      "id": "valid_final_acceptance_mixed_contract_effectivity",
+      "expect": "PASS",
+      "initial": {
+        "loop": {"id": "LOOP-F", "state": "OPEN", "approved_contract_revision": "C@3"},
+        "increments": {
+          "INC-A": {"position": null, "terminal_disposition": "ACCEPTED", "contract_revision": "C@2", "plan_revision": "P@4", "baseline_revision": "B@8"},
+          "INC-B": {"position": null, "terminal_disposition": "ACCEPTED", "contract_revision": "C@3", "plan_revision": "P@6", "baseline_revision": "B@8"}
+        }
+      },
+      "steps": [
+        {"action": "set_gate", "scope": "LOOP-F", "gate": "G4_VALIDATION_ACCEPTANCE", "status": "SATISFIED", "record": "VAL-FINAL-C3", "target_contract_revision": "C@3", "validator": "val-final", "producer": "exec-team", "final_contract_scope": true},
+        {"action": "final_reconciliation", "final_contract_revision": "C@3", "scope_contract_revisions": {"INC-A": "C@2", "INC-B": "C@3"}},
+        {"action": "learning_disposition", "material_learning": true},
+        {"action": "transition", "scope": "LOOP-F", "transition": "loop.close_accepted", "presented_contract_revision": "C@3"}
+      ]
+    },
+    {
+      "id": "invalid_unreviewed_plan",
+      "expect": "FAIL",
+      "expected_error": "MISSING_GATE",
+      "initial": {
+        "loop": {"id": "LOOP-I1", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {"INC-X": {"position": "PLANNING", "contract_revision": "C@2", "plan_revision": "P@1", "baseline_revision": "B@1"}}
+      },
+      "steps": [
+        {"action": "set_gate", "scope": "INC-X", "gate": "G1_CONTRACT_APPROVAL", "status": "SATISFIED", "record": "AUTH", "target_contract_revision": "C@2"},
+        {"action": "transition", "scope": "INC-X", "transition": "increment.plan_to_ready", "presented_contract_revision": "C@2", "presented_plan_revision": "P@1", "presented_baseline_revision": "B@1"}
+      ]
+    },
+    {
+      "id": "invalid_stale_plan_review",
+      "expect": "FAIL",
+      "expected_error": "STALE_PLAN_REVIEW",
+      "initial": {
+        "loop": {"id": "LOOP-I2", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {"INC-X": {"position": "PLANNING", "contract_revision": "C@2", "plan_revision": "P@4", "baseline_revision": "B@1"}}
+      },
+      "steps": [
+        {"action": "set_gate", "scope": "INC-X", "gate": "G1_CONTRACT_APPROVAL", "status": "SATISFIED", "record": "AUTH", "target_contract_revision": "C@2"},
+        {"action": "set_gate", "scope": "INC-X", "gate": "G2_PLAN_REVIEW", "status": "SATISFIED", "record": "PR4", "target_plan_revision": "P@4", "review_scope": [{"type": "EXECUTION_INCREMENT", "id": "INC-X"}]},
+        {"action": "change_plan_revision", "scope": "INC-X", "new_plan_revision": "P@5"},
+        {"action": "transition", "scope": "INC-X", "transition": "increment.plan_to_ready", "presented_contract_revision": "C@2", "presented_plan_revision": "P@5", "presented_baseline_revision": "B@1"}
+      ]
+    },
+    {
+      "id": "invalid_wrong_contract_revision",
+      "expect": "FAIL",
+      "expected_error": "PRESENTED_CONTRACT_MISMATCH",
+      "initial": {
+        "loop": {"id": "LOOP-I3", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {"INC-X": {"position": "READY", "contract_revision": "C@2", "plan_revision": "P@4", "baseline_revision": "B@1"}}
+      },
+      "steps": [
+        {"action": "set_gate", "scope": "INC-X", "gate": "G1_CONTRACT_APPROVAL", "status": "SATISFIED", "record": "AUTH", "target_contract_revision": "C@2"},
+        {"action": "set_gate", "scope": "INC-X", "gate": "G2_PLAN_REVIEW", "status": "SATISFIED", "record": "PR4", "target_plan_revision": "P@4", "review_scope": [{"type": "EXECUTION_INCREMENT", "id": "INC-X"}]},
+        {"action": "set_gate", "scope": "INC-X", "gate": "G3_AUTHORITY", "status": "SATISFIED", "record": "OA"},
+        {"action": "transition", "scope": "INC-X", "transition": "increment.ready_to_executing", "presented_contract_revision": "C@3", "presented_plan_revision": "P@4", "presented_baseline_revision": "B@1"}
+      ]
+    },
+    {
+      "id": "invalid_contract_change_without_human_approval",
+      "expect": "FAIL",
+      "expected_error": "CONTRACT_CHANGE_NOT_APPROVED",
+      "initial": {
+        "loop": {"id": "LOOP-I4", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {"INC-X": {"position": "PLANNING", "contract_revision": "C@2", "plan_revision": "P@4", "baseline_revision": "B@1"}}
+      },
+      "steps": [
+        {"action": "contract_change_approved", "proposal": "CCP-1", "new_contract_revision": "C@3", "effectivity": {"INC-X": {"classification": "AFFECTED", "governing_contract_revision": "C@3", "determination_record": "EFF", "action": "REPLAN", "new_plan_revision": "P@5"}}}
+      ]
+    },
+    {
+      "id": "invalid_unknown_authority",
+      "expect": "FAIL",
+      "expected_error": "UNKNOWN_GATE",
+      "initial": {
+        "loop": {"id": "LOOP-I5", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {"INC-X": {"position": "READY", "contract_revision": "C@2", "plan_revision": "P@4", "baseline_revision": "B@1"}}
+      },
+      "steps": [
+        {"action": "set_gate", "scope": "INC-X", "gate": "G1_CONTRACT_APPROVAL", "status": "SATISFIED", "record": "AUTH", "target_contract_revision": "C@2"},
+        {"action": "set_gate", "scope": "INC-X", "gate": "G2_PLAN_REVIEW", "status": "SATISFIED", "record": "PR4", "target_plan_revision": "P@4", "review_scope": [{"type": "EXECUTION_INCREMENT", "id": "INC-X"}]},
+        {"action": "set_gate", "scope": "INC-X", "gate": "G3_AUTHORITY", "status": "UNKNOWN", "record": "OA-UNKNOWN"},
+        {"action": "transition", "scope": "INC-X", "transition": "increment.ready_to_executing", "presented_contract_revision": "C@2", "presented_plan_revision": "P@4", "presented_baseline_revision": "B@1"}
+      ]
+    },
+    {
+      "id": "invalid_self_acceptance",
+      "expect": "FAIL",
+      "expected_error": "SELF_VALIDATION",
+      "initial": {
+        "loop": {"id": "LOOP-I6", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {"INC-X": {"position": "VALIDATING", "contract_revision": "C@2", "plan_revision": "P@4", "baseline_revision": "B@1"}}
+      },
+      "steps": [
+        {"action": "set_gate", "scope": "INC-X", "gate": "G4_VALIDATION_ACCEPTANCE", "status": "SATISFIED", "record": "VAL", "target_contract_revision": "C@2", "validator": "agent-1", "producer": "agent-1"}
+      ]
+    },
+    {
+      "id": "invalid_provider_done_implies_acceptance",
+      "expect": "FAIL",
+      "expected_error": "MISSING_GATE",
+      "initial": {
+        "loop": {"id": "LOOP-I7", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {"INC-X": {"position": "VALIDATING", "contract_revision": "C@2", "plan_revision": "P@4", "baseline_revision": "B@1", "tasks": {"T1": {"state": "ACTIVE"}}}}
+      },
+      "steps": [
+        {"action": "provider_status", "scope": "INC-X", "task": "T1", "provider_status": "Done"},
+        {"action": "set_task_state", "scope": "INC-X", "task": "T1", "state": "COMPLETE"},
+        {"action": "transition", "scope": "INC-X", "transition": "increment.validating_accept", "presented_contract_revision": "C@2", "presented_plan_revision": "P@4", "presented_baseline_revision": "B@1"}
+      ]
+    },
+    {
+      "id": "invalid_ambiguous_contract_effectivity",
+      "expect": "FAIL",
+      "expected_error": "AMBIGUOUS_CONTRACT_EFFECTIVITY",
+      "initial": {
+        "loop": {"id": "LOOP-I8", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {
+          "INC-A": {"position": "EXECUTING", "contract_revision": "C@2", "plan_revision": "P@4", "baseline_revision": "B@1"},
+          "INC-B": {"position": "PLANNING", "contract_revision": "C@2", "plan_revision": "P@5", "baseline_revision": "B@1"}
+        }
+      },
+      "steps": [
+        {"action": "contract_change_approved", "proposal": "CCP", "authority_decision_record": "AD", "new_contract_revision": "C@3", "effectivity": {"INC-A": {"classification": "UNAFFECTED", "governing_contract_revision": "C@2", "determination_record": "EFF-A"}}}
+      ]
+    },
+    {
+      "id": "invalid_all_increments_accepted_without_final_validation",
+      "expect": "FAIL",
+      "expected_error": "MISSING_GATE",
+      "initial": {
+        "loop": {"id": "LOOP-I9", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {
+          "INC-A": {"position": null, "terminal_disposition": "ACCEPTED", "contract_revision": "C@2", "plan_revision": "P@4", "baseline_revision": "B@1"},
+          "INC-B": {"position": null, "terminal_disposition": "ACCEPTED", "contract_revision": "C@2", "plan_revision": "P@5", "baseline_revision": "B@1"}
+        }
+      },
+      "steps": [
+        {"action": "final_reconciliation", "final_contract_revision": "C@2", "scope_contract_revisions": {"INC-A": "C@2", "INC-B": "C@2"}},
+        {"action": "learning_disposition", "material_learning": false},
+        {"action": "transition", "scope": "LOOP-I9", "transition": "loop.close_accepted", "presented_contract_revision": "C@2"}
+      ]
+    }
+  ]
+}
