@@ -1,0 +1,203 @@
+{
+  "meta": {
+    "name": "Canonical AE Lifecycle/State Protocol",
+    "version": "L1-D-stage1",
+    "representation_status": "conforming_machine_representation",
+    "semantic_authority": "human_semantic_specification",
+    "technology_semantics": "JSON is a repository representation choice, not Canonical AE meaning"
+  },
+  "loop": {
+    "control_states": ["OPEN", "SUSPENDED", "CLOSED"],
+    "terminal_dispositions": ["ACCEPTED", "CANCELLED", "SUPERSEDED"]
+  },
+  "increment": {
+    "active_positions": ["PLANNING", "READY", "EXECUTING", "VALIDATING"],
+    "terminal_dispositions": ["ACCEPTED", "CANCELLED", "SUPERSEDED"]
+  },
+  "task": {
+    "execution_states": ["NOT_STARTED", "ACTIVE", "COMPLETE"]
+  },
+  "gate_evaluation_states": ["SATISFIED", "UNSATISFIED", "UNKNOWN"],
+  "transition_results": ["ALLOWED", "DENIED", "BLOCKED"],
+  "review_scope_anchor_types": [
+    "EXECUTION_INCREMENT",
+    "EXECUTABLE_TASK",
+    "ARCHITECTURE_ELEMENT",
+    "ARCHITECTURE_RELATIONSHIP",
+    "TYPED_SCOPE_DESCRIPTOR"
+  ],
+  "gates": {
+    "G1_CONTRACT_APPROVAL": {
+      "exact_revision_required": true,
+      "authoritative_record_types": ["AuthorityDecision"],
+      "unknown_fails_closed": true
+    },
+    "G2_PLAN_REVIEW": {
+      "exact_revision_required": true,
+      "explicit_scope_required": true,
+      "authoritative_record_types": ["PlanReviewRecord"],
+      "unknown_fails_closed": true
+    },
+    "G3_AUTHORITY": {
+      "scope_required": true,
+      "authoritative_record_types": ["AuthorityDecision", "AuthorityContext"],
+      "unknown_fails_closed": true
+    },
+    "G4_VALIDATION_ACCEPTANCE": {
+      "exact_contract_revision_required": true,
+      "independent_judgment_required": true,
+      "authoritative_record_types": ["ValidationRecord"],
+      "unknown_fails_closed": true
+    },
+    "G5_CONTRACT_CHANGE": {
+      "exact_proposal_required": true,
+      "human_decision_required": true,
+      "authoritative_record_types": ["AuthorityDecision"],
+      "unknown_fails_closed": true
+    }
+  },
+  "routes": [
+    "ACCEPT",
+    "RETRY_EXECUTION",
+    "REPLAN",
+    "PROPOSE_CONTRACT_CHANGE",
+    "ESCALATE"
+  ],
+  "rules": {
+    "single_exclusive_loop_phase_prohibited": true,
+    "gate_projection_not_independent_truth": true,
+    "scope_aware_plan_review": true,
+    "contract_revision_effectivity_required": true,
+    "no_silent_contract_revision_switch": true,
+    "provider_done_does_not_imply_acceptance": true,
+    "self_validation_acceptance_prohibited": true,
+    "final_loop_acceptance_requires_final_contract_scope_validation": true,
+    "learning_disposition_required_for_loop_closure": true,
+    "transition_history_non_destructively_reconstructable": true
+  },
+  "transitions": [
+    {
+      "id": "increment.plan_to_ready",
+      "scope_type": "EXECUTION_INCREMENT",
+      "source": "PLANNING",
+      "target": "READY",
+      "required_gates": ["G1_CONTRACT_APPROVAL", "G2_PLAN_REVIEW"]
+    },
+    {
+      "id": "increment.ready_to_executing",
+      "scope_type": "EXECUTION_INCREMENT",
+      "source": "READY",
+      "target": "EXECUTING",
+      "required_gates": ["G1_CONTRACT_APPROVAL", "G2_PLAN_REVIEW", "G3_AUTHORITY"]
+    },
+    {
+      "id": "increment.executing_to_validating",
+      "scope_type": "EXECUTION_INCREMENT",
+      "source": "EXECUTING",
+      "target": "VALIDATING",
+      "required_gates": []
+    },
+    {
+      "id": "increment.validating_retry_to_executing",
+      "scope_type": "EXECUTION_INCREMENT",
+      "source": "VALIDATING",
+      "target": "EXECUTING",
+      "route": "RETRY_EXECUTION",
+      "required_gates": ["G3_AUTHORITY"],
+      "requires_failed_validation": true
+    },
+    {
+      "id": "increment.executing_replan_to_planning",
+      "scope_type": "EXECUTION_INCREMENT",
+      "source": "EXECUTING",
+      "target": "PLANNING",
+      "route": "REPLAN",
+      "required_gates": []
+    },
+    {
+      "id": "increment.validating_replan_to_planning",
+      "scope_type": "EXECUTION_INCREMENT",
+      "source": "VALIDATING",
+      "target": "PLANNING",
+      "route": "REPLAN",
+      "required_gates": []
+    },
+    {
+      "id": "increment.validating_accept",
+      "scope_type": "EXECUTION_INCREMENT",
+      "source": "VALIDATING",
+      "target_terminal_disposition": "ACCEPTED",
+      "route": "ACCEPT",
+      "required_gates": ["G4_VALIDATION_ACCEPTANCE"]
+    },
+    {
+      "id": "increment.cancel",
+      "scope_type": "EXECUTION_INCREMENT",
+      "source_any_active": true,
+      "target_terminal_disposition": "CANCELLED",
+      "required_gates": ["G3_AUTHORITY"]
+    },
+    {
+      "id": "increment.supersede",
+      "scope_type": "EXECUTION_INCREMENT",
+      "source_any_active": true,
+      "target_terminal_disposition": "SUPERSEDED",
+      "required_gates": ["G3_AUTHORITY"]
+    },
+    {
+      "id": "loop.suspend",
+      "scope_type": "AE_LOOP",
+      "source": "OPEN",
+      "target": "SUSPENDED",
+      "required_gates": []
+    },
+    {
+      "id": "loop.resume",
+      "scope_type": "AE_LOOP",
+      "source": "SUSPENDED",
+      "target": "OPEN",
+      "required_gates": []
+    },
+    {
+      "id": "loop.close_accepted",
+      "scope_type": "AE_LOOP",
+      "source": "OPEN",
+      "target": "CLOSED",
+      "target_terminal_disposition": "ACCEPTED",
+      "route": "ACCEPT",
+      "required_gates": ["G4_VALIDATION_ACCEPTANCE"],
+      "requires_learning_disposition": true,
+      "requires_all_increments_terminal": true,
+      "requires_final_contract_scope_validation": true
+    },
+    {
+      "id": "loop.close_cancelled",
+      "scope_type": "AE_LOOP",
+      "source_any_nonclosed": true,
+      "target": "CLOSED",
+      "target_terminal_disposition": "CANCELLED",
+      "required_gates": ["G3_AUTHORITY"],
+      "requires_learning_disposition": true
+    },
+    {
+      "id": "loop.close_superseded",
+      "scope_type": "AE_LOOP",
+      "source_any_nonclosed": true,
+      "target": "CLOSED",
+      "target_terminal_disposition": "SUPERSEDED",
+      "required_gates": ["G3_AUTHORITY"],
+      "requires_learning_disposition": true
+    }
+  ],
+  "promotion_criteria_for_structural_normative_authority": [
+    "all_required_protocol_semantics_representable",
+    "valid_scenario_fixtures_pass",
+    "known_invalid_routes_fail",
+    "scope_aware_review_expressible",
+    "contract_revision_effectivity_expressible",
+    "blocking_conditions_expressible",
+    "exact_revision_gates_expressible",
+    "rolling_wave_parallel_scopes_expressible",
+    "human_machine_structural_drift_controllable"
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "name": "L1-D G5 Contract Change and effectivity fixtures",
+    "version": "L1-D-stage1"
+  },
+  "scenarios": [
+    {
+      "id": "valid_g5_contract_change_with_complete_effectivity",
+      "expect": "PASS",
+      "initial": {
+        "loop": {"id": "LOOP-G5-1", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {
+          "INC-A": {"position": "EXECUTING", "contract_revision": "C@2"},
+          "INC-B": {"position": "PLANNING", "contract_revision": "C@2"}
+        }
+      },
+      "steps": [
+        {"action": "set_gate", "scope": "LOOP-G5-1", "gate": "G5_CONTRACT_CHANGE", "status": "SATISFIED", "record": "AD-CCP1", "target_proposal": "CCP-1", "human_decision": true},
+        {"action": "contract_change_approved", "proposal": "CCP-1", "new_contract_revision": "C@3", "effectivity": {
+          "INC-A": {"classification": "UNAFFECTED", "governing_contract_revision": "C@2", "determination_record": "EFF-A"},
+          "INC-B": {"classification": "AFFECTED", "governing_contract_revision": "C@3", "determination_record": "EFF-B", "action": "REPLAN"}
+        }}
+      ]
+    },
+    {
+      "id": "invalid_contract_change_without_g5",
+      "expect": "FAIL",
+      "expected_error": "CONTRACT_CHANGE_NOT_APPROVED",
+      "initial": {
+        "loop": {"id": "LOOP-G5-2", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {"INC-A": {"position": "PLANNING", "contract_revision": "C@2"}}
+      },
+      "steps": [
+        {"action": "contract_change_approved", "proposal": "CCP-2", "new_contract_revision": "C@3", "effectivity": {
+          "INC-A": {"classification": "AFFECTED", "governing_contract_revision": "C@3", "determination_record": "EFF-A", "action": "REPLAN"}
+        }}
+      ]
+    },
+    {
+      "id": "invalid_g5_wrong_proposal",
+      "expect": "FAIL",
+      "expected_error": "STALE_CONTRACT_CHANGE_GATE",
+      "initial": {
+        "loop": {"id": "LOOP-G5-3", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {"INC-A": {"position": "PLANNING", "contract_revision": "C@2"}}
+      },
+      "steps": [
+        {"action": "set_gate", "scope": "LOOP-G5-3", "gate": "G5_CONTRACT_CHANGE", "status": "SATISFIED", "record": "AD-X", "target_proposal": "CCP-OTHER", "human_decision": true},
+        {"action": "contract_change_approved", "proposal": "CCP-3", "new_contract_revision": "C@3", "effectivity": {
+          "INC-A": {"classification": "AFFECTED", "governing_contract_revision": "C@3", "determination_record": "EFF-A", "action": "REPLAN"}
+        }}
+      ]
+    },
+    {
+      "id": "invalid_g5_ambiguous_effectivity",
+      "expect": "FAIL",
+      "expected_error": "AMBIGUOUS_CONTRACT_EFFECTIVITY",
+      "initial": {
+        "loop": {"id": "LOOP-G5-4", "state": "OPEN", "approved_contract_revision": "C@2"},
+        "increments": {
+          "INC-A": {"position": "EXECUTING", "contract_revision": "C@2"},
+          "INC-B": {"position": "PLANNING", "contract_revision": "C@2"}
+        }
+      },
+      "steps": [
+        {"action": "set_gate", "scope": "LOOP-G5-4", "gate": "G5_CONTRACT_CHANGE", "status": "SATISFIED", "record": "AD-4", "target_proposal": "CCP-4", "human_decision": true},
+        {"action": "contract_change_approved", "proposal": "CCP-4", "new_contract_revision": "C@3", "effectivity": {
+          "INC-A": {"classification": "UNAFFECTED", "governing_contract_revision": "C@2", "determination_record": "EFF-A"}
+        }}
+      ]
+    }
+  ]
+}

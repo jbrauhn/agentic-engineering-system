@@ -1,0 +1,27 @@
+name: Lifecycle Integrity
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lifecycle-integrity:
+    name: lifecycle-integrity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate lifecycle protocol and main scenario fixtures
+        run: python validate_lifecycle.py lifecycle_protocol.json lifecycle_scenarios.json
+      - name: Validate G5 Contract Change gate and revision effectivity
+        run: python validate_contract_change_gate.py lifecycle_protocol.json contract_change_gate_scenarios.json
