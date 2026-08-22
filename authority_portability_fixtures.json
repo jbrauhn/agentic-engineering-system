@@ -1,0 +1,13 @@
+{
+  "meta": {"name":"L1-F authority portability fixtures","version":"L1-F-stage1"},
+  "implementations": {
+    "A": {"model":"ROLE_SCOPED_PLUS_EXPLICIT_ASSIGNMENT","entitlement_source":"provider-native","oa_source":"explicit Authority Assignment","pdp_topology":"runtime + provider policy"},
+    "B": {"model":"ATTRIBUTE_RESOURCE_TASK_DYNAMIC","entitlement_source":"external entitlement source","oa_source":"dynamic derivation","pdp_topology":"distributed policy components"}
+  },
+  "cases": [
+    {"id":"portable_authorized_work_update","operation":"work.update","facts":{"identity":true,"oa":"PERMIT","entitlement":"PRESENT","pep":true,"provider":"AVAILABLE"},"expected_policy":"PERMIT","expected_runtime":"ALLOWED"},
+    {"id":"portable_no_oa","operation":"work.update","facts":{"identity":true,"oa":"DENY","entitlement":"PRESENT","pep":true,"provider":"AVAILABLE"},"expected_policy":"DENY","expected_runtime":"DENIED"},
+    {"id":"portable_missing_entitlement","operation":"work.update","facts":{"identity":true,"oa":"PERMIT","entitlement":"MISSING","pep":true,"provider":"AVAILABLE"},"expected_policy":"PERMIT","expected_runtime":"BLOCKED"},
+    {"id":"portable_indeterminate_authority","operation":"work.update","facts":{"identity":true,"oa":"INDETERMINATE","entitlement":"PRESENT","pep":true,"provider":"AVAILABLE"},"expected_policy":"INDETERMINATE","expected_runtime":"BLOCKED"}
+  ]
+}
