@@ -1,0 +1,33 @@
+{
+  "meta": {"name":"L1-H Planning / Execution portability fixtures","version":"L1-H-stage1"},
+  "implementations": {
+    "A": {
+      "topology":"source-controlled Plan + Jira/Plane-like Work Management + CI jobs + multiple stateless/fresh workers + provider-native branch workflow"
+    },
+    "B": {
+      "topology":"workflow-provider Plan representation + different Work Management provider + long-lived agent/runtime + direct tool/API execution + materially different orchestration"
+    }
+  },
+  "cases": [
+    {
+      "id":"portable_parallel_execution",
+      "A":{"contract":"C@2","plan":"P@4","baseline":"B@8","review_scope":"INC-A","route":"LOCAL_ADAPTATION","blockers":[],"validation_ready":false,"recoverable":true},
+      "B":{"contract":"C@2","plan":"P@4","baseline":"B@8","review_scope":"INC-A","route":"LOCAL_ADAPTATION","blockers":[],"validation_ready":false,"recoverable":true}
+    },
+    {
+      "id":"portable_replan_on_dependency_change",
+      "A":{"contract":"C@2","plan":"P@4","baseline":"B@8","review_scope":"INC-A","route":"REPLAN","blockers":["DEPENDENCY_CHANGE"],"validation_ready":false,"recoverable":true},
+      "B":{"contract":"C@2","plan":"P@4","baseline":"B@8","review_scope":"INC-A","route":"REPLAN","blockers":["DEPENDENCY_CHANGE"],"validation_ready":false,"recoverable":true}
+    },
+    {
+      "id":"portable_effective_old_revision",
+      "A":{"contract":"C@2","plan":"P@4","baseline":"B@8","review_scope":"INC-A","route":"LOCAL_ADAPTATION","blockers":[],"validation_ready":false,"recoverable":true},
+      "B":{"contract":"C@2","plan":"P@4","baseline":"B@8","review_scope":"INC-A","route":"LOCAL_ADAPTATION","blockers":[],"validation_ready":false,"recoverable":true}
+    },
+    {
+      "id":"portable_reconciled_validation_ready",
+      "A":{"contract":"C@2","plan":"P@4","baseline":"B@8","review_scope":"INC-A+INC-B","route":"LOCAL_ADAPTATION","blockers":[],"validation_ready":true,"recoverable":true},
+      "B":{"contract":"C@2","plan":"P@4","baseline":"B@8","review_scope":"INC-A+INC-B","route":"LOCAL_ADAPTATION","blockers":[],"validation_ready":true,"recoverable":true}
+    }
+  ]
+}
