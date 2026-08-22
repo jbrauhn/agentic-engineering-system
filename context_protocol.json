@@ -1,0 +1,159 @@
+{
+  "meta": {
+    "name": "Canonical AE Knowledge / Context / Memory Protocol",
+    "version": "L1-G-stage1",
+    "representation_status": "conforming_machine_representation",
+    "semantic_authority": "human_semantic_specification",
+    "technology_semantics": "JSON is a repository/reference representation choice, not Canonical AE meaning"
+  },
+  "memory_layers": [
+    "AUTHORITATIVE_DURABLE_STATE",
+    "DURABLE_REFERENCE_KNOWLEDGE",
+    "CONTINUATION_STATE",
+    "DERIVED_RETRIEVAL_STATE",
+    "BOUNDED_CURRENT_CONTEXT",
+    "EPHEMERAL_SESSION_STATE"
+  ],
+  "domain_semantics": {
+    "context_requirement": "B",
+    "context_package": "D",
+    "context_assembly_receipt": "B",
+    "bootstrap_descriptor": "B",
+    "handoff_record": "A2"
+  },
+  "context_requirement_classes": [
+    "REQUIRED_GOVERNING",
+    "REQUIRED_OPERATIONAL",
+    "SUPPORTING"
+  ],
+  "currentness_modes": [
+    "EXACT_REVISION",
+    "EFFECTIVE_FOR_SCOPE",
+    "CURRENT_AT_USE",
+    "BEST_AVAILABLE_SUPPORTING"
+  ],
+  "authority_relationships": [
+    "AUTHORITATIVE",
+    "NON_AUTHORITATIVE",
+    "UNKNOWN"
+  ],
+  "derivation_relationships": [
+    "ISSUED_SOURCE",
+    "DERIVED_INDEX",
+    "DERIVED_SUMMARY",
+    "CACHE",
+    "RETRIEVAL_AID"
+  ],
+  "currentness_results": [
+    "SATISFIED",
+    "STALE",
+    "UNKNOWN",
+    "INTENTIONALLY_HISTORICAL"
+  ],
+  "context_dispositions": [
+    "READY",
+    "REASSEMBLE",
+    "BLOCKED",
+    "DEGRADE",
+    "CONSTRAIN"
+  ],
+  "bootstrap_discoveries": [
+    "AE_IMPLEMENTATION",
+    "CANONICAL_AE_RELEASE",
+    "OEB_EXACT_REVISION",
+    "PRODUCT_SYSTEM_PROFILE_EXACT_REVISION",
+    "ACTOR_AUTHORITY_CONTEXT",
+    "PRODUCT_WORK_SCOPE",
+    "LOOP_INCREMENT_TASK",
+    "GOVERNING_ARTIFACTS_AND_VALIDATION",
+    "CAPABILITY_BINDINGS_ACCESS_PATHS",
+    "HANDOFF_CONTINUATION",
+    "CONTEXT_REQUIREMENT",
+    "ASSEMBLE_BOUNDED_CONTEXT"
+  ],
+  "anchor_first_order": [
+    "REQUIRED_GOVERNING_ANCHORS",
+    "CURRENT_WORK_DEPENDENCIES",
+    "ARCHITECTURE_NEIGHBORHOOD",
+    "MATERIAL_DECISIONS_EVIDENCE_HANDOFF",
+    "SUPPORTING_KNOWLEDGE"
+  ],
+  "context_requirement_fields_as_applicable": [
+    "purpose_or_action",
+    "required_governing_anchors",
+    "required_authority_source_quality",
+    "revision_effectivity_requirement",
+    "currentness_requirement",
+    "security_access_requirement",
+    "supporting_categories",
+    "failure_disposition",
+    "assembly_bounds"
+  ],
+  "context_package_fields_as_applicable": [
+    "package_instance",
+    "purpose",
+    "consumer_runtime_context",
+    "ae_implementation",
+    "product_system_scope",
+    "loop_increment_task_scope",
+    "context_requirement",
+    "assembly_time",
+    "source_references",
+    "exact_revisions_digests",
+    "source_authority_relationship",
+    "currentness_effectivity_result",
+    "access_security_constraints",
+    "selected_material",
+    "unresolved_conflicts",
+    "assembly_bounds",
+    "assembly_receipt_reference"
+  ],
+  "receipt_fields_as_applicable": [
+    "context_package_or_purpose",
+    "context_requirement",
+    "assembly_time",
+    "authoritative_source_references",
+    "exact_revisions_digests",
+    "retrieval_index_sources",
+    "selection_exclusion",
+    "currentness_checks",
+    "authorization_access_outcomes",
+    "unresolved_conflicts",
+    "assembly_mechanism_version",
+    "package_integrity_digest"
+  ],
+  "knowledge_write_paths": [
+    "REFERENCE_KNOWLEDGE_PERSISTENCE",
+    "CANONICAL_SEMANTIC_PROMOTION"
+  ],
+  "rules": {
+    "memory_is_system_property_not_store": true,
+    "agent_does_not_own_memory": true,
+    "r2_owns_authoritative_state_r3_coordinates_context": true,
+    "no_generic_knowledge_item_or_memory_record": true,
+    "context_package_not_authoritative": true,
+    "context_package_reconstructable": true,
+    "context_receipt_not_a2": true,
+    "handoff_existing_a2_not_current_source_truth": true,
+    "handoff_conditionally_required": true,
+    "replacement_actor_reconstructable": true,
+    "hidden_session_state_not_material_source": true,
+    "anchor_first_relevance_expanding": true,
+    "mandatory_anchors_not_displaced_by_relevance": true,
+    "correct_effective_beats_latest": true,
+    "context_invalidation_not_source_mutation": true,
+    "unresolved_authority_conflict_blocks_protected_use": true,
+    "derived_retrieval_state_not_authoritative": true,
+    "knowledge_write_does_not_create_canonical_truth": true,
+    "semantic_owner_promotion_required_for_canonical_state": true,
+    "compaction_not_canonical_state": true,
+    "material_state_promoted_before_intentional_compaction": true,
+    "derived_context_no_broader_access_than_source": true,
+    "context_package_not_evidence_by_default": true,
+    "consequential_context_provenance_conditional": true,
+    "routine_context_provenance_not_permanently_required": true,
+    "interface_parity_not_environment_uniformity": true,
+    "no_prompt_logging_requirement": true,
+    "no_vector_rag_memory_technology_required": true
+  }
+}
