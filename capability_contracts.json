@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "name": "Canonical AE Capability Contract Definitions",
+    "version": "L1-E-stage1",
+    "representation_status": "conforming_machine_representation",
+    "semantic_authority": "human_semantic_specification",
+    "technology_semantics": "JSON is a repository/reference representation choice, not Canonical AE meaning"
+  },
+  "readiness_dimensions": ["SUPPORTED", "BOUND", "DISCOVERABLE", "REACHABLE", "ENTITLEABLE", "ENFORCEABLE", "PROVEN"],
+  "readiness_evaluation_states": ["SATISFIED", "UNSATISFIED", "UNKNOWN", "NOT_APPLICABLE"],
+  "runtime_outcomes": ["ALLOWED", "DENIED", "BLOCKED"],
+  "operational_impacts": ["NONE", "DEGRADE", "CONSTRAIN", "BLOCK"],
+  "adoption_proof_states": ["PROVEN", "PENDING", "FAILED", "NOT_APPLICABLE"],
+  "requirement_classes": ["REQUIRED", "CONDITIONAL_REQUIRED"],
+  "operation_defaults": {
+    "consumers": "lifecycle/R1-R7-derived",
+    "evidence_provenance_expectation": "material operation/result/provenance reconstructable as applicable",
+    "implementation_proof_expectation": "semantic mapping + deterministic resolution + applicable access/readiness evidence + authorized success/required denial"
+  },
+  "capabilities": [
+    {"capability_id":"source_control","name":"Source Control","purpose":"Provide governed access to versioned source and engineering artifacts with exact revision/provenance semantics.","operations":[
+      {"operation_id":"source.read","requirement_class":"REQUIRED","purpose":"Read governed source/artifacts needed for Planning, Execution, Validation, or context.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"source.resolve_revision","requirement_class":"REQUIRED","purpose":"Resolve an exact revision identity for governed reference.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"source.write_change","requirement_class":"REQUIRED","purpose":"Create/update a versioned change through a governed machine path.","agent_access_required":true,"protected_operation":true},
+      {"operation_id":"source.compare","requirement_class":"REQUIRED","purpose":"Compare revisions/changes for Planning, review, evidence, and Validation.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"source.submit_change_for_review","requirement_class":"CONDITIONAL_REQUIRED","purpose":"Submit a change into the organization's governed review path when applicable.","agent_access_required":true,"protected_operation":true}]},
+    {"capability_id":"ci_cd","name":"CI/CD","purpose":"Run and inspect governed automated engineering workflows and recover their evidence.","operations":[
+      {"operation_id":"pipeline.discover","requirement_class":"REQUIRED","purpose":"Discover applicable pipeline/workflow capability.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"pipeline.run","requirement_class":"REQUIRED","purpose":"Start an applicable automated workflow when authorized.","agent_access_required":true,"protected_operation":true},
+      {"operation_id":"pipeline.status","requirement_class":"REQUIRED","purpose":"Read execution status.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"pipeline.result.read","requirement_class":"REQUIRED","purpose":"Read semantic workflow result.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"pipeline.evidence.read","requirement_class":"REQUIRED","purpose":"Retrieve/reference pipeline evidence.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"pipeline.promote_or_deploy","requirement_class":"CONDITIONAL_REQUIRED","purpose":"Promote/deploy when applicable lifecycle work requires it.","agent_access_required":true,"protected_operation":true}]},
+    {"capability_id":"models","name":"Models","purpose":"Provide governed model invocation and enough metadata for material provenance/configuration traceability.","operations":[
+      {"operation_id":"model.describe","requirement_class":"REQUIRED","purpose":"Describe available model capability/configuration.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"model.invoke","requirement_class":"REQUIRED","purpose":"Invoke a bound model through a governed path.","agent_access_required":true,"protected_operation":true},
+      {"operation_id":"model.result_metadata.read","requirement_class":"REQUIRED","purpose":"Read model/provider/configuration provenance sufficient for material traceability.","agent_access_required":true,"protected_operation":false}]},
+    {"capability_id":"runtime_execution","name":"Runtime / Execution","purpose":"Start and observe bounded governed execution and preserve control over continuing execution.","operations":[
+      {"operation_id":"execution.start","requirement_class":"REQUIRED","purpose":"Start bounded execution.","agent_access_required":true,"protected_operation":true},
+      {"operation_id":"execution.status","requirement_class":"REQUIRED","purpose":"Read execution status.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"execution.result.read","requirement_class":"REQUIRED","purpose":"Read execution result/output metadata.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"execution.cancel","requirement_class":"CONDITIONAL_REQUIRED","purpose":"Cancel/terminate long-running or cancellable execution when explicit control is needed.","agent_access_required":true,"protected_operation":true}]},
+    {"capability_id":"identity_access","name":"Identity & Access","purpose":"Establish actor identity and scoped credential/entitlement context without requiring broad IAM administration or raw secret handling by agents.","operations":[
+      {"operation_id":"identity.authenticate","requirement_class":"REQUIRED","purpose":"Establish authenticated actor/runtime identity.","agent_access_required":false,"protected_operation":false},
+      {"operation_id":"identity.context.read","requirement_class":"REQUIRED","purpose":"Read identity claims/context permitted for governed decisions.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"credential.establish_scoped_use","requirement_class":"REQUIRED","purpose":"Establish scoped credential use directly or through mediation/injection without requiring raw secret possession by the agent.","agent_access_required":false,"protected_operation":true},
+      {"operation_id":"entitlement.context.read","requirement_class":"CONDITIONAL_REQUIRED","purpose":"Read relevant entitlement context where permitted and needed.","agent_access_required":true,"protected_operation":false}]},
+    {"capability_id":"governed_tool_access","name":"Governed Tool Access","purpose":"Discover, describe, invoke, and inspect governed engineering tools without canonizing one tool protocol.","operations":[
+      {"operation_id":"tool.discover","requirement_class":"REQUIRED","purpose":"Discover governed tools/operations.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"tool.describe","requirement_class":"REQUIRED","purpose":"Describe a governed tool operation sufficiently for safe invocation.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"tool.invoke","requirement_class":"REQUIRED","purpose":"Invoke an authorized tool.","agent_access_required":true,"protected_operation":true},
+      {"operation_id":"tool.result.read","requirement_class":"REQUIRED","purpose":"Read semantic result/provenance.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"tool.cancel","requirement_class":"CONDITIONAL_REQUIRED","purpose":"Cancel/terminate long-running tool invocation when required.","agent_access_required":true,"protected_operation":true}]},
+    {"capability_id":"observability","name":"Observability","purpose":"Emit and retrieve telemetry sufficient for AE operation, evidence, diagnostics, and learning.","operations":[
+      {"operation_id":"telemetry.emit","requirement_class":"REQUIRED","purpose":"Emit/capture AE-relevant telemetry; may be automatic rather than reasoning-agent initiated.","agent_access_required":false,"protected_operation":false},
+      {"operation_id":"telemetry.query","requirement_class":"REQUIRED","purpose":"Query telemetry relevant to governed engineering work.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"telemetry.read","requirement_class":"REQUIRED","purpose":"Read telemetry results/evidence.","agent_access_required":true,"protected_operation":false}]},
+    {"capability_id":"knowledge_memory","name":"Knowledge / Memory","purpose":"Provide governed durable knowledge access while preserving R2 authoritative ownership and immutable governed-artifact semantics.","operations":[
+      {"operation_id":"knowledge.read","requirement_class":"REQUIRED","purpose":"Read authoritative or referenced durable knowledge.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"knowledge.query","requirement_class":"REQUIRED","purpose":"Query durable knowledge for context/reconstruction.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"knowledge.write","requirement_class":"REQUIRED","purpose":"Write governed durable knowledge only within the authority/source-of-truth rules of the owning canonical state.","agent_access_required":true,"protected_operation":true},
+      {"operation_id":"knowledge.reference","requirement_class":"REQUIRED","purpose":"Create/use durable references without copying ownership.","agent_access_required":true,"protected_operation":false}]},
+    {"capability_id":"work_management","name":"Work Management","purpose":"Administer AE work through governed agent-readable and agent-writable interfaces without routine Human mechanical mediation.","operations":[
+      {"operation_id":"work.create","requirement_class":"REQUIRED","purpose":"Create durable provider work representing canonical AE work where required.","agent_access_required":true,"protected_operation":true},
+      {"operation_id":"work.query","requirement_class":"REQUIRED","purpose":"Locate work by applicable canonical/provider criteria.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"work.read","requirement_class":"REQUIRED","purpose":"Read current relevant provider work information.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"work.update","requirement_class":"REQUIRED","purpose":"Modify authorized work content/metadata.","agent_access_required":true,"protected_operation":true},
+      {"operation_id":"work.transition","requirement_class":"REQUIRED","purpose":"Request/change provider workflow state when authorized.","agent_access_required":true,"protected_operation":true},
+      {"operation_id":"work.relationship.manage","requirement_class":"REQUIRED","purpose":"Create/update/remove dependencies and required work relationships.","agent_access_required":true,"protected_operation":true},
+      {"operation_id":"work.annotation.add","requirement_class":"REQUIRED","purpose":"Add comments/annotations needed by AE.","agent_access_required":true,"protected_operation":true},
+      {"operation_id":"work.reference.associate","requirement_class":"REQUIRED","purpose":"Associate evidence, references, or related resources with the work object.","agent_access_required":true,"protected_operation":true},
+      {"operation_id":"work.artifact.associate","requirement_class":"REQUIRED","purpose":"Associate relevant artifacts using any semantics-preserving provider mechanism; binary upload is not required.","agent_access_required":true,"protected_operation":true},
+      {"operation_id":"work.complete","requirement_class":"REQUIRED","purpose":"Complete/close provider work when authorized.","agent_access_required":true,"protected_operation":true}]},
+    {"capability_id":"validation","name":"Validation","purpose":"Expose mechanisms for requesting/observing independent Validation without equating R6 with one validator product.","operations":[
+      {"operation_id":"validation.request","requirement_class":"REQUIRED","purpose":"Request/establish applicable independent Validation.","agent_access_required":true,"protected_operation":true},
+      {"operation_id":"validation.status","requirement_class":"REQUIRED","purpose":"Read Validation activity status.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"validation.result.read","requirement_class":"REQUIRED","purpose":"Read Validation result/judgment.","agent_access_required":true,"protected_operation":false},
+      {"operation_id":"validation.evidence.read","requirement_class":"REQUIRED","purpose":"Read/reference Validation evidence.","agent_access_required":true,"protected_operation":false}]}
+  ]
+}

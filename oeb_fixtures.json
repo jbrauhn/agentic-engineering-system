@@ -1,0 +1,24 @@
+{
+  "meta": {"name": "L1-E OEB specialization fixtures", "version": "L1-E-stage1"},
+  "cases": [
+    {
+      "id": "valid_oeb_product_specialization",
+      "expect": "PASS",
+      "oeb": {"oeb_id": "OEB-ORG", "revision": "OEB-ORG@5", "canonical_release": "AE@1.0", "capability_binding_refs": ["B-providerA"], "mandatory_constraints": ["POLICY-ZT", "SEC-BASE"], "governance_refs": ["AUTH-BASE"], "standards_refs": ["STD-PROFILE"], "architecture_expectation_refs": ["ARCH-EXPECT"], "validation_expectation_refs": ["VAL-EXPECT"], "engineering_health_refs": ["HEALTH-BASE"]},
+      "profile": {"profile_id": "PSP-A", "revision": "PSP-A@9", "base_oeb_revision": "OEB-ORG@5", "add_constraints": ["CLASSIFIED-HANDLING"], "remove_constraints": [], "binding_selections": {"work_management": "B-providerA"}}
+    },
+    {
+      "id": "invalid_profile_silent_weakening",
+      "expect": "FAIL",
+      "expected_error": "PROFILE_SILENT_WEAKENING",
+      "oeb": {"oeb_id": "OEB-ORG", "revision": "OEB-ORG@5", "canonical_release": "AE@1.0", "capability_binding_refs": ["B-providerA"], "mandatory_constraints": ["POLICY-ZT", "SEC-BASE"]},
+      "profile": {"profile_id": "PSP-B", "revision": "PSP-B@1", "base_oeb_revision": "OEB-ORG@5", "add_constraints": [], "remove_constraints": ["SEC-BASE"], "exception_refs": []}
+    },
+    {
+      "id": "valid_new_oeb_no_silent_rebase",
+      "expect": "PASS",
+      "oeb": {"oeb_id": "OEB-ORG", "revision": "OEB-ORG@6", "canonical_release": "AE@1.0", "capability_binding_refs": ["B-providerA"], "mandatory_constraints": ["POLICY-ZT", "SEC-BASE", "NEW-ORG-RULE"]},
+      "active_work": [{"loop_id": "LOOP-77", "governing_oeb_revision": "OEB-ORG@5", "reassessment_required_by_policy": "PENDING"}]
+    }
+  ]
+}
