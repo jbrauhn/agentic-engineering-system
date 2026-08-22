@@ -13,8 +13,7 @@ class CapabilityError(Exception):
 def fail(code,msg): raise CapabilityError(code,msg)
 def load(path): return json.loads(Path(path).read_text(encoding="utf-8"))
 
-def indexes(defs):
-    return ({c["capability_id"]:c for c in defs["capabilities"]},{o["operation_id"]:(c,o) for c in defs["capabilities"] for o in c["operations"]})
+def indexes(defs): return ({c["capability_id"]:c for c in defs["capabilities"]},{o["operation_id"]:(c,o) for c in defs["capabilities"] for o in c["operations"]})
 
 def validate_definitions(defs):
     ids=[c["capability_id"] for c in defs.get("capabilities",[])]
@@ -54,8 +53,8 @@ def expand_binding(raw,profiles):
     b=dict(raw); b["capability_id"]=template_cap(b["template"]); ops=template_ops(b["template"])
     for rem in b.get("remove_operations",[]):
         if rem in ops: ops.remove(rem)
-    shape=b.get("provider_shape","DEFAULT")
-    b["operation_mappings"]={op:f"{b['provider_id']}::{shape}::{op.replace('.','_')}" for op in ops}
+    shape=b.get("provider_shape","DEFAULT"); b["operation_mappings"]={op:f"{b['provider_id']}::{shape}::{op.replace('.','_')}" for op in ops}
+    b["scope"]=b.get("scope",{"product":"PRODUCT-A"})
     contexts=b.get("supported_contexts",["headless-agent"]); b["supported_contexts"]=contexts; mechmap=b.get("mechanisms_by_context",{})
     b["access_paths"]=[{"context":ctx,"mechanism":mechmap.get(ctx,b.get("mechanism","GOVERNED_API")),"discovery_ref":f"DISC::{b['binding_id']}::{ctx}","operations":list(ops),"evidence_ref":f"EVIDENCE::ACCESS::{b['binding_id']}::{ctx}"} for ctx in contexts]
     profile=profiles[b.get("readiness_profile","PROVEN_HEALTHY")]
@@ -85,13 +84,16 @@ def validate_binding(caps,ops,b,allow_partial=False):
             if any(p["mechanism"]=="HUMAN_UI_ONLY" for p in paths): fail("MECHANICAL_HUMAN_INTERMEDIARY",f"{b['binding_id']}:{oid}")
             for ctx in b["supported_contexts"]:
                 if not any(p["context"]==ctx and p.get("discovery_ref") and p.get("evidence_ref") for p in paths): fail("ACCESS_CONTEXT_NOT_PROVEN",f"{b['binding_id']}:{oid}:{ctx}")
+    if b["capability_id"]=="runtime_execution" and "execution.cancel" not in mapped and not b.get("bounded_execution_control"): fail("BOUNDED_EXECUTION_CONTROL_MISSING",b["binding_id"])
     if b["capability_id"]=="knowledge_memory" and b.get("knowledge_write_bypasses_authoritative_ownership"): fail("KNOWLEDGE_OWNERSHIP_BYPASS",b["binding_id"])
     if b["capability_id"]=="identity_access" and b.get("raw_secret_delivered_to_agent") is True: fail("RAW_SECRET_AGENT_REQUIREMENT",b["binding_id"])
     if b["proof_environment"] not in {"sandbox","test","lower","simulation-plus-integration","production-safe-read"}: fail("UNSAFE_PROOF_ENVIRONMENT",b["binding_id"])
     if not b.get("actual_binding_exercised"): fail("DOCS_ONLY_PROOF",b["binding_id"])
 
+def scope_matches(binding_scope,request_scope): return all(request_scope.get(k)==v for k,v in binding_scope.items())
+
 def resolve(bindings,request):
-    candidates=[b for b in bindings if request["operation"] in b["operation_mappings"]]
+    request_scope=request.get("scope",{"product":"PRODUCT-A"}); candidates=[b for b in bindings if request["operation"] in b["operation_mappings"] and scope_matches(b.get("scope",{}),request_scope)]
     if not candidates: fail("NO_APPLICABLE_BINDING",request["operation"])
     if len(candidates)>1: fail("AMBIGUOUS_BINDING",request["operation"])
     return candidates[0]
