@@ -67,7 +67,7 @@ def validate_scenario(s):
     if s.get("human_validator_required_without_policy"):
         return "UNIVERSAL_HUMAN_VALIDATOR_PROHIBITED"
 
-    # Exact target and judgment-path independence.
+    # Exact target and identified judgment path are required for every issued Validation judgment.
     if not s.get("record_contract_revision"):
         return "EXACT_CONTRACT_REQUIRED"
     if s.get("record_contract_revision") != s.get("requirement_contract_revision"):
@@ -76,8 +76,6 @@ def validate_scenario(s):
         return "SELF_ACCEPTANCE"
     if s.get("role_label_only") or not s.get("validator_identity") or not s.get("independence_provenance"):
         return "VALIDATOR_IDENTITY_PROVENANCE_REQUIRED"
-    if not s.get("independent_source_resolution"):
-        return "MATERIAL_SOURCE_NOT_INDEPENDENTLY_RESOLVED"
 
     # Policy-sensitive strengthening and separate authority.
     required_ind = set(s.get("policy_required_independence", []))
@@ -87,29 +85,9 @@ def validate_scenario(s):
     if s.get("human_da_required") and not s.get("human_da_satisfied"):
         return "SEPARATE_AUTHORITY_REQUIREMENT_UNSATISFIED"
 
-    # Provider/context are not canonical judgment or Evidence by themselves.
-    if s.get("provider_green_only"):
-        return "PROVIDER_GREEN_NOT_VALIDATION"
-    if s.get("context_package_only"):
-        return "CONTEXT_PACKAGE_NOT_EVIDENCE"
-    if s.get("validation_provider_only") and s.get("provider_result_is_canonical_judgment"):
-        return "PROVIDER_RESULT_NOT_CANONICAL_JUDGMENT"
+    # Evidence/reference manipulation is never an acceptable way to obtain a judgment.
     if s.get("evidence_reference_manipulation"):
         return "EVIDENCE_REFERENCE_INDEPENDENCE_BYPASS"
-
-    # Evidence sufficiency.
-    required_proof = set(s.get("required_proof", []))
-    covered_proof = set(s.get("covered_proof", []))
-    if not required_proof.issubset(covered_proof):
-        return "PROOF_COVERAGE_INCOMPLETE"
-    if not s.get("evidence_authoritative"):
-        return "EVIDENCE_AUTHORITY_INDETERMINATE"
-    if not s.get("evidence_integrity"):
-        return "EVIDENCE_INTEGRITY_FAILED"
-    if s.get("evidence_currentness") != "CURRENT" or s.get("evidence_reliance") in {"UNRELIABLE", "UNKNOWN"}:
-        return "EVIDENCE_NOT_CURRENT_RELIABLE"
-    if s.get("contradictory_evidence") and not s.get("contradiction_dispositioned"):
-        return "CONTRADICTORY_EVIDENCE_UNRESOLVED"
     if not s.get("parallel_evidence_scope_provenance_preserved"):
         return "PARALLEL_EVIDENCE_SCOPE_PROVENANCE_REQUIRED"
 
@@ -151,6 +129,30 @@ def validate_scenario(s):
         return "FAILED_VALIDATION_HISTORY_REQUIRED"
     if s.get("route") == "REPLAN" and not s.get("prior_plan_validation_history_preserved"):
         return "PRIOR_PLAN_VALIDATION_HISTORY_REQUIRED"
+
+    # Sufficiency/currentness failures prohibit acceptance, but they may be the basis of a valid non-accept judgment.
+    if s.get("judgment") == "PROOF_SATISFIED":
+        if not s.get("independent_source_resolution"):
+            return "MATERIAL_SOURCE_NOT_INDEPENDENTLY_RESOLVED"
+        if s.get("provider_green_only"):
+            return "PROVIDER_GREEN_NOT_VALIDATION"
+        if s.get("context_package_only"):
+            return "CONTEXT_PACKAGE_NOT_EVIDENCE"
+        if s.get("validation_provider_only") and s.get("provider_result_is_canonical_judgment"):
+            return "PROVIDER_RESULT_NOT_CANONICAL_JUDGMENT"
+
+        required_proof = set(s.get("required_proof", []))
+        covered_proof = set(s.get("covered_proof", []))
+        if not required_proof.issubset(covered_proof):
+            return "PROOF_COVERAGE_INCOMPLETE"
+        if not s.get("evidence_authoritative"):
+            return "EVIDENCE_AUTHORITY_INDETERMINATE"
+        if not s.get("evidence_integrity"):
+            return "EVIDENCE_INTEGRITY_FAILED"
+        if s.get("evidence_currentness") != "CURRENT" or s.get("evidence_reliance") in {"UNRELIABLE", "UNKNOWN"}:
+            return "EVIDENCE_NOT_CURRENT_RELIABLE"
+        if s.get("contradictory_evidence") and not s.get("contradiction_dispositioned"):
+            return "CONTRADICTORY_EVIDENCE_UNRESOLVED"
 
     return None
 
