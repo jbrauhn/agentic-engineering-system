@@ -58,11 +58,16 @@
     {"id":"invalid_missing_exact_contract_revision","expect":"FAIL","expected_error":"EXACT_CONTRACT_REQUIRED","record_contract_revision":null},
     {"id":"invalid_wrong_contract_revision_evidence","expect":"FAIL","expected_error":"WRONG_CONTRACT_REVISION","record_contract_revision":"C@1"},
     {"id":"invalid_missing_proof_coverage","expect":"FAIL","expected_error":"PROOF_COVERAGE_INCOMPLETE","covered_proof":["P1"]},
+    {"id":"valid_missing_proof_coverage_nonaccept","expect":"PASS","covered_proof":["P1"],"judgment":"PROOF_NOT_SATISFIED_EVIDENCE_INCOMPLETE","route":"RETRY_EXECUTION"},
     {"id":"invalid_contradictory_evidence_ignored","expect":"FAIL","expected_error":"CONTRADICTORY_EVIDENCE_UNRESOLVED","contradictory_evidence":true,"contradiction_dispositioned":false},
     {"id":"valid_contradictory_evidence_dispositioned","expect":"PASS","contradictory_evidence":true,"contradiction_dispositioned":true},
+    {"id":"valid_unresolved_contradiction_nonaccept","expect":"PASS","contradictory_evidence":true,"contradiction_dispositioned":false,"judgment":"UNABLE_TO_ESTABLISH_TRUSTWORTHY_EVIDENCE_OR_STATE","route":"ESCALATE"},
     {"id":"invalid_provider_green_equals_validation","expect":"FAIL","expected_error":"PROVIDER_GREEN_NOT_VALIDATION","provider_green_only":true},
+    {"id":"valid_provider_green_only_diagnostic_nonaccept","expect":"PASS","provider_green_only":true,"judgment":"PROOF_NOT_SATISFIED_EVIDENCE_INCOMPLETE","route":"ESCALATE"},
     {"id":"invalid_context_package_only_as_evidence","expect":"FAIL","expected_error":"CONTEXT_PACKAGE_NOT_EVIDENCE","context_package_only":true},
+    {"id":"valid_context_package_only_diagnostic_nonaccept","expect":"PASS","context_package_only":true,"judgment":"PROOF_NOT_SATISFIED_EVIDENCE_INCOMPLETE","route":"ESCALATE"},
     {"id":"invalid_validator_cannot_resolve_sources","expect":"FAIL","expected_error":"MATERIAL_SOURCE_NOT_INDEPENDENTLY_RESOLVED","independent_source_resolution":false},
+    {"id":"valid_source_unresolved_nonaccept","expect":"PASS","independent_source_resolution":false,"judgment":"UNABLE_TO_ESTABLISH_TRUSTWORTHY_EVIDENCE_OR_STATE","route":"ESCALATE"},
     {"id":"invalid_validator_role_label_only","expect":"FAIL","expected_error":"VALIDATOR_IDENTITY_PROVENANCE_REQUIRED","role_label_only":true,"validator_identity":null,"independence_provenance":false},
     {"id":"valid_human_validator_when_policy_permits","expect":"PASS","validator_path":"HUMAN-REVIEWER","validator_identity":"HUMAN-42"},
     {"id":"valid_ai_validator_same_model_provider_when_policy_permits","expect":"PASS","validator_path":"VALIDATOR-FRESH-PATH"},
@@ -73,9 +78,12 @@
     {"id":"invalid_universal_provider_diversity_invented","expect":"FAIL","expected_error":"UNIVERSAL_STRENGTHENING_PROHIBITED","fresh_provider_required_without_policy":true},
     {"id":"invalid_universal_human_validator_invented","expect":"FAIL","expected_error":"UNIVERSAL_HUMAN_VALIDATOR_PROHIBITED","human_validator_required_without_policy":true},
     {"id":"invalid_stale_evidence_acceptance","expect":"FAIL","expected_error":"EVIDENCE_NOT_CURRENT_RELIABLE","evidence_currentness":"STALE"},
+    {"id":"valid_stale_evidence_nonaccept","expect":"PASS","evidence_currentness":"STALE","judgment":"UNABLE_TO_ESTABLISH_TRUSTWORTHY_EVIDENCE_OR_STATE","route":"ESCALATE"},
     {"id":"invalid_unreliable_evidence_acceptance","expect":"FAIL","expected_error":"EVIDENCE_NOT_CURRENT_RELIABLE","evidence_reliance":"UNRELIABLE"},
     {"id":"invalid_unknown_evidence_authority_acceptance","expect":"FAIL","expected_error":"EVIDENCE_AUTHORITY_INDETERMINATE","evidence_authoritative":false},
+    {"id":"valid_unknown_evidence_authority_nonaccept","expect":"PASS","evidence_authoritative":false,"judgment":"UNABLE_TO_ESTABLISH_TRUSTWORTHY_EVIDENCE_OR_STATE","route":"ESCALATE"},
     {"id":"invalid_evidence_integrity_failure","expect":"FAIL","expected_error":"EVIDENCE_INTEGRITY_FAILED","evidence_integrity":false},
+    {"id":"valid_integrity_failure_nonaccept","expect":"PASS","evidence_integrity":false,"judgment":"UNABLE_TO_ESTABLISH_TRUSTWORTHY_EVIDENCE_OR_STATE","route":"ESCALATE"},
     {"id":"valid_increment_acceptance","expect":"PASS","scope_type":"EXECUTION_INCREMENT"},
     {"id":"invalid_increment_acceptance_auto_final","expect":"FAIL","expected_error":"INCREMENT_NOT_FINAL_CONTRACT","scope_type":"FINAL_CONTRACT","increment_acceptance_used_as_final":true,"final_reconciliation":false},
     {"id":"valid_final_contract_reuses_prior_validation","expect":"PASS","scope_type":"FINAL_CONTRACT","final_reconciliation":true,"reused_prior_validation":true,"current_reliance_rechecked":true,"cross_scope_reconciled":true},
@@ -104,6 +112,6 @@
     {"id":"invalid_new_validation_entity_by_convenience","expect":"FAIL","expected_error":"VALIDATION_ENTITY_INFLATION","new_validation_entity_type":true},
     {"id":"valid_human_da_separate_when_required","expect":"PASS","human_da_required":true,"human_da_satisfied":true},
     {"id":"invalid_required_human_da_missing","expect":"FAIL","expected_error":"SEPARATE_AUTHORITY_REQUIREMENT_UNSATISFIED","human_da_required":true,"human_da_satisfied":false},
-    {"id":"valid_untrusted_state_routes_escalate","expect":"PASS","judgment":"UNABLE_TO_ESTABLISH_TRUSTWORTHY_EVIDENCE_OR_STATE","route":"ESCALATE","evidence_authoritative":true,"evidence_currentness":"CURRENT","evidence_reliance":"RELIABLE"}
+    {"id":"valid_untrusted_state_routes_escalate","expect":"PASS","judgment":"UNABLE_TO_ESTABLISH_TRUSTWORTHY_EVIDENCE_OR_STATE","route":"ESCALATE","evidence_authoritative":false,"independent_source_resolution":false,"evidence_currentness":"UNKNOWN","evidence_reliance":"UNKNOWN"}
   ]
 }
