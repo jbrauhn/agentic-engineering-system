@@ -21,13 +21,13 @@ def main():
  if out.exists(): shutil.rmtree(out)
  out.mkdir(parents=True)
  manifest=json.loads((repo/'canonical_ae_release_manifest.json').read_text())
- roles={}
- # release manifest is authority object, not silently assigned to another layer
- roles[repo/'canonical_ae_release_manifest.json']='RELEASE_AUTHORITY'
+ roles={repo/'canonical_ae_release_manifest.json':'RELEASE_AUTHORITY'}
  for layer,info in manifest['semantic_layers'].items():
   for p in resolve(repo, info['selectors']):
    if p.name=='clean_room_adoption_baseline.json': continue
    roles.setdefault(p,layer)
+ for group,info in manifest.get('supporting_content',{}).items():
+  for p in resolve(repo, info['selectors']): roles.setdefault(p,'SUPPORTING_'+group)
  inventory=[]
  for src,role in sorted(roles.items(),key=lambda x:str(x[0].relative_to(repo))):
   rel=src.relative_to(repo); dst=out/rel; dst.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(src,dst)
