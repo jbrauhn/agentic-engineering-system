@@ -1,0 +1,36 @@
+name: Part 1 Acceptance Package
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/part1-acceptance-package.yml'
+
+jobs:
+  package-part1-candidate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Assemble exact candidate distribution
+        run: |
+          python assemble_distribution.py --repo . --output /tmp/ae-distribution
+          test ! -e /tmp/ae-distribution/clean_room_adoption_baseline.json
+          ! find /tmp/ae-distribution -path '*/handoffs/*' -print -quit | grep -q .
+      - name: Package blind-test inputs
+        run: |
+          cd /tmp
+          zip -qr Canonical_AE_Part1_Candidate_2026-08-23.zip ae-distribution
+          cp "$GITHUB_WORKSPACE/clean_room_adoption_baseline.json" Canonical_AE_Part1_Clean_Room_Baseline_2026-08-23.json
+          sha256sum Canonical_AE_Part1_Candidate_2026-08-23.zip Canonical_AE_Part1_Clean_Room_Baseline_2026-08-23.json > ACCEPTANCE_PACKAGE_SHA256.txt
+      - name: Upload acceptance package
+        uses: actions/upload-artifact@v4
+        with:
+          name: part1-acceptance-package
+          path: |
+            /tmp/Canonical_AE_Part1_Candidate_2026-08-23.zip
+            /tmp/Canonical_AE_Part1_Clean_Room_Baseline_2026-08-23.json
+            /tmp/ACCEPTANCE_PACKAGE_SHA256.txt
+          if-no-files-found: error
+          retention-days: 7
