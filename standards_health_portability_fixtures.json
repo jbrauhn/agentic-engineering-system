@@ -1,0 +1,58 @@
+{
+  "meta": {"name": "L1-J standards/health portability fixtures", "version": "L1-J-stage1"},
+  "implementations": {
+    "A": {
+      "standards_topology": "external regulatory/security sources + source-controlled organization applicability profile",
+      "assessment_topology": "agent-assisted analysis + automated code/test/architecture signals",
+      "exception_topology": "organization authority decision records",
+      "work_knowledge_topology": "provider A work management + source-controlled knowledge",
+      "framework_vocabulary": "architecture principles and coupling/change-amplification analysis",
+      "central_standards_health_service": false,
+      "numeric_maturity_model_required": false
+    },
+    "B": {
+      "standards_topology": "different standards/policy provider + Product-specific references",
+      "assessment_topology": "Human + tool-assisted engineering review",
+      "exception_topology": "external policy service + durable Authority Decision reference",
+      "work_knowledge_topology": "provider B work management + different knowledge provider",
+      "framework_vocabulary": "different quality/architecture lens describing same underlying conditions",
+      "central_standards_health_service": false,
+      "numeric_maturity_model_required": false
+    }
+  },
+  "equivalence_fields": [
+    "effective_source_version",
+    "requirement_character",
+    "applicability",
+    "disposition",
+    "health_condition_semantics",
+    "health_impact",
+    "capability_health_distinction",
+    "remediation_route",
+    "independent_remediation_validation",
+    "history_non_destructive",
+    "authority_provenance_preserved"
+  ],
+  "cases": [
+    {
+      "id": "mandatory_requirement_equivalence",
+      "A": {"effective_source_version":"STD-X@3","requirement_character":"MANDATORY","applicability":"APPLIES","disposition":"SATISFIED","health_condition_semantics":null,"health_impact":null,"capability_health_distinction":true,"remediation_route":null,"independent_remediation_validation":true,"history_non_destructive":true,"authority_provenance_preserved":true},
+      "B": {"effective_source_version":"STD-X@3","requirement_character":"MANDATORY","applicability":"APPLIES","disposition":"SATISFIED","health_condition_semantics":null,"health_impact":null,"capability_health_distinction":true,"remediation_route":null,"independent_remediation_validation":true,"history_non_destructive":true,"authority_provenance_preserved":true}
+    },
+    {
+      "id": "authorized_exception_equivalence",
+      "A": {"effective_source_version":"STD-Y@7","requirement_character":"MANDATORY","applicability":"APPLIES","disposition":"AUTHORIZED_EXCEPTION_WAIVER","health_condition_semantics":null,"health_impact":null,"capability_health_distinction":true,"remediation_route":null,"independent_remediation_validation":true,"history_non_destructive":true,"authority_provenance_preserved":true},
+      "B": {"effective_source_version":"STD-Y@7","requirement_character":"MANDATORY","applicability":"APPLIES","disposition":"AUTHORIZED_EXCEPTION_WAIVER","health_condition_semantics":null,"health_impact":null,"capability_health_distinction":true,"remediation_route":null,"independent_remediation_validation":true,"history_non_destructive":true,"authority_provenance_preserved":true}
+    },
+    {
+      "id": "framework_independent_health_equivalence",
+      "A": {"effective_source_version":null,"requirement_character":null,"applicability":null,"disposition":null,"health_condition_semantics":"high coupling causes cross-module change amplification","health_impact":"DEGRADE","capability_health_distinction":true,"remediation_route":"REPLAN","independent_remediation_validation":true,"history_non_destructive":true,"authority_provenance_preserved":true},
+      "B": {"effective_source_version":null,"requirement_character":null,"applicability":null,"disposition":null,"health_condition_semantics":"high coupling causes cross-module change amplification","health_impact":"DEGRADE","capability_health_distinction":true,"remediation_route":"REPLAN","independent_remediation_validation":true,"history_non_destructive":true,"authority_provenance_preserved":true}
+    },
+    {
+      "id": "remediation_history_equivalence",
+      "A": {"effective_source_version":null,"requirement_character":null,"applicability":null,"disposition":null,"health_condition_semantics":"brittle low-value verification","health_impact":"CONSTRAIN","capability_health_distinction":true,"remediation_route":"REMEDIATION_LOOP","independent_remediation_validation":true,"history_non_destructive":true,"authority_provenance_preserved":true},
+      "B": {"effective_source_version":null,"requirement_character":null,"applicability":null,"disposition":null,"health_condition_semantics":"brittle low-value verification","health_impact":"CONSTRAIN","capability_health_distinction":true,"remediation_route":"REMEDIATION_LOOP","independent_remediation_validation":true,"history_non_destructive":true,"authority_provenance_preserved":true}
+    }
+  ]
+}
