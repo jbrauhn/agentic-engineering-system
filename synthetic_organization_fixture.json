@@ -1,0 +1,26 @@
+{
+  "fixture_id": "SYNTH-ORG-ALPHA",
+  "purpose": "deliberately imperfect generic adoption/reference organization",
+  "kestrel_present": false,
+  "oeb": {"id":"OEB-SYNTH","revision":"OEB-SYNTH@3","constraints":["production changes require explicit OA","restricted data stays in approved providers"],"standards_profile":"STD-SYNTH@2"},
+  "product": {"profile":"PROD-SYNTH@4","baseline":"BASE-SYNTH@7","architecture_model":"ARCH-SYNTH@5","scope":"product-alpha"},
+  "implementation_profile": {"id":"AEIP-SYNTH","revision":"AEIP-SYNTH@1","release":"CAE-P1-CANDIDATE-2026-08-23","state":"CANDIDATE"},
+  "environments": [
+    {"id":"DEVCONTAINER_TERMINAL","bootstrap":"cli-agent-runtime","actor_class":"HUMAN_AND_AGENT"},
+    {"id":"REMOTE_WORKSPACE_IDE","bootstrap":"ide-broker","actor_class":"HUMAN_AND_AGENT"}
+  ],
+  "capability_bindings": [
+    {"capability":"Source Control","binding":"CB-SC@2","provider":"ForgeSCM","required":true,"agent_operable":true,"entitleable":true,"enforceable":true,"proven":true,"access_paths":["cli-agent-runtime","ide-broker"]},
+    {"capability":"CI/CD","binding":"CB-CI@3","provider":"BuildGrid","required":true,"agent_operable":true,"entitleable":true,"enforceable":true,"proven":true,"access_paths":["cli-agent-runtime","ide-broker"]},
+    {"capability":"Work Management","binding":"CB-WM@5","provider":"TaskFlow","required":true,"agent_operable":true,"entitleable":true,"enforceable":true,"proven":true,"access_paths":["cli-agent-runtime","ide-broker"],"allowed_operation":"work.update:product-alpha","denied_operation":"work.update:finance-admin"},
+    {"capability":"Observability","binding":"CB-OBS@1","provider":"TraceLake","required":true,"agent_operable":false,"entitleable":true,"enforceable":true,"proven":false,"technical_available":true,"gap":{"impact":"CONSTRAIN","reason":"telemetry.query is UI-only for agents"}},
+    {"capability":"Models","binding":"CB-MODEL@2","provider":"ModelGateway","required":true,"agent_operable":true,"entitleable":false,"enforceable":true,"proven":false,"technical_available":true,"gap":{"impact":"BLOCK","reason":"only broad administrator credential exists; scoped agent entitlement unavailable"}},
+    {"capability":"Knowledge / Memory","binding":"CB-KNOW@2","provider":"DocVault","required":true,"agent_operable":true,"entitleable":true,"enforceable":true,"proven":true,"access_paths":["cli-agent-runtime","ide-broker"]},
+    {"capability":"Validation","binding":"CB-VAL@2","provider":"IndependentCheck","required":true,"agent_operable":true,"entitleable":true,"enforceable":true,"proven":true,"access_paths":["cli-agent-runtime","ide-broker"]}
+  ],
+  "authority": {"identity_source":"CorpIdP","oa_source":"PolicyService","decision_authority":"Human Owner for Contract/material risk","work_management_in_scope":"ALLOWED","work_management_out_of_scope":"DENIED"},
+  "standards": {"applicable":[{"standard":"ENG-SEC-1","character":"MANDATORY","revision":"2"},{"standard":"DOC-ARCH","character":"ADVISORY","revision":"1"}]},
+  "engineering_health_findings": [{"id":"EHF-SYNTH-1","condition":"service boundaries create high change amplification and architecture decision history is incomplete","impact":"DEGRADE","framework":"NONE_REQUIRED","remediation_candidate":true}],
+  "validation_expectations": {"independent":true,"reference_loop_required":true,"capability_denial_evidence_required":true},
+  "constraints": ["two environment classes must remain usable","no Human clerical proxy for required agent operations"]
+}
