@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "Canonical AE Standards Applicability / Engineering Health Protocol",
-    "version": "L1-J-stage1",
+    "version": "L1-J-stage1-review2",
     "representation_status": "conforming_machine_representation",
     "semantic_authority": "human_semantic_specification",
     "technology_semantics": "JSON is a repository/reference representation choice, not Canonical AE meaning"
@@ -17,6 +17,14 @@
   "application_dispositions": ["SATISFIED", "NOT_DEMONSTRATED_OR_NONCONFORMING", "AUTHORIZED_EXCEPTION_WAIVER", "PROPORTIONATELY_NOT_USED", "UNRESOLVED"],
   "health_operational_impacts": ["BLOCK", "CONSTRAIN", "DEGRADE", "NONE_OBSERVE"],
   "health_current_dispositions": ["ACTIVE", "DEFERRED", "ACCEPTED_RISK", "REMEDIATED", "SUPERSEDED", "QUALIFIED_UNKNOWN"],
+  "health_current_disposition_basis_examples": {
+    "ACTIVE": ["ISSUED_FINDING", "CURRENT_EVIDENCE", "OTHER_AUTHORITATIVE_STATE"],
+    "DEFERRED": ["DECISION_RECORD", "AUTHORITY_DECISION", "OTHER_AUTHORITATIVE_STATE"],
+    "ACCEPTED_RISK": ["AUTHORITY_DECISION"],
+    "REMEDIATED": ["VALIDATION_RECORD"],
+    "SUPERSEDED": ["SUPERSEDING_FINDING"],
+    "QUALIFIED_UNKNOWN": ["CURRENTNESS_OR_EVIDENCE_ASSESSMENT", "OTHER_AUTHORITATIVE_STATE"]
+  },
   "standard_reference_fields_as_applicable": [
     "authoritative_source_reference",
     "source_authority_provenance",
@@ -50,13 +58,19 @@
   "rules": {
     "standards_sources_may_remain_external": true,
     "derived_copy_summary_not_authoritative": true,
+    "copied_standard_not_authoritative": true,
     "standards_applicability_subordinate_b": true,
     "engineering_health_finding_a2_explicit_extension": true,
     "historical_l1c_not_rewritten": true,
+    "health_finding_does_not_require_standards_context": true,
     "applicability_distinct_from_application_disposition": true,
+    "proportional_omission_advisory_only": true,
     "mandatory_cannot_use_proportional_omission": true,
+    "conditional_pending_protected_use_fails_closed": true,
     "unresolved_mandatory_not_silently_optional": true,
     "authorized_exception_requires_authority_scope_version_provenance": true,
+    "applicability_reasoning_not_authorization_policy": true,
+    "applicability_human_da_not_universal": true,
     "correct_effective_version_beats_latest": true,
     "no_silent_active_work_rebase": true,
     "standards_do_not_replace_contract_proof": true,
@@ -69,6 +83,7 @@
     "remediation_validation_independent": true,
     "health_history_non_destructive": true,
     "current_health_disposition_derived": true,
+    "current_health_disposition_requires_appropriate_authoritative_basis": true,
     "no_universal_maturity_score": true,
     "no_universal_named_framework": true,
     "no_remediation_before_adoption_universal": true,
