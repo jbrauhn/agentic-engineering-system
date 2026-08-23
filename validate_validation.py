@@ -55,7 +55,6 @@ def validate_cross_domain(protocol, lifecycle, capabilities, authority, context,
 
 
 def validate_scenario(s):
-    # Entity/provider architecture guardrails first.
     if s.get("new_validation_entity_type"):
         return "VALIDATION_ENTITY_INFLATION"
     if s.get("central_validator_required"):
@@ -67,7 +66,6 @@ def validate_scenario(s):
     if s.get("human_validator_required_without_policy"):
         return "UNIVERSAL_HUMAN_VALIDATOR_PROHIBITED"
 
-    # Exact target and identified judgment path are required for every issued Validation judgment.
     if not s.get("record_contract_revision"):
         return "EXACT_CONTRACT_REQUIRED"
     if s.get("record_contract_revision") != s.get("requirement_contract_revision"):
@@ -77,7 +75,6 @@ def validate_scenario(s):
     if s.get("role_label_only") or not s.get("validator_identity") or not s.get("independence_provenance"):
         return "VALIDATOR_IDENTITY_PROVENANCE_REQUIRED"
 
-    # Policy-sensitive strengthening and separate authority.
     required_ind = set(s.get("policy_required_independence", []))
     satisfied_ind = set(s.get("policy_satisfied_independence", []))
     if not required_ind.issubset(satisfied_ind):
@@ -85,36 +82,25 @@ def validate_scenario(s):
     if s.get("human_da_required") and not s.get("human_da_satisfied"):
         return "SEPARATE_AUTHORITY_REQUIREMENT_UNSATISFIED"
 
-    # Evidence/reference manipulation is never an acceptable way to obtain a judgment.
     if s.get("evidence_reference_manipulation"):
         return "EVIDENCE_REFERENCE_INDEPENDENCE_BYPASS"
     if not s.get("parallel_evidence_scope_provenance_preserved"):
         return "PARALLEL_EVIDENCE_SCOPE_PROVENANCE_REQUIRED"
 
-    # Historical invalidation/current reliance.
     if s.get("later_invalidation") and s.get("historical_records_rewritten"):
         return "HISTORY_MUST_BE_NON_DESTRUCTIVE"
     if s.get("later_invalidation") and not s.get("revalidation_or_escalation_triggered"):
         return "CURRENT_RELIANCE_RESPONSE_REQUIRED"
 
-    # Final Contract reconciliation.
-    if s.get("scope_type") == "FINAL_CONTRACT":
-        if s.get("increment_acceptance_used_as_final"):
-            return "INCREMENT_NOT_FINAL_CONTRACT"
-        if not s.get("final_reconciliation"):
-            return "FINAL_RECONCILIATION_REQUIRED"
-        if s.get("reused_prior_validation") and not s.get("current_reliance_rechecked"):
-            return "REUSED_EVIDENCE_RELIANCE_NOT_RECHECKED"
-        if not s.get("cross_scope_reconciled"):
-            return "FINAL_CROSS_SCOPE_RECONCILIATION_REQUIRED"
+    # Increment acceptance can never substitute for final Contract Validation.
+    if s.get("scope_type") == "FINAL_CONTRACT" and s.get("increment_acceptance_used_as_final"):
+        return "INCREMENT_NOT_FINAL_CONTRACT"
 
-    # Contract cannot be mutated by Validator.
     if s.get("validator_mutates_contract"):
         return "VALIDATOR_CANNOT_MUTATE_CONTRACT"
     if s.get("judgment") == "CONTRACT_OR_PROOF_DEFICIENCY_DETECTED" and not s.get("g5_route_used"):
         return "CONTRACT_DEFICIENCY_REQUIRES_G5_ROUTE"
 
-    # Judgment-to-route relationship and history.
     allowed_routes = {
         "PROOF_SATISFIED": {"ACCEPT"},
         "PROOF_NOT_SATISFIED_EVIDENCE_INCOMPLETE": {"RETRY_EXECUTION", "ESCALATE"},
@@ -130,7 +116,7 @@ def validate_scenario(s):
     if s.get("route") == "REPLAN" and not s.get("prior_plan_validation_history_preserved"):
         return "PRIOR_PLAN_VALIDATION_HISTORY_REQUIRED"
 
-    # Sufficiency/currentness failures prohibit acceptance, but they may be the basis of a valid non-accept judgment.
+    # Acceptance-specific sufficiency. Non-accept judgments may validly diagnose missing/indeterminate Evidence.
     if s.get("judgment") == "PROOF_SATISFIED":
         if not s.get("independent_source_resolution"):
             return "MATERIAL_SOURCE_NOT_INDEPENDENTLY_RESOLVED"
@@ -153,6 +139,15 @@ def validate_scenario(s):
             return "EVIDENCE_NOT_CURRENT_RELIABLE"
         if s.get("contradictory_evidence") and not s.get("contradiction_dispositioned"):
             return "CONTRADICTORY_EVIDENCE_UNRESOLVED"
+
+        # Full final reconciliation is required to support final Contract acceptance.
+        if s.get("scope_type") == "FINAL_CONTRACT":
+            if not s.get("final_reconciliation"):
+                return "FINAL_RECONCILIATION_REQUIRED"
+            if s.get("reused_prior_validation") and not s.get("current_reliance_rechecked"):
+                return "REUSED_EVIDENCE_RELIANCE_NOT_RECHECKED"
+            if not s.get("cross_scope_reconciled"):
+                return "FINAL_CROSS_SCOPE_RECONCILIATION_REQUIRED"
 
     return None
 
