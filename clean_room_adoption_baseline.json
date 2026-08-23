@@ -1,0 +1,23 @@
+{
+  "input_type":"SUPPLIED_OEB_PRODUCT_BASELINE",
+  "organization":"CLEANROOM-BETA",
+  "oeb":{"id":"OEB-BETA","revision":"OEB-BETA@6","standards_profile":"STD-BETA@4"},
+  "product":{"profile":"PROD-BETA@2","baseline":"BASE-BETA@9","architecture_model":"ARCH-BETA@3","scope":"product-beta"},
+  "implementation_profile":{"id":"AEIP-BETA","revision":"AEIP-BETA@1","state":"CANDIDATE"},
+  "environments":[{"id":"CLOUD_WORKSPACE","bootstrap":"workspace-broker"},{"id":"NATIVE_TERMINAL","bootstrap":"governed-api-client"}],
+  "capability_bindings":[
+    {"capability":"Source Control","binding":"BETA-SC@1","required":true,"agent_operable":true,"entitleable":true,"enforceable":true,"proven":true,"access_paths":["workspace-broker","governed-api-client"]},
+    {"capability":"CI/CD","binding":"BETA-CI@1","required":true,"agent_operable":true,"entitleable":true,"enforceable":true,"proven":false,"access_paths":["workspace-broker"]},
+    {"capability":"Work Management","binding":"BETA-WM@2","required":true,"agent_operable":true,"entitleable":true,"enforceable":true,"proven":true,"access_paths":["workspace-broker","governed-api-client"]},
+    {"capability":"Models","binding":"BETA-MODEL@1","required":true,"agent_operable":true,"entitleable":true,"enforceable":true,"proven":true,"access_paths":["workspace-broker"]},
+    {"capability":"Observability","binding":"BETA-OBS@3","required":true,"agent_operable":false,"entitleable":true,"enforceable":true,"proven":false,"technical_available":true,"access_paths":[],"gap":{"impact":"CONSTRAIN","reason":"no agent-accessible query interface"}},
+    {"capability":"Knowledge / Memory","binding":"BETA-KNOW@2","required":true,"agent_operable":true,"entitleable":true,"enforceable":true,"proven":true,"access_paths":["workspace-broker","governed-api-client"]},
+    {"capability":"Validation","binding":"BETA-VAL@2","required":true,"agent_operable":true,"entitleable":true,"enforceable":true,"proven":true,"access_paths":["workspace-broker"]}
+  ],
+  "authority":{"identity_source":"EnterpriseIdP","oa_source":"RelationshipPolicy","pep":"ProviderAndBroker","human_decisions":["Contract approval","material risk acceptance"]},
+  "standards":{"profile":"STD-BETA@4","mandatory":["SECURE-CHANGE@3"],"advisory":["ARCH-DOC@2"]},
+  "architecture":{"expectation":"durable context/container boundaries and affected-element traceability"},
+  "context":{"durable_sources":["EnterpriseDocs","SourceControl"],"handoff_required_for":"actor replacement during material work"},
+  "validation":{"installation_independent":true,"evidence_classes":["binding usability","authority denial","reference loop","bootstrap reconstruction"]},
+  "engineering_health_findings":[{"id":"EHF-BETA-2","condition":"automated integration verification is incomplete","impact":"CONSTRAIN","remediation_candidate":true}]
+}

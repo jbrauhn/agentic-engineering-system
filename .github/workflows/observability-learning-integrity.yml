@@ -17,6 +17,8 @@ on:
       - 'planning_execution_protocol.json'
       - 'validation_protocol.json'
       - 'standards_health_protocol.json'
+      - 'L1-L_*'
+      - 'adoption_distribution_protocol.json'
       - '.github/workflows/observability-learning-integrity.yml'
   workflow_dispatch:
 
