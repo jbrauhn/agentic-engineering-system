@@ -1,0 +1,34 @@
+name: Validation Integrity
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validation-integrity:
+    name: validation-integrity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate Validation protocol scenarios portability and cross-domain semantics
+        run: >-
+          python validate_validation.py
+          validation_protocol.json
+          validation_scenarios.json
+          validation_portability_fixtures.json
+          lifecycle_protocol.json
+          capability_contracts.json
+          authority_protocol.json
+          context_protocol.json
+          planning_execution_protocol.json

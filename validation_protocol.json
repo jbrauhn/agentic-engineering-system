@@ -1,0 +1,134 @@
+{
+  "meta": {
+    "name": "Canonical AE Validation / Evidence / Independence Protocol",
+    "version": "L1-I-stage1",
+    "representation_status": "conforming_machine_representation",
+    "semantic_authority": "human_semantic_specification",
+    "technology_semantics": "JSON is a repository/reference representation choice, not Canonical AE meaning"
+  },
+  "validation_requirement_type": "B",
+  "validation_requirement_fields_as_applicable": [
+    "purpose_type",
+    "contract_exact_revision",
+    "proof_criteria",
+    "declared_scope",
+    "plan_baseline_architecture_references",
+    "required_evidence_classes_relationships",
+    "required_independence_characteristics",
+    "risk_policy_constraints",
+    "required_currentness_effectivity",
+    "unresolved_findings_limitations",
+    "authority_approval_requirements",
+    "expected_judgment_routing_semantics"
+  ],
+  "validation_scope_types": [
+    "EXECUTION_INCREMENT",
+    "FINAL_CONTRACT",
+    "INSTALLATION_ADOPTION",
+    "CAPABILITY_BINDING_READINESS",
+    "OTHER_GOVERNED_SCOPE"
+  ],
+  "judgment_classes": [
+    "PROOF_SATISFIED",
+    "PROOF_NOT_SATISFIED_EVIDENCE_INCOMPLETE",
+    "PROOF_NOT_SATISFIED_IMPLEMENTATION_DEFECT",
+    "PROOF_NOT_SATISFIED_PLAN_ROUTE_DEFICIENT",
+    "CONTRACT_OR_PROOF_DEFICIENCY_DETECTED",
+    "UNABLE_TO_ESTABLISH_TRUSTWORTHY_EVIDENCE_OR_STATE"
+  ],
+  "lifecycle_routes": [
+    "ACCEPT",
+    "RETRY_EXECUTION",
+    "REPLAN",
+    "PROPOSE_CONTRACT_CHANGE",
+    "ESCALATE"
+  ],
+  "evidence_sufficiency_dimensions": [
+    "PROOF_CRITERION_COVERAGE",
+    "EXACT_SCOPE_REVISION_RELATIONSHIP",
+    "SOURCE_AUTHORITY",
+    "PROVENANCE_INTEGRITY",
+    "CURRENTNESS_EFFECTIVITY",
+    "REQUIRED_INDEPENDENCE_CHARACTERISTICS",
+    "COMPLETENESS",
+    "CONTRADICTORY_NEGATIVE_EVIDENCE",
+    "ENVIRONMENTAL_RELEVANCE",
+    "RETRIEVABILITY_REPRODUCIBILITY",
+    "KNOWN_GAPS_LIMITATIONS"
+  ],
+  "current_reliance_results": ["RELIABLE", "QUALIFIED", "UNRELIABLE", "UNKNOWN"],
+  "universal_independence_requirements": [
+    "WORK_PRODUCING_PATH_CANNOT_ISSUE_OWN_ACCEPTANCE",
+    "VALIDATOR_INDEPENDENTLY_RESOLVES_MATERIAL_EVIDENCE_AND_STATE",
+    "VALIDATOR_ACTOR_PATH_IDENTIFIED_AND_PROVENANCED",
+    "PROVIDER_OR_EXECUTOR_SUCCESS_NOT_G4_ACCEPTANCE"
+  ],
+  "policy_sensitive_independence_dimensions": [
+    "FRESH_INVOCATION_OR_AGENT",
+    "SEPARATE_ACTOR_OR_IDENTITY",
+    "HUMAN_PARTICIPATION",
+    "MODEL_PROVIDER_DIVERSITY",
+    "ENVIRONMENT_TOOLCHAIN_SEPARATION",
+    "ORGANIZATIONAL_REVIEW_SEPARATION",
+    "REPRODUCIBILITY",
+    "NEGATIVE_TESTING",
+    "EVIDENCE_BREADTH_DEPTH",
+    "ADDITIONAL_AUTHORITY_APPROVAL",
+    "STRONGER_CURRENTNESS_PROVENANCE"
+  ],
+  "final_reconciliation_requirements": [
+    "REUSED_PRIOR_EVIDENCE_VALIDATION_IDENTIFIED",
+    "CURRENT_RELIANCE_REESTABLISHED",
+    "CROSS_INCREMENT_INTERACTIONS_RECONCILED",
+    "INTEGRATION_FINAL_STATE_RECONCILED",
+    "UNRESOLVED_LIMITATIONS_DISPOSITIONED",
+    "HISTORICALLY_VALID_REVISIONS_RECONCILED",
+    "FINAL_CONTRACT_PROOF_COMPLETE",
+    "LOCAL_VALIDATION_GAPS_CONSIDERED",
+    "INDEPENDENT_FINAL_JUDGMENT_PROVENANCED"
+  ],
+  "default_judgment_route_guidance": {
+    "PROOF_SATISFIED": ["ACCEPT"],
+    "PROOF_NOT_SATISFIED_EVIDENCE_INCOMPLETE": ["RETRY_EXECUTION", "ESCALATE"],
+    "PROOF_NOT_SATISFIED_IMPLEMENTATION_DEFECT": ["RETRY_EXECUTION", "REPLAN"],
+    "PROOF_NOT_SATISFIED_PLAN_ROUTE_DEFICIENT": ["REPLAN"],
+    "CONTRACT_OR_PROOF_DEFICIENCY_DETECTED": ["PROPOSE_CONTRACT_CHANGE"],
+    "UNABLE_TO_ESTABLISH_TRUSTWORTHY_EVIDENCE_OR_STATE": ["ESCALATE"]
+  },
+  "rules": {
+    "judgment_path_independence_universal": true,
+    "stronger_independence_policy_sensitive": true,
+    "same_model_provider_may_conform_when_policy_permits": true,
+    "human_validator_not_universal": true,
+    "separate_environment_not_universal": true,
+    "validator_role_label_not_sufficient": true,
+    "validation_judgment_not_automatically_human_da": true,
+    "evidence_set_not_first_class_entity": true,
+    "context_package_not_evidence": true,
+    "provider_green_not_validation": true,
+    "executor_evidence_may_be_used_but_not_self_accept": true,
+    "material_evidence_independently_resolvable": true,
+    "contradictory_evidence_must_be_dispositioned": true,
+    "wrong_revision_evidence_not_sufficient": true,
+    "historical_evidence_validation_non_destructive": true,
+    "current_reliance_may_change": true,
+    "increment_acceptance_not_final_contract_acceptance": true,
+    "final_validation_may_reuse_valid_prior_evidence": true,
+    "final_validation_requires_reconciliation": true,
+    "validation_judgment_distinct_from_lifecycle_route": true,
+    "judgment_route_relationship_reconstructable": true,
+    "contract_deficiency_routes_through_g5": true,
+    "one_core_protocol_multiple_scopes": true,
+    "validation_provider_not_r6": true,
+    "no_central_validator_service_required": true,
+    "no_new_validation_a1_a2_required": true
+  },
+  "cross_domain_expectations": {
+    "lifecycle_gate": "G4_VALIDATION_ACCEPTANCE",
+    "lifecycle_routes": ["ACCEPT", "RETRY_EXECUTION", "REPLAN", "PROPOSE_CONTRACT_CHANGE", "ESCALATE"],
+    "validation_capability_operations": ["validation.request", "validation.status", "validation.result.read", "validation.evidence.read"],
+    "authority_runtime_outcomes": ["ALLOWED", "DENIED", "BLOCKED"],
+    "context_rules": ["context_package_not_authoritative", "context_package_not_evidence_by_default", "unresolved_authority_conflict_blocks_protected_use"],
+    "planning_execution_verification_chain": ["CONTRACT_PROOF", "PLAN_VERIFICATION_TEST_STRATEGY", "EXECUTION_VERIFICATION_AND_EVIDENCE", "INDEPENDENT_VALIDATION"]
+  }
+}

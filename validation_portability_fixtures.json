@@ -1,0 +1,46 @@
+{
+  "meta": {
+    "name": "L1-I Validation portability fixtures",
+    "version": "L1-I-stage1"
+  },
+  "implementations": {
+    "A": {
+      "description": "CI/test/security Evidence plus independent AI Validator; Human review only when policy requires it",
+      "validator_topology": "independent_ai_invocation",
+      "evidence_topology": "ci_test_security_provider_refs",
+      "policy_topology": "organization_policy_plus_product_specialization",
+      "central_validator_service": false
+    },
+    "B": {
+      "description": "Different provider stack with Human/tool-assisted or agentic Validator and eval/observability Evidence",
+      "validator_topology": "mixed_human_tool_or_agentic_path",
+      "evidence_topology": "eval_observability_external_refs",
+      "policy_topology": "dynamic_policy_specialization",
+      "central_validator_service": false
+    }
+  },
+  "cases": [
+    {
+      "id": "portable_increment_acceptance",
+      "A": {"contract":"C@2","proof":["P1","P2"],"scope":"INC-A","sufficient":true,"independent":true,"judgment":"PROOF_SATISFIED","route":"ACCEPT"},
+      "B": {"contract":"C@2","proof":["P1","P2"],"scope":"INC-A","sufficient":true,"independent":true,"judgment":"PROOF_SATISFIED","route":"ACCEPT"}
+    },
+    {
+      "id": "portable_plan_deficiency",
+      "A": {"contract":"C@2","proof":["P1"],"scope":"INC-B","sufficient":false,"independent":true,"judgment":"PROOF_NOT_SATISFIED_PLAN_ROUTE_DEFICIENT","route":"REPLAN"},
+      "B": {"contract":"C@2","proof":["P1"],"scope":"INC-B","sufficient":false,"independent":true,"judgment":"PROOF_NOT_SATISFIED_PLAN_ROUTE_DEFICIENT","route":"REPLAN"}
+    },
+    {
+      "id": "portable_high_risk_human_strengthening",
+      "A": {"contract":"C@3","proof":["P1","P2","P3"],"scope":"FINAL","sufficient":true,"independent":true,"policy_strengthening":["HUMAN_PARTICIPATION"],"judgment":"PROOF_SATISFIED","route":"ACCEPT"},
+      "B": {"contract":"C@3","proof":["P1","P2","P3"],"scope":"FINAL","sufficient":true,"independent":true,"policy_strengthening":["HUMAN_PARTICIPATION"],"judgment":"PROOF_SATISFIED","route":"ACCEPT"}
+    },
+    {
+      "id": "portable_untrusted_evidence_escalation",
+      "A": {"contract":"C@2","proof":["P1"],"scope":"INC-C","sufficient":false,"independent":true,"judgment":"UNABLE_TO_ESTABLISH_TRUSTWORTHY_EVIDENCE_OR_STATE","route":"ESCALATE"},
+      "B": {"contract":"C@2","proof":["P1"],"scope":"INC-C","sufficient":false,"independent":true,"judgment":"UNABLE_TO_ESTABLISH_TRUSTWORTHY_EVIDENCE_OR_STATE","route":"ESCALATE"}
+    }
+  ],
+  "equivalence_fields": ["contract","proof","scope","sufficient","independent","policy_strengthening","judgment","route"],
+  "allowed_to_differ": ["validator_topology","evidence_topology","policy_topology","actor_type","model_provider","environment","test_stack","interface"]
+}
