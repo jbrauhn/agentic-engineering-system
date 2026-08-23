@@ -74,15 +74,17 @@ def verify_distribution(dist,manifest):
  e=[]; inv=load(dist/'RELEASE_INVENTORY.json')
  if inv['release_id']!=manifest['release_id']:e.append('release inventory identity mismatch')
  roles={x['role'] for x in inv['artifacts']}
- for r in ['RELEASE_AUTHORITY','CANONICAL_CORE','ADOPTION_STARTER_PACK','EXECUTABLE_REFERENCE_LAYER']:
+ for r in ['RELEASE_AUTHORITY','CANONICAL_CORE','ADOPTION_STARTER_PACK','EXECUTABLE_REFERENCE_LAYER','SUPPORTING_SYSTEM_RATIONALE']:
   if r not in roles:e.append('missing distribution role '+r)
  for x in inv['artifacts']:
   p=dist/x['path']
   if not p.exists():e.append('inventory missing '+x['path']);continue
   h=hashlib.sha256(p.read_bytes()).hexdigest()
   if h!=x['sha256']:e.append('digest mismatch '+x['path'])
- for req in ['START_HERE.md','ADOPTION_STARTER_PACK.md','CONTRACT.md','canonical_ae_release_manifest.json']:
+ for req in ['START_HERE.md','ADOPTION_STARTER_PACK.md','SYSTEM_RATIONALE.md','CONTRACT.md','canonical_ae_release_manifest.json']:
   if not (dist/req).exists():e.append('distribution required file missing '+req)
+ if (dist/'clean_room_adoption_baseline.json').exists():e.append('clean-room supplied baseline leaked into distribution')
+ if any(x['path'].startswith('handoffs/') for x in inv['artifacts']):e.append('relay handoff state leaked into distribution')
  return e
 
 def validate_loops(loops):
