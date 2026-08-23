@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "Canonical AE Observability / Metrics / Experiments / Learning Protocol",
-    "version": "L1-K-stage1",
+    "version": "L1-K-stage1-review2",
     "representation_status": "conforming_machine_representation",
     "semantic_authority": "human_semantic_specification",
     "technology_semantics": "JSON/Python/CI are reference choices, not Canonical AE technology"
@@ -40,6 +40,8 @@
   "rules": {
     "federated_r7_boundary": true,
     "provider_telemetry_may_remain_external": true,
+    "raw_telemetry_point_not_canonical_state": true,
+    "provider_observability_technology_not_canonical": true,
     "metric_definition_subordinate_b": true,
     "dashboard_not_authoritative": true,
     "effective_observability_view_derived": true,
@@ -59,6 +61,8 @@
     "experiment_concluded_history_non_destructive": true,
     "experiment_conclusion_strength_bounded_by_design_evidence": true,
     "experiment_method_not_canonicalized": true,
+    "experiment_does_not_bypass_lifecycle_authority": true,
+    "experiment_provenance_survives_actor_session_loss": true,
     "inconclusive_may_be_concluded": true,
     "no_experiment_run_observation_entity": true,
     "experiment_transition_history_reconstructable": true,
