@@ -26,7 +26,7 @@ def cross(protocol,lifecycle,cap,auth,context,planning,validation,standards):
   if not validation.get('rules',{}).get(r):e.append('validation rule missing '+r)
  for r in protocol['cross_domain_expectations']['standards_health_rules']:
   if not standards.get('rules',{}).get(r):e.append('standards-health rule missing '+r)
- required=['federated_r7_boundary','minimum_measures_are_neutral_observations','no_faster_cheaper_auto_better','no_universal_roi_formula','lifecycle_metrics_use_canonical_history','telemetry_not_evidence_by_default','telemetry_not_learning_by_default','experiment_a1_existing_identity','experiment_conclusion_strength_bounded_by_design_evidence','learning_record_material_only','learning_informative_not_self_authorizing','preauthorized_adaptation_allowed_within_boundary','adaptation_cannot_expand_authority','no_universal_prompt_logging','no_chain_of_thought_retention','no_central_r7_service_required','no_new_l1k_a1_a2_required']
+ required=['federated_r7_boundary','minimum_measures_are_neutral_observations','no_faster_cheaper_auto_better','no_universal_roi_formula','lifecycle_metrics_use_canonical_history','telemetry_not_evidence_by_default','telemetry_not_learning_by_default','raw_telemetry_point_not_canonical_state','provider_observability_technology_not_canonical','experiment_a1_existing_identity','experiment_conclusion_strength_bounded_by_design_evidence','experiment_does_not_bypass_lifecycle_authority','experiment_provenance_survives_actor_session_loss','learning_record_material_only','learning_informative_not_self_authorizing','learning_provenance_survives_actor_session_loss','preauthorized_adaptation_allowed_within_boundary','adaptation_cannot_expand_authority','no_universal_prompt_logging','no_chain_of_thought_retention','no_universal_surveillance','no_central_r7_service_required','no_new_l1k_a1_a2_required']
  for r in required:
   if not protocol.get('rules',{}).get(r):e.append('required rule missing '+r)
  ids={m['id'] for m in protocol.get('minimum_measure_categories',[])}
@@ -41,6 +41,8 @@ def rank(s):
 def validate(s,protocol):
  if s.get('new_entity') in {'MetricRecord','MetricDefinition','MeasurementRecord','PerformanceReport'}:return 'METRIC_ENTITY_INFLATION'
  if s.get('new_entity')=='Observation':return 'OBSERVATION_ENTITY_INFLATION'
+ if s.get('telemetry_point_canonical_state'):return 'RAW_TELEMETRY_NOT_CANONICAL_STATE'
+ if s.get('provider_technology_canonical'):return 'PROVIDER_TECHNOLOGY_NOT_CANONICAL'
  if s.get('central_r7_required'):return 'CENTRAL_R7_NOT_CANONICAL'
  if s.get('universal_prompt_logging'):return 'PROMPT_LOGGING_NOT_CANONICAL'
  if s.get('chain_of_thought_retention'):return 'COT_RETENTION_NOT_CANONICAL'
@@ -68,6 +70,8 @@ def validate(s,protocol):
  if s.get('provider_metric_auto_validation'):return 'PROVIDER_METRIC_NOT_VALIDATION'
  if s.get('health_tool_score_auto_finding'):return 'TOOL_SCORE_NOT_HEALTH_FINDING'
  if s.get('experiment'):
+  if s.get('experiment_bypasses_governance'):return 'EXPERIMENT_CANNOT_BYPASS_GOVERNANCE'
+  if not s.get('durable_experiment_provenance'):return 'EXPERIMENT_PROVENANCE_DURABILITY_REQUIRED'
   if not s.get('experiment_id'):return 'EXPERIMENT_ID_REQUIRED'
   if s.get('experiment_state') not in protocol['experiment_lifecycle']['states']:return 'EXPERIMENT_STATE_INVALID'
   if s.get('experiment_transition_from') or s.get('experiment_transition_to'):
@@ -86,6 +90,7 @@ def validate(s,protocol):
   if not s.get('durable_learning_provenance'):return 'LEARNING_PROVENANCE_DURABILITY_REQUIRED'
   if s.get('learning_history_rewritten'):return 'LEARNING_HISTORY_NON_DESTRUCTIVE'
   if s.get('learning_silent_mutation'):return 'LEARNING_NOT_SELF_AUTHORIZING'
+  if s.get('learning_replaces_decision'):return 'LEARNING_NOT_DECISION_SUBSTITUTE'
  if s.get('loop_learning_disposition') not in protocol['loop_learning_dispositions']:return 'LEARNING_DISPOSITION_INVALID'
  if s.get('preauthorized_adaptation'):
   if not (s.get('oa_boundary_valid') and s.get('policy_boundary_valid') and s.get('adaptation_inside_boundary')):return 'ADAPTATION_BOUNDARY_REQUIRED'
