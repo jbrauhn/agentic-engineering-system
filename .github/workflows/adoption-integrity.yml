@@ -1,0 +1,66 @@
+name: Adoption Integrity
+
+on:
+  pull_request:
+    paths:
+      - 'L1-L_*'
+      - 'START_HERE.md'
+      - 'SYSTEM_RATIONALE.md'
+      - 'ADOPTION_STARTER_PACK.md'
+      - 'DR-136-*'
+      - 'DR-137-*'
+      - 'DR-138-*'
+      - 'ADR-010-*'
+      - 'canonical_ae_release_manifest.json'
+      - 'adoption_*.json'
+      - 'synthetic_organization_fixture.json'
+      - 'clean_room_adoption_baseline.json'
+      - 'reference_ae_loops.json'
+      - 'assemble_distribution.py'
+      - 'run_clean_room_adoption.py'
+      - 'validate_adoption.py'
+      - 'context_protocol.json'
+      - 'capability_contracts.json'
+      - 'authority_protocol.json'
+      - 'lifecycle_protocol.json'
+      - 'validation_protocol.json'
+      - 'standards_health_protocol.json'
+      - 'observability_learning_protocol.json'
+      - '.github/workflows/adoption-integrity.yml'
+  workflow_dispatch:
+
+jobs:
+  adoption-integrity:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Assemble exact reference distribution
+        run: python assemble_distribution.py --repo . --output /tmp/ae-distribution
+      - name: Derive clean-room implementation Plan from distribution plus supplied baseline only
+        run: >-
+          python run_clean_room_adoption.py
+          --distribution /tmp/ae-distribution
+          --baseline clean_room_adoption_baseline.json
+          --output /tmp/clean-room-plan.json
+      - name: Validate adoption distribution conformance interface parity and integrated Proof
+        run: >-
+          python validate_adoption.py
+          adoption_distribution_protocol.json
+          adoption_scenarios.json
+          adoption_portability_fixtures.json
+          canonical_ae_release_manifest.json
+          synthetic_organization_fixture.json
+          reference_ae_loops.json
+          /tmp/clean-room-plan.json
+          clean_room_adoption_baseline.json
+          /tmp/ae-distribution
+          context_protocol.json
+          capability_contracts.json
+          authority_protocol.json
+          lifecycle_protocol.json
+          validation_protocol.json
+          standards_health_protocol.json
+          observability_learning_protocol.json
