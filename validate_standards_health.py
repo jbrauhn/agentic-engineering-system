@@ -16,7 +16,6 @@ def merged(defaults, scenario):
 
 def validate_cross_domain(protocol, lifecycle, capabilities, authority, context, planning, validation):
     errors = []
-
     domain = protocol.get("domain_semantics", {})
     if domain.get("standards_applicability") != "B":
         errors.append("Standards applicability must remain subordinate B")
@@ -28,50 +27,35 @@ def validate_cross_domain(protocol, lifecycle, capabilities, authority, context,
     lifecycle_routes = set(lifecycle.get("routes", []))
     if not set(protocol.get("cross_domain_expectations", {}).get("lifecycle_routes", [])).issubset(lifecycle_routes):
         errors.append("L1-J lifecycle routes drift from L1-D")
-
     if set(protocol.get("cross_domain_expectations", {}).get("capability_operational_impacts", [])) != set(capabilities.get("operational_impacts", [])):
         errors.append("L1-J capability impact reference drifts from L1-E")
-
     for rule in protocol.get("cross_domain_expectations", {}).get("authority_rules", []):
         if not authority.get("rules", {}).get(rule):
             errors.append(f"L1-F authority rule missing or false: {rule}")
-
     for rule in protocol.get("cross_domain_expectations", {}).get("context_rules", []):
         if not context.get("rules", {}).get(rule):
             errors.append(f"L1-G context rule missing or false: {rule}")
-
-    expected_routes = set(protocol.get("cross_domain_expectations", {}).get("planning_execution_routes", []))
-    if not expected_routes.issubset(set(planning.get("execution_routes", []))):
+    if not set(protocol.get("cross_domain_expectations", {}).get("planning_execution_routes", [])).issubset(set(planning.get("execution_routes", []))):
         errors.append("L1-J planning/execution routes drift from L1-H")
-    expected_chain = protocol.get("cross_domain_expectations", {}).get("planning_execution_verification_chain", [])
-    if planning.get("verification_chain") != expected_chain:
+    if planning.get("verification_chain") != protocol.get("cross_domain_expectations", {}).get("planning_execution_verification_chain", []):
         errors.append("L1-J Proof/Verification/Evidence/Validation chain drifts from L1-H")
-
     for rule in protocol.get("cross_domain_expectations", {}).get("validation_rules", []):
         if not validation.get("rules", {}).get(rule):
             errors.append(f"L1-I Validation rule missing or false: {rule}")
 
     required_rules = [
-        "standards_applicability_subordinate_b",
-        "engineering_health_finding_a2_explicit_extension",
-        "historical_l1c_not_rewritten",
-        "applicability_distinct_from_application_disposition",
-        "mandatory_cannot_use_proportional_omission",
-        "correct_effective_version_beats_latest",
-        "standards_do_not_replace_contract_proof",
-        "framework_name_not_health_condition",
-        "capability_gap_distinct_from_health_finding",
-        "remediation_validation_independent",
-        "health_history_non_destructive",
-        "current_health_disposition_derived",
-        "no_universal_maturity_score",
-        "no_universal_named_framework",
+        "standards_applicability_subordinate_b", "engineering_health_finding_a2_explicit_extension",
+        "historical_l1c_not_rewritten", "applicability_distinct_from_application_disposition",
+        "mandatory_cannot_use_proportional_omission", "correct_effective_version_beats_latest",
+        "standards_do_not_replace_contract_proof", "framework_name_not_health_condition",
+        "capability_gap_distinct_from_health_finding", "remediation_validation_independent",
+        "health_history_non_destructive", "current_health_disposition_derived",
+        "no_universal_maturity_score", "no_universal_named_framework",
         "no_central_standards_health_service_required"
     ]
     for rule in required_rules:
         if not protocol.get("rules", {}).get(rule):
             errors.append(f"L1-J required rule missing or false: {rule}")
-
     return errors
 
 
@@ -90,60 +74,73 @@ def validate_scenario(s):
         return "UNIVERSAL_FRAMEWORK_PROHIBITED"
     if s.get("universal_remediation_before_adoption") or s.get("low_impact_blocks_adoption"):
         return "NO_UNIVERSAL_REMEDIATION_BEFORE_ADOPTION"
+    if s.get("universal_human_da_for_applicability"):
+        return "UNIVERSAL_APPLICABILITY_HUMAN_DA_PROHIBITED"
+    if s.get("universal_independent_validation_for_finding"):
+        return "UNIVERSAL_FINDING_INDEPENDENCE_PROHIBITED"
     if not s.get("health_a2_extension_explicit"):
         return "HEALTH_A2_EXTENSION_MUST_BE_EXPLICIT"
     if s.get("historical_l1c_rewritten"):
         return "HISTORICAL_L1C_MUST_NOT_BE_REWRITTEN"
+    if s.get("collapsed_applicability_disposition"):
+        return "APPLICABILITY_DISPOSITION_MUST_REMAIN_DISTINCT"
+    if s.get("standards_applicability_authorizes_operation"):
+        return "STANDARDS_NOT_AUTHORIZATION_POLICY"
+    if s.get("copied_standard_becomes_authority"):
+        return "COPIED_STANDARD_NOT_SOURCE_AUTHORITY"
 
-    # Standards source/applicability/effectivity.
-    if not s.get("source_reference") or not s.get("source_authoritative"):
-        return "AUTHORITATIVE_STANDARD_SOURCE_REQUIRED"
-    if not s.get("effectivity_basis_known"):
-        return "EFFECTIVITY_BASIS_REQUIRED"
-    if not s.get("applicability_rationale"):
-        return "APPLICABILITY_RATIONALE_REQUIRED"
+    # Standards are conditional context: an Engineering Health Finding does not require a standards source.
+    if s.get("standards_context_present", True):
+        if not s.get("source_reference") or not s.get("source_authoritative"):
+            return "AUTHORITATIVE_STANDARD_SOURCE_REQUIRED"
+        if not s.get("effectivity_basis_known"):
+            return "EFFECTIVITY_BASIS_REQUIRED"
+        if not s.get("applicability_rationale"):
+            return "APPLICABILITY_RATIONALE_REQUIRED"
 
-    character = s.get("requirement_character")
-    applicability = s.get("applicability")
-    disposition = s.get("disposition")
+        character = s.get("requirement_character")
+        applicability = s.get("applicability")
+        disposition = s.get("disposition")
 
-    if character == "MANDATORY" and disposition == "PROPORTIONATELY_NOT_USED":
-        return "MANDATORY_PROPORTIONAL_OMISSION"
-    if character == "CONDITIONAL":
-        if s.get("conditional_trigger_met") and applicability != "APPLIES":
-            return "CONDITIONAL_TRIGGER_REQUIRES_APPLIES"
-        if not s.get("conditional_trigger_met") and applicability not in {"CONDITIONAL_PENDING", "DOES_NOT_APPLY"}:
-            return "CONDITIONAL_TRIGGER_STATE_INVALID"
+        if disposition == "PROPORTIONATELY_NOT_USED" and character != "ADVISORY":
+            return "PROPORTIONAL_OMISSION_ADVISORY_ONLY"
+        if character == "CONDITIONAL":
+            if s.get("conditional_trigger_met") and applicability != "APPLIES":
+                return "CONDITIONAL_TRIGGER_REQUIRES_APPLIES"
+            if not s.get("conditional_trigger_met") and applicability not in {"CONDITIONAL_PENDING", "DOES_NOT_APPLY"}:
+                return "CONDITIONAL_TRIGGER_STATE_INVALID"
+            if applicability == "CONDITIONAL_PENDING" and s.get("protected_work_proceeds"):
+                return "CONDITIONAL_PENDING_FAILS_CLOSED"
 
-    if applicability == "UNRESOLVED_REQUIRES_DECISION" and character in {"MANDATORY", "CONDITIONAL"} and s.get("protected_work_proceeds"):
-        return "UNRESOLVED_MANDATORY_FAILS_CLOSED"
+        if applicability == "UNRESOLVED_REQUIRES_DECISION" and character in {"MANDATORY", "CONDITIONAL"} and s.get("protected_work_proceeds"):
+            return "UNRESOLVED_MANDATORY_FAILS_CLOSED"
 
-    if disposition == "AUTHORIZED_EXCEPTION_WAIVER":
-        if not s.get("exception_allowed") or not s.get("exception_authority"):
-            return "EXCEPTION_AUTHORITY_REQUIRED"
-        if not s.get("exception_scope_version_exact"):
-            return "EXCEPTION_SCOPE_VERSION_REQUIRED"
-        if not s.get("exception_provenance"):
-            return "EXCEPTION_PROVENANCE_REQUIRED"
+        if disposition == "AUTHORIZED_EXCEPTION_WAIVER":
+            if not s.get("exception_allowed") or not s.get("exception_authority"):
+                return "EXCEPTION_AUTHORITY_REQUIRED"
+            if not s.get("exception_scope_version_exact"):
+                return "EXCEPTION_SCOPE_VERSION_REQUIRED"
+            if not s.get("exception_provenance"):
+                return "EXCEPTION_PROVENANCE_REQUIRED"
 
-    if s.get("selected_version") != s.get("effective_version") and s.get("newer_version_auto_selected"):
-        return "LATEST_VERSION_NOT_EFFECTIVE_BY_DEFAULT"
-    if s.get("newly_effective_requirement") and s.get("active_work_affected") and not s.get("effectivity_impact_handled"):
-        return "NEW_EFFECTIVE_REQUIREMENT_REASSESSMENT_REQUIRED"
-    if s.get("product_weakens_mandatory"):
-        return "PRODUCT_CANNOT_SILENTLY_WEAKEN"
-    if s.get("standards_replace_contract_proof"):
-        return "STANDARDS_NOT_SECOND_CONTRACT"
-    if s.get("context_summary_as_authority"):
-        return "CONTEXT_NOT_STANDARD_AUTHORITY"
-    if s.get("effective_view_authoritative_shadow"):
-        return "EFFECTIVE_VIEW_MUST_BE_DERIVED"
+        if s.get("selected_version") != s.get("effective_version") and s.get("newer_version_auto_selected"):
+            return "LATEST_VERSION_NOT_EFFECTIVE_BY_DEFAULT"
+        if s.get("newly_effective_requirement") and s.get("active_work_affected") and not s.get("effectivity_impact_handled"):
+            return "NEW_EFFECTIVE_REQUIREMENT_REASSESSMENT_REQUIRED"
+        if s.get("product_weakens_mandatory"):
+            return "PRODUCT_CANNOT_SILENTLY_WEAKEN"
+        if s.get("standards_replace_contract_proof"):
+            return "STANDARDS_NOT_SECOND_CONTRACT"
+        if s.get("context_summary_as_authority"):
+            return "CONTEXT_NOT_STANDARD_AUTHORITY"
+        if s.get("effective_view_authoritative_shadow"):
+            return "EFFECTIVE_VIEW_MUST_BE_DERIVED"
 
-    if applicability == "APPLIES" and disposition == "SATISFIED":
-        if s.get("checklist_only"):
-            return "CHECKLIST_NOT_EVIDENCE"
-        if character in {"MANDATORY", "CONDITIONAL"} and not s.get("evidence_demonstrated"):
-            return "APPLICATION_EVIDENCE_REQUIRED"
+        if applicability == "APPLIES" and disposition == "SATISFIED":
+            if s.get("checklist_only"):
+                return "CHECKLIST_NOT_EVIDENCE"
+            if character in {"MANDATORY", "CONDITIONAL"} and not s.get("evidence_demonstrated"):
+                return "APPLICATION_EVIDENCE_REQUIRED"
 
     # Capability gap and engineering-health separation.
     if s.get("missing_canonical_capability_operation") and s.get("mislabeled_capability_gap_as_health"):
@@ -170,17 +167,23 @@ def validate_scenario(s):
         if s.get("health_history_rewritten"):
             return "HEALTH_HISTORY_NON_DESTRUCTIVE"
 
-        disposition_requires_later_basis = s.get("health_current_disposition") in {
-            "DEFERRED", "ACCEPTED_RISK", "REMEDIATED", "SUPERSEDED", "QUALIFIED_UNKNOWN"
+        current = s.get("health_current_disposition")
+        basis = s.get("current_disposition_basis")
+        valid_basis = {
+            "ACTIVE": {"ISSUED_FINDING", "CURRENT_EVIDENCE", "OTHER_AUTHORITATIVE_STATE"},
+            "DEFERRED": {"DECISION_RECORD", "AUTHORITY_DECISION", "OTHER_AUTHORITATIVE_STATE"},
+            "ACCEPTED_RISK": {"AUTHORITY_DECISION"},
+            "REMEDIATED": {"VALIDATION_RECORD"},
+            "SUPERSEDED": {"SUPERSEDING_FINDING"},
+            "QUALIFIED_UNKNOWN": {"CURRENTNESS_OR_EVIDENCE_ASSESSMENT", "OTHER_AUTHORITATIVE_STATE"}
         }
-        if disposition_requires_later_basis and not s.get("later_authoritative_state_for_disposition"):
+        if basis not in valid_basis.get(current, set()):
             return "CURRENT_DISPOSITION_REQUIRES_AUTHORITATIVE_BASIS"
 
     # Remediation and lifecycle routing.
     if s.get("remediation") and s.get("remediation_success_claimed"):
         if (not s.get("remediation_validation_independent")) or s.get("remediation_producer") == s.get("remediation_validator"):
             return "REMEDIATION_REQUIRES_INDEPENDENT_VALIDATION"
-
     if s.get("contract_deficiency") and s.get("route") != "PROPOSE_CONTRACT_CHANGE":
         return "CONTRACT_DEFICIENCY_REQUIRES_G5_ROUTE"
     if s.get("reviewed_route_changes") and not s.get("inside_adaptation_boundary") and s.get("route") != "REPLAN":
@@ -190,7 +193,6 @@ def validate_scenario(s):
             return "UNRESOLVED_GOVERNANCE_REQUIRES_ESCALATION"
     if s.get("explicit_deferral_or_risk_acceptance") and not s.get("deferral_risk_provenance"):
         return "DEFERRAL_RISK_PROVENANCE_REQUIRED"
-
     return None
 
 
@@ -226,7 +228,6 @@ def main():
         return 2
 
     protocol, fixtures, portability, lifecycle, capabilities, authority, context, planning, validation = [load(p) for p in sys.argv[1:]]
-
     cross_errors = validate_cross_domain(protocol, lifecycle, capabilities, authority, context, planning, validation)
     if cross_errors:
         for error in cross_errors:
@@ -243,12 +244,7 @@ def main():
         expected_error = raw.get("expected_error")
         ok = got == expected and (expected != "FAIL" or error == expected_error)
         status = "PASS" if ok else "FAIL"
-        print(
-            f"{status}: {raw.get('id')} expected={expected}"
-            + (f"/{expected_error}" if expected_error else "")
-            + f" got={got}"
-            + (f"/{error}" if error else "")
-        )
+        print(f"{status}: {raw.get('id')} expected={expected}" + (f"/{expected_error}" if expected_error else "") + f" got={got}" + (f"/{error}" if error else ""))
         if not ok:
             failures.append(raw.get("id"))
 
@@ -256,11 +252,9 @@ def main():
     for failure in portability_failures:
         print("FAIL portability:", failure)
     failures.extend(portability_failures)
-
     if failures:
         print("standards-health-integrity FAILED:", ", ".join(failures))
         return 1
-
     print(f"standards-health-integrity PASSED: {len(fixtures.get('scenarios', []))} semantic scenarios + {len(portability.get('cases', []))} portability cases")
     return 0
 
