@@ -39,11 +39,16 @@ jobs:
           python-version: '3.11'
       - name: Assemble exact reference distribution
         run: python assemble_distribution.py --repo . --output /tmp/ae-distribution
+      - name: Prepare isolated clean-room supplied input
+        run: |
+          mkdir -p /tmp/clean-room-input /tmp/clean-room-run
+          cp clean_room_adoption_baseline.json /tmp/clean-room-input/supplied_baseline.json
       - name: Derive clean-room implementation Plan from distribution plus supplied baseline only
         run: >-
-          python run_clean_room_adoption.py
+          cd /tmp/clean-room-run &&
+          python /tmp/ae-distribution/run_clean_room_adoption.py
           --distribution /tmp/ae-distribution
-          --baseline clean_room_adoption_baseline.json
+          --baseline /tmp/clean-room-input/supplied_baseline.json
           --output /tmp/clean-room-plan.json
       - name: Validate adoption distribution conformance interface parity and integrated Proof
         run: >-
