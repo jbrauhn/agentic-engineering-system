@@ -32,7 +32,13 @@ def main():
  for src,role in sorted(roles.items(),key=lambda x:str(x[0].relative_to(repo))):
   rel=src.relative_to(repo); dst=out/rel; dst.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(src,dst)
   inventory.append({'path':str(rel),'role':role,'sha256':sha256(dst),'bytes':dst.stat().st_size})
- inv={'release_id':manifest['release_id'],'release_version':manifest['release_version'],'integrity_algorithm':'SHA-256','artifacts':inventory}
+ inv={
+  'release_id':manifest['release_id'],
+  'release_version':manifest['release_version'],
+  'distribution_revision':manifest.get('distribution_revision',1),
+  'integrity_algorithm':'SHA-256',
+  'artifacts':inventory
+ }
  (out/'RELEASE_INVENTORY.json').write_text(json.dumps(inv,indent=2)+'\n')
- print(f"assembled {len(inventory)} artifacts for {manifest['release_id']} at {out}")
+ print(f"assembled {len(inventory)} artifacts for {manifest['release_id']} distribution revision {inv['distribution_revision']} at {out}")
 if __name__=='__main__': main()
