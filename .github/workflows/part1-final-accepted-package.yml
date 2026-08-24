@@ -1,0 +1,70 @@
+name: Part 1 Accepted Release Package
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/part1-final-accepted-package.yml'
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Assemble exact accepted distribution
+        run: python assemble_distribution.py --repo . --output /tmp/ae-distribution
+      - name: Verify accepted release state and inventory
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          dist = Path('/tmp/ae-distribution')
+          manifest = json.loads((dist / 'canonical_ae_release_manifest.json').read_text())
+          decision = json.loads((dist / 'part1_acceptance_authority_decision_20260824.json').read_text())
+          inventory = json.loads((dist / 'RELEASE_INVENTORY.json').read_text())
+          assert manifest['distribution_revision'] == 3
+          assert manifest['release_status'] == 'HUMAN_OWNER_ACCEPTED'
+          assert manifest['acceptance']['decision'] == 'ACCEPT'
+          assert manifest['acceptance']['accepted_basis']['source_commit'] == '6c2424d5aea415819b276dfc6988aa9f964c6e62'
+          assert decision['canonical_type'] == 'Authority Decision'
+          assert decision['decision'] == 'ACCEPT'
+          assert decision['exact_target']['accepted_source_commit'] == '6c2424d5aea415819b276dfc6988aa9f964c6e62'
+          assert inventory['distribution_revision'] == 3
+          assert len(inventory['artifacts']) == 174
+          for item in inventory['artifacts']:
+              p = dist / item['path']
+              assert p.exists(), item['path']
+              digest = hashlib.sha256(p.read_bytes()).hexdigest()
+              assert digest == item['sha256'], item['path']
+          assert not (dist / 'clean_room_adoption_baseline.json').exists()
+          assert not any(p.parts and p.parts[0] == 'handoffs' for p in dist.rglob('*'))
+          print('accepted release verification PASS: status=HUMAN_OWNER_ACCEPTED revision=3 artifacts=174 inventory_failures=0')
+          PY
+      - name: Create deterministic accepted transport archive twice
+        run: |
+          mkdir -p /tmp/accepted-package
+          for n in 1 2; do
+            tar --sort=name --mtime='UTC 2026-08-24 00:00:00' --owner=0 --group=0 --numeric-owner -cf - -C /tmp ae-distribution | gzip -n > /tmp/accepted-package/accepted-${n}.tar.gz
+          done
+          cmp /tmp/accepted-package/accepted-1.tar.gz /tmp/accepted-package/accepted-2.tar.gz
+          mv /tmp/accepted-package/accepted-1.tar.gz /tmp/accepted-package/Canonical_AE_Part1_Accepted_2026-08-24_rev3.tar.gz
+          rm /tmp/accepted-package/accepted-2.tar.gz
+          (cd /tmp/accepted-package && sha256sum Canonical_AE_Part1_Accepted_2026-08-24_rev3.tar.gz > SHA256SUMS.txt)
+          cat /tmp/accepted-package/SHA256SUMS.txt
+      - name: Add release metadata
+        run: |
+          cp /tmp/ae-distribution/RELEASE_INVENTORY.json /tmp/accepted-package/RELEASE_INVENTORY.json
+          cp canonical_ae_release_manifest.json /tmp/accepted-package/canonical_ae_release_manifest.json
+          cp part1_acceptance_authority_decision_20260824.json /tmp/accepted-package/part1_acceptance_authority_decision_20260824.json
+          printf 'accepted_release_source_main_commit=2e144d21535f8bf838f9a6c064ebd967f8b491ce\n' > /tmp/accepted-package/PACKAGE_METADATA.txt
+          printf 'packaging_workflow_pr_merge_ref=%s\n' "$GITHUB_SHA" >> /tmp/accepted-package/PACKAGE_METADATA.txt
+          printf 'packaging_workflow_is_temporary=true\n' >> /tmp/accepted-package/PACKAGE_METADATA.txt
+      - name: Upload accepted release package
+        uses: actions/upload-artifact@v4
+        with:
+          name: part1-accepted-release-package-rev3
+          path: /tmp/accepted-package/
+          if-no-files-found: error
