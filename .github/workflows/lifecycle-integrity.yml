@@ -22,6 +22,6 @@ jobs:
         with:
           python-version: '3.11'
       - name: Validate lifecycle protocol and main scenario fixtures
-        run: python validate_lifecycle.py lifecycle_protocol.json lifecycle_scenarios.json
+        run: python reference/validators/validate_lifecycle.py reference/protocols/lifecycle_protocol.json reference/scenarios/lifecycle_scenarios.json
       - name: Validate G5 Contract Change gate and revision effectivity
-        run: python validate_contract_change_gate.py lifecycle_protocol.json contract_change_gate_scenarios.json
+        run: python reference/validators/validate_contract_change_gate.py reference/protocols/lifecycle_protocol.json reference/scenarios/contract_change_gate_scenarios.json
