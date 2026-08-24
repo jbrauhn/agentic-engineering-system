@@ -16,9 +16,15 @@ Agentic Engineering aims to obtain substantial leverage from capable AI agents w
 - **Measurements are neutral observations.** Experiments and Learning inform governed decisions rather than self-modifying the system.
 - **Portability by layering.** Canonical AE → OEB/Product context → organization-specific implementation.
 
+## Current Part 1 state
+
+Part 1 has been accepted by the Human Owner against the exact revision-2 acceptance basis recorded in `part1_acceptance_authority_decision_20260824.json`. Distribution revision 3 records that accepted state and current release-facing wording; it does not change Canonical Core semantics or erase the prior candidate history.
+
+The historical release ID/version retain their candidate-era labels for continuity. Current release status is determined by the Canonical AE Release Manifest together with the Human Owner Authority Decision record.
+
 ## Evolution
 
-The current candidate Part 1 assembly evolved through approved L1 domains:
+The accepted Part 1 system evolved through approved L1 domains:
 
 - L1-A identity/boundaries;
 - L1-B logical responsibility architecture;
@@ -33,10 +39,12 @@ The current candidate Part 1 assembly evolved through approved L1 domains:
 - L1-K observability/experiments/learning;
 - L1-L adoption/distribution/conformance assembly.
 
+The broad Canonical interface-parity question tracked by issue #6 was resolved by L1-L/DR-136 and the reference portability Proof. Older L1-C/L1-D historical text may still describe issue #6 as open because that was true when those baselines were issued; that historical wording is not current status and is not rewritten destructively.
+
 ## Detailed authority
 
-This page is a Human-readable rationale/navigation view. `CONTRACT.md`, Decision Records, ADRs, and Human semantic L1 artifacts remain the detailed authoritative sources. If this page conflicts with them, this page is wrong.
+This page is a Human-readable rationale/navigation view. `CONTRACT.md`, Decision Records, ADRs, Human semantic L1 artifacts, and applicable durable Authority Decision records remain the detailed authoritative sources. If this page conflicts with them, this page is wrong.
 
-## Open experiments
+## Open experiments and follow-ons
 
-At this stage, previously recorded experiments such as governed AE vs lighter baselines, model placement, and ASD-STE100 remain experiments rather than predetermined conclusions. See the authoritative Decision Register/DR material.
+Previously recorded experiments such as governed AE vs lighter baselines, model placement, and ASD-STE100 remain experiments rather than predetermined conclusions. Repository required-check enforcement remains a separate follow-on tracked by issue #12; it does not redefine Canonical AE semantics or invalidate the issued Part 1 Human Owner acceptance.
