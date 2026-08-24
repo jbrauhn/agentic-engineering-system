@@ -26,3 +26,7 @@ jobs:
         run: python reference/validators/validate_lifecycle.py reference/protocols/lifecycle_protocol.json reference/scenarios/lifecycle_scenarios.json
       - name: Validate G5 Contract Change gate and revision effectivity
         run: python reference/validators/validate_contract_change_gate.py reference/protocols/lifecycle_protocol.json reference/scenarios/contract_change_gate_scenarios.json
+      - name: Intentional ruleset enforcement failure
+        run: |
+          echo "Intentional failure: proves required-check enforcement blocks merge."
+          exit 1
