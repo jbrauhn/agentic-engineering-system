@@ -100,6 +100,7 @@ def main():
         })
 
     covered_capabilities = {c['capability'] for c in caps} | {g['capability'] for g in gaps}
+    distribution_revision = manifest.get('distribution_revision', 1)
     plan = {
         'canonical_type': 'Plan',
         'plan_id': 'PLAN-CLEANROOM-BETA@1',
@@ -107,7 +108,9 @@ def main():
         'planning_method': 'simplest_credible_adoption_planning',
         'input_boundary': {
             'distribution_release': manifest['release_id'],
+            'distribution_revision': distribution_revision,
             'inventory_release': inventory['release_id'],
+            'inventory_distribution_revision': inventory.get('distribution_revision', 1),
             'supplied_baseline_id': baseline['organization'],
             'hidden_prior_session_inputs': []
         },
@@ -167,6 +170,7 @@ def main():
     Path(a.output).write_text(json.dumps(plan, indent=2) + '\n')
     print(
         f"derived {plan['plan_id']} from release + supplied baseline only; "
+        f"distribution revision {distribution_revision}; "
         f"Canonical capability coverage {len(covered_capabilities)}/{len(required_capabilities)}"
     )
 
