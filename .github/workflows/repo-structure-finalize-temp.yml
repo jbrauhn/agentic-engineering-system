@@ -60,7 +60,6 @@ jobs:
               'validate_*.py': 'reference/validators/validate_*.py',
           }
 
-          # Only representation-aware/non-normative tooling and navigation are rewritten.
           targets = []
           for base in ['.github/workflows', 'reference', 'tools', 'adoption', 'docs']:
               b = root / base
@@ -80,7 +79,6 @@ jobs:
               if text != original:
                   p.write_text(text, encoding='utf-8')
 
-          # Validators and the clean-room harness formerly lived at repo root.
           for p in (root / 'reference/validators').glob('validate_*.py'):
               text = p.read_text(encoding='utf-8')
               text = text.replace('Path(__file__).resolve().parent', 'Path(__file__).resolve().parents[2]')
@@ -92,7 +90,6 @@ jobs:
           text = text.replace('Path(__file__).parent', 'Path(__file__).resolve().parents[2]')
           cr.write_text(text, encoding='utf-8')
 
-          # Manifest: rev4 is path/representation-only. Human acceptance basis is untouched.
           mp = root / 'canonical_ae_release_manifest.json'
           m = json.loads(mp.read_text(encoding='utf-8'))
           assert m['distribution_revision'] == 3
@@ -127,7 +124,6 @@ jobs:
           m['evolution']['compatibility_note'] = 'Distribution revision 4 is a non-semantic repository/distribution path reorganization of the Human Owner-accepted Part 1 system. Revision 3 preserves the prior flat paths. The Human-accepted revision-2 basis and Proof O Authority Decision remain unchanged.'
           mp.write_text(json.dumps(m, indent=2) + '\n', encoding='utf-8')
 
-          # Public landing docs: current representation, not a future proposal.
           readme = root / 'README.md'
           t = readme.read_text(encoding='utf-8')
           t = t.replace('distribution revision 3 · `HUMAN_OWNER_ACCEPTED`','distribution revision 4 · `HUMAN_OWNER_ACCEPTED`')
@@ -155,95 +151,24 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python reference/validators/validate_lifecycle.py \
-            reference/protocols/lifecycle_protocol.json \
-            reference/scenarios/lifecycle_scenarios.json
-          python reference/validators/validate_contract_change_gate.py \
-            reference/protocols/lifecycle_protocol.json \
-            reference/scenarios/contract_change_gate_scenarios.json
-          python reference/validators/validate_capabilities.py \
-            reference/protocols/capability_contracts.json \
-            reference/scenarios/capability_scenarios.json \
-            reference/fixtures/oeb_fixtures.json
-          python reference/validators/validate_authority.py \
-            reference/protocols/authority_protocol.json \
-            reference/scenarios/authority_scenarios.json \
-            reference/fixtures/authority_portability_fixtures.json \
-            reference/protocols/capability_contracts.json \
-            reference/protocols/lifecycle_protocol.json
-          python reference/validators/validate_context.py \
-            reference/protocols/context_protocol.json \
-            reference/scenarios/context_scenarios.json \
-            reference/fixtures/context_portability_fixtures.json \
-            reference/protocols/capability_contracts.json \
-            reference/protocols/lifecycle_protocol.json \
-            reference/protocols/authority_protocol.json
-          python reference/validators/validate_planning_execution.py \
-            reference/protocols/planning_execution_protocol.json \
-            reference/scenarios/planning_execution_scenarios.json \
-            reference/fixtures/planning_execution_portability_fixtures.json \
-            reference/protocols/lifecycle_protocol.json \
-            reference/protocols/capability_contracts.json \
-            reference/protocols/authority_protocol.json \
-            reference/protocols/context_protocol.json
-          python reference/validators/validate_validation.py \
-            reference/protocols/validation_protocol.json \
-            reference/scenarios/validation_scenarios.json \
-            reference/fixtures/validation_portability_fixtures.json \
-            reference/protocols/lifecycle_protocol.json \
-            reference/protocols/capability_contracts.json \
-            reference/protocols/authority_protocol.json \
-            reference/protocols/context_protocol.json \
-            reference/protocols/planning_execution_protocol.json
-          python reference/validators/validate_standards_health.py \
-            reference/protocols/standards_health_protocol.json \
-            reference/scenarios/standards_health_scenarios.json \
-            reference/fixtures/standards_health_portability_fixtures.json \
-            reference/protocols/lifecycle_protocol.json \
-            reference/protocols/capability_contracts.json \
-            reference/protocols/authority_protocol.json \
-            reference/protocols/context_protocol.json \
-            reference/protocols/planning_execution_protocol.json \
-            reference/protocols/validation_protocol.json
-          python reference/validators/validate_observability_learning.py \
-            reference/protocols/observability_learning_protocol.json \
-            reference/scenarios/observability_learning_scenarios.json \
-            reference/fixtures/observability_learning_portability_fixtures.json \
-            reference/protocols/lifecycle_protocol.json \
-            reference/protocols/capability_contracts.json \
-            reference/protocols/authority_protocol.json \
-            reference/protocols/context_protocol.json \
-            reference/protocols/planning_execution_protocol.json \
-            reference/protocols/validation_protocol.json \
-            reference/protocols/standards_health_protocol.json
+          python reference/validators/validate_lifecycle.py reference/protocols/lifecycle_protocol.json reference/scenarios/lifecycle_scenarios.json
+          python reference/validators/validate_contract_change_gate.py reference/protocols/lifecycle_protocol.json reference/scenarios/contract_change_gate_scenarios.json
+          python reference/validators/validate_capabilities.py reference/protocols/capability_contracts.json reference/scenarios/capability_scenarios.json reference/fixtures/oeb_fixtures.json
+          python reference/validators/validate_authority.py reference/protocols/authority_protocol.json reference/scenarios/authority_scenarios.json reference/fixtures/authority_portability_fixtures.json reference/protocols/capability_contracts.json reference/protocols/lifecycle_protocol.json
+          python reference/validators/validate_context.py reference/protocols/context_protocol.json reference/scenarios/context_scenarios.json reference/fixtures/context_portability_fixtures.json reference/protocols/capability_contracts.json reference/protocols/lifecycle_protocol.json reference/protocols/authority_protocol.json
+          python reference/validators/validate_planning_execution.py reference/protocols/planning_execution_protocol.json reference/scenarios/planning_execution_scenarios.json reference/fixtures/planning_execution_portability_fixtures.json reference/protocols/lifecycle_protocol.json reference/protocols/capability_contracts.json reference/protocols/authority_protocol.json reference/protocols/context_protocol.json
+          python reference/validators/validate_validation.py reference/protocols/validation_protocol.json reference/scenarios/validation_scenarios.json reference/fixtures/validation_portability_fixtures.json reference/protocols/lifecycle_protocol.json reference/protocols/capability_contracts.json reference/protocols/authority_protocol.json reference/protocols/context_protocol.json reference/protocols/planning_execution_protocol.json
+          python reference/validators/validate_standards_health.py reference/protocols/standards_health_protocol.json reference/scenarios/standards_health_scenarios.json reference/fixtures/standards_health_portability_fixtures.json reference/protocols/lifecycle_protocol.json reference/protocols/capability_contracts.json reference/protocols/authority_protocol.json reference/protocols/context_protocol.json reference/protocols/planning_execution_protocol.json reference/protocols/validation_protocol.json
+          python reference/validators/validate_observability_learning.py reference/protocols/observability_learning_protocol.json reference/scenarios/observability_learning_scenarios.json reference/fixtures/observability_learning_portability_fixtures.json reference/protocols/lifecycle_protocol.json reference/protocols/capability_contracts.json reference/protocols/authority_protocol.json reference/protocols/context_protocol.json reference/protocols/planning_execution_protocol.json reference/protocols/validation_protocol.json reference/protocols/standards_health_protocol.json
 
           rm -rf /tmp/ae-rev4 /tmp/clean-room-input /tmp/clean-room-run
           python tools/assemble_distribution.py --repo . --output /tmp/ae-rev4
           mkdir -p /tmp/clean-room-input /tmp/clean-room-run
           cp reference/fixtures/clean_room_adoption_baseline.json /tmp/clean-room-input/supplied_baseline.json
           cd /tmp/clean-room-run
-          python /tmp/ae-rev4/tools/clean-room/run_clean_room_adoption.py \
-            --distribution /tmp/ae-rev4 \
-            --baseline /tmp/clean-room-input/supplied_baseline.json \
-            --output /tmp/clean-room-plan.json
+          python /tmp/ae-rev4/tools/clean-room/run_clean_room_adoption.py --distribution /tmp/ae-rev4 --baseline /tmp/clean-room-input/supplied_baseline.json --output /tmp/clean-room-plan.json
           cd "$GITHUB_WORKSPACE"
-          python reference/validators/validate_adoption.py \
-            reference/protocols/adoption_distribution_protocol.json \
-            reference/scenarios/adoption_scenarios.json \
-            reference/fixtures/adoption_portability_fixtures.json \
-            canonical_ae_release_manifest.json \
-            reference/fixtures/synthetic_organization_fixture.json \
-            reference/loops/reference_ae_loops.json \
-            /tmp/clean-room-plan.json \
-            reference/fixtures/clean_room_adoption_baseline.json \
-            /tmp/ae-rev4 \
-            reference/protocols/context_protocol.json \
-            reference/protocols/capability_contracts.json \
-            reference/protocols/authority_protocol.json \
-            reference/protocols/lifecycle_protocol.json \
-            reference/protocols/validation_protocol.json \
-            reference/protocols/standards_health_protocol.json \
-            reference/protocols/observability_learning_protocol.json
+          python reference/validators/validate_adoption.py reference/protocols/adoption_distribution_protocol.json reference/scenarios/adoption_scenarios.json reference/fixtures/adoption_portability_fixtures.json canonical_ae_release_manifest.json reference/fixtures/synthetic_organization_fixture.json reference/loops/reference_ae_loops.json /tmp/clean-room-plan.json reference/fixtures/clean_room_adoption_baseline.json /tmp/ae-rev4 reference/protocols/context_protocol.json reference/protocols/capability_contracts.json reference/protocols/authority_protocol.json reference/protocols/lifecycle_protocol.json reference/protocols/validation_protocol.json reference/protocols/standards_health_protocol.json reference/protocols/observability_learning_protocol.json
           python - <<'PY'
           import json
           from pathlib import Path
@@ -257,12 +182,12 @@ jobs:
           print('rev4 finalizer validation PASS: 174 artifacts')
           PY
 
-      - name: Commit final representation updates and remove helper
+      - name: Commit non-workflow representation updates
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git rm .github/workflows/repo-structure-finalize-temp.yml
+          git restore --source=HEAD -- .github/workflows/*-integrity.yml
           git add -A
-          git commit -m 'Finalize repository representation revision 4 [repo-refactor]'
+          git commit -m 'Finalize non-workflow repository representation revision 4 [repo-refactor]'
           git push origin HEAD:${{ github.head_ref }}
