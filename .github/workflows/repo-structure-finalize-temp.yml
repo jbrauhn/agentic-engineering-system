@@ -1,0 +1,190 @@
+name: Temporary Repository Structure Finalizer
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/repo-structure-finalize-temp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Update representation-aware paths
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+
+          root = Path('.').resolve()
+          mapping = {
+              'CONTRACT.md': 'canonical/CONTRACT.md',
+              'ADOPTION_STARTER_PACK.md': 'adoption/ADOPTION_STARTER_PACK.md',
+              'SYSTEM_RATIONALE.md': 'docs/SYSTEM_RATIONALE.md',
+              'part1_acceptance_authority_decision_20260824.json': 'canonical/governance/part1_acceptance_authority_decision_20260824.json',
+              'assemble_distribution.py': 'tools/assemble_distribution.py',
+              'run_clean_room_adoption.py': 'tools/clean-room/run_clean_room_adoption.py',
+          }
+          for letter_dir in (root / 'canonical/l1').iterdir():
+              if letter_dir.is_dir():
+                  for p in letter_dir.glob('L1-*.md'):
+                      mapping[p.name] = p.relative_to(root).as_posix()
+          for p in (root / 'canonical/decisions/dr').glob('DR-*.md'):
+              mapping[p.name] = p.relative_to(root).as_posix()
+          for p in (root / 'canonical/decisions/adr').glob('ADR-*.md'):
+              mapping[p.name] = p.relative_to(root).as_posix()
+          for base in ['protocols', 'scenarios', 'fixtures', 'loops', 'validators']:
+              for p in (root / 'reference' / base).iterdir():
+                  if p.is_file():
+                      mapping[p.name] = p.relative_to(root).as_posix()
+
+          glob_map = {
+              'L1-*.md': 'canonical/l1/*/L1-*.md',
+              'DR-*.md': 'canonical/decisions/dr/DR-*.md',
+              'ADR-*.md': 'canonical/decisions/adr/ADR-*.md',
+              '*_protocol.json': 'reference/protocols/*_protocol.json',
+              '*_scenarios.json': 'reference/scenarios/*_scenarios.json',
+              '*_portability_fixtures.json': 'reference/fixtures/*_portability_fixtures.json',
+              'validate_*.py': 'reference/validators/validate_*.py',
+          }
+
+          # Only representation-aware/non-normative tooling and navigation are rewritten.
+          targets = []
+          for base in ['.github/workflows', 'reference', 'tools', 'adoption', 'docs']:
+              b = root / base
+              if b.exists():
+                  targets.extend(p for p in b.rglob('*') if p.is_file() and p.suffix.lower() in {'.md','.json','.py','.yml','.yaml'})
+          targets += [root / 'README.md', root / 'START_HERE.md']
+
+          for p in sorted(set(targets)):
+              if p.name == 'repo-structure-finalize-temp.yml':
+                  continue
+              text = p.read_text(encoding='utf-8')
+              original = text
+              for old, new in sorted(mapping.items(), key=lambda kv: len(kv[0]), reverse=True):
+                  text = text.replace(old, new)
+              for old, new in glob_map.items():
+                  text = text.replace(old, new)
+              if text != original:
+                  p.write_text(text, encoding='utf-8')
+
+          # Validators and the clean-room harness formerly lived at repo root.
+          for p in (root / 'reference/validators').glob('validate_*.py'):
+              text = p.read_text(encoding='utf-8')
+              text = text.replace('Path(__file__).resolve().parent', 'Path(__file__).resolve().parents[2]')
+              text = text.replace('Path(__file__).parent', 'Path(__file__).resolve().parents[2]')
+              p.write_text(text, encoding='utf-8')
+          cr = root / 'tools/clean-room/run_clean_room_adoption.py'
+          text = cr.read_text(encoding='utf-8')
+          text = text.replace('Path(__file__).resolve().parent', 'Path(__file__).resolve().parents[2]')
+          text = text.replace('Path(__file__).parent', 'Path(__file__).resolve().parents[2]')
+          cr.write_text(text, encoding='utf-8')
+
+          # Manifest: rev4 is path/representation-only. Human acceptance basis is untouched.
+          mp = root / 'canonical_ae_release_manifest.json'
+          m = json.loads(mp.read_text(encoding='utf-8'))
+          assert m['distribution_revision'] == 3
+          assert m['release_status'] == 'HUMAN_OWNER_ACCEPTED'
+          assert m['acceptance']['accepted_basis']['distribution_revision'] == 2
+          m['distribution_revision'] = 4
+          m['semantic_layers']['CANONICAL_CORE']['selectors'] = [
+              'canonical/CONTRACT.md',
+              'canonical/l1/*/L1-*.md',
+              'canonical/decisions/dr/DR-*.md',
+              'canonical/decisions/adr/ADR-*.md',
+          ]
+          m['semantic_layers']['ADOPTION_STARTER_PACK']['selectors'] = ['START_HERE.md','adoption/ADOPTION_STARTER_PACK.md']
+          m['semantic_layers']['EXECUTABLE_REFERENCE_LAYER']['selectors'] = [
+              'reference/protocols/*_protocol.json',
+              'reference/scenarios/*_scenarios.json',
+              'reference/fixtures/*_portability_fixtures.json',
+              'reference/protocols/capability_contracts.json',
+              'reference/validators/validate_*.py',
+              '.github/workflows/*-integrity.yml',
+              'reference/fixtures/synthetic_organization_fixture.json',
+              'reference/loops/reference_ae_loops.json',
+              'tools/clean-room/run_clean_room_adoption.py',
+              'tools/assemble_distribution.py',
+          ]
+          m['supporting_content']['SYSTEM_RATIONALE']['selectors'] = ['docs/SYSTEM_RATIONALE.md']
+          m['supporting_content']['PART1_ACCEPTANCE_AUTHORITY_DECISION']['selectors'] = ['canonical/governance/part1_acceptance_authority_decision_20260824.json']
+          m['excluded_from_clean_room_distribution'][0] = 'reference/fixtures/clean_room_adoption_baseline.json'
+          m['acceptance']['finalization']['current_distribution_revision'] = 4
+          m['acceptance']['finalization']['semantic_change'] = False
+          m['acceptance']['finalization']['purpose'] = 'Distribution revision 4 reorganizes repository and distribution artifact paths for navigation only. Canonical Core semantics and the exact Human-accepted revision-2 basis remain unchanged and reconstructable.'
+          m['evolution']['compatibility_note'] = 'Distribution revision 4 is a non-semantic repository/distribution path reorganization of the Human Owner-accepted Part 1 system. Revision 3 preserves the prior flat paths. The Human-accepted revision-2 basis and Proof O Authority Decision remain unchanged.'
+          mp.write_text(json.dumps(m, indent=2) + '\n', encoding='utf-8')
+
+          # Public landing docs: current representation, not a future proposal.
+          readme = root / 'README.md'
+          t = readme.read_text(encoding='utf-8')
+          t = t.replace('distribution revision 3 · `HUMAN_OWNER_ACCEPTED`','distribution revision 4 · `HUMAN_OWNER_ACCEPTED`')
+          t = t.replace('distribution revision: `3`;','distribution revision: `4`;')
+          t = t.replace('accepted distribution contents: `174` artifacts;','current distribution contents: `174` artifacts;')
+          marker = '## Repository organization note'
+          if marker in t:
+              before, _, rest = t.partition(marker)
+              after_marker = rest.partition('## Repository governance follow-on')[2]
+              t = before + marker + '\n\nThe live revision-4 representation organizes Canonical, adoption, reference, tooling, and explanatory material into dedicated directories. Historical revision 3 preserves the accepted flat-path representation and exact payload hash. The reorganization changes navigation/path representation only; it does not redefine Canonical architecture or Part 1 semantics.\n\n## Repository governance follow-on' + after_marker
+          readme.write_text(t, encoding='utf-8')
+
+          repo_map = root / 'docs/REPOSITORY_MAP.md'
+          t = repo_map.read_text(encoding='utf-8')
+          t = t.replace('# Repository Map\n', '# Repository Map\n\n**Current physical representation:** distribution revision 4. Historical revision 3 preserves the prior flat-root layout.\n\n', 1)
+          t = t.replace('## Why the accepted Part 1 root is still flat','## Representation history')
+          t = t.replace('## Recommended future physical layout','## Current physical layout')
+          t = t.replace('If a controlled non-semantic repository/distribution representation revision is authorized, the target shape should be closer to:','The live repository is organized around this shape:')
+          repo_map.write_text(t, encoding='utf-8')
+
+          print(f'updated representation-aware paths using {len(mapping)} exact file mappings')
+          PY
+
+      - name: Run reference validators and distribution assembly
+        shell: bash
+        run: |
+          set -euo pipefail
+          python reference/validators/validate_lifecycle.py
+          python reference/validators/validate_contract_change_gate.py
+          python reference/validators/validate_capabilities.py
+          python reference/validators/validate_authority.py
+          python reference/validators/validate_context.py
+          python reference/validators/validate_planning_execution.py
+          python reference/validators/validate_validation.py
+          python reference/validators/validate_standards_health.py
+          python reference/validators/validate_observability_learning.py
+          python reference/validators/validate_adoption.py
+          rm -rf /tmp/ae-rev4
+          python tools/assemble_distribution.py --repo . --output /tmp/ae-rev4
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('canonical_ae_release_manifest.json').read_text())
+          i=json.loads(Path('/tmp/ae-rev4/RELEASE_INVENTORY.json').read_text())
+          assert m['distribution_revision']==4
+          assert m['release_status']=='HUMAN_OWNER_ACCEPTED'
+          assert len(i['artifacts'])==174, len(i['artifacts'])
+          assert not Path('/tmp/ae-rev4/reference/fixtures/clean_room_adoption_baseline.json').exists()
+          print('rev4 finalizer validation PASS: 174 artifacts')
+          PY
+
+      - name: Commit final representation updates and remove helper
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/repo-structure-finalize-temp.yml
+          git add -A
+          git commit -m 'Finalize repository representation revision 4 [repo-refactor]'
+          git push origin HEAD:${{ github.head_ref }}
