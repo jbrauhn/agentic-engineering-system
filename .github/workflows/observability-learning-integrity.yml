@@ -3,22 +3,24 @@ name: Observability Learning Integrity
 on:
   pull_request:
     paths:
-      - 'L1-K_*'
-      - 'DR-133-*'
-      - 'DR-134-*'
-      - 'DR-135-*'
-      - 'ADR-009-*'
-      - 'observability_learning_*.json'
-      - 'validate_observability_learning.py'
-      - 'lifecycle_protocol.json'
-      - 'capability_contracts.json'
-      - 'authority_protocol.json'
-      - 'context_protocol.json'
-      - 'planning_execution_protocol.json'
-      - 'validation_protocol.json'
-      - 'standards_health_protocol.json'
-      - 'L1-L_*'
-      - 'adoption_distribution_protocol.json'
+      - 'canonical/level-1/K/**'
+      - 'canonical/level-1/L/**'
+      - 'canonical/decisions/dr/DR-133-*'
+      - 'canonical/decisions/dr/DR-134-*'
+      - 'canonical/decisions/dr/DR-135-*'
+      - 'canonical/decisions/adr/ADR-009-*'
+      - 'reference/protocols/observability_learning_protocol.json'
+      - 'reference/scenarios/observability_learning_scenarios.json'
+      - 'reference/fixtures/observability_learning_portability_fixtures.json'
+      - 'reference/validators/validate_observability_learning.py'
+      - 'reference/protocols/lifecycle_protocol.json'
+      - 'reference/protocols/capability_contracts.json'
+      - 'reference/protocols/authority_protocol.json'
+      - 'reference/protocols/context_protocol.json'
+      - 'reference/protocols/planning_execution_protocol.json'
+      - 'reference/protocols/validation_protocol.json'
+      - 'reference/protocols/standards_health_protocol.json'
+      - 'reference/protocols/adoption_distribution_protocol.json'
       - '.github/workflows/observability-learning-integrity.yml'
   workflow_dispatch:
 
@@ -32,14 +34,14 @@ jobs:
           python-version: '3.11'
       - name: Validate observability metrics experiments learning portability and cross-domain semantics
         run: >-
-          python validate_observability_learning.py
-          observability_learning_protocol.json
-          observability_learning_scenarios.json
-          observability_learning_portability_fixtures.json
-          lifecycle_protocol.json
-          capability_contracts.json
-          authority_protocol.json
-          context_protocol.json
-          planning_execution_protocol.json
-          validation_protocol.json
-          standards_health_protocol.json
+          python reference/validators/validate_observability_learning.py
+          reference/protocols/observability_learning_protocol.json
+          reference/scenarios/observability_learning_scenarios.json
+          reference/fixtures/observability_learning_portability_fixtures.json
+          reference/protocols/lifecycle_protocol.json
+          reference/protocols/capability_contracts.json
+          reference/protocols/authority_protocol.json
+          reference/protocols/context_protocol.json
+          reference/protocols/planning_execution_protocol.json
+          reference/protocols/validation_protocol.json
+          reference/protocols/standards_health_protocol.json
