@@ -2,8 +2,7 @@
 
 **Current physical representation:** distribution revision 4. Historical revision 3 preserves the prior flat-root layout.
 
-
-This page is a human/agent navigation aid for the Canonical Agentic Engineering repository. It does **not** redefine release authority or Canonical semantics. The release manifest remains authoritative for distribution membership and layer classification.
+This page is a human/agent navigation aid for the Canonical Agentic Engineering repository. It does **not** redefine release authority or Canonical semantics. The **[release manifest](../canonical_ae_release_manifest.json)** remains authoritative for distribution membership and layer classification.
 
 ## Fast paths
 
@@ -11,174 +10,143 @@ This page is a human/agent navigation aid for the Canonical Agentic Engineering 
 
 Read in this order:
 
-1. [`../START_HERE.md`](../START_HERE.md)
-2. [`../docs/SYSTEM_RATIONALE.md`](../docs/SYSTEM_RATIONALE.md)
-3. [`../canonical/CONTRACT.md`](../canonical/CONTRACT.md)
-4. the applicable `canonical/level-1/*/L1-*.md` semantic artifacts
-5. supporting `canonical/decisions/dr/DR-*.md` and `Acanonical/decisions/dr/DR-*.md` records when you need the decision history or machine-reference rationale.
+1. **[START HERE](../START_HERE.md)**
+2. **[System Rationale](SYSTEM_RATIONALE.md)**
+3. **[Contract](../canonical/CONTRACT.md)**
+4. **[Level 1 Canonical domains](../canonical/level-1/)**
+5. **[Decision Records](../canonical/decisions/dr/)** and **[Architecture Decision Records](../canonical/decisions/adr/)** when you need decision history or machine-reference rationale.
 
 ### I want to adopt AE in an organization
 
-1. [`../canonical_ae_release_manifest.json`](../canonical_ae_release_manifest.json)
-2. [`../START_HERE.md`](../START_HERE.md)
-3. [`../adoption/ADOPTION_STARTER_PACK.md`](../adoption/ADOPTION_STARTER_PACK.md)
-4. Canonical capability definitions and applicable L1 semantics
-5. reference fixtures/validators only as conforming examples, never as hidden Canonical requirements.
+1. **[Release manifest](../canonical_ae_release_manifest.json)**
+2. **[START HERE](../START_HERE.md)**
+3. **[Adoption Starter Pack](../adoption/ADOPTION_STARTER_PACK.md)**
+4. **[Level 1 capabilities/OEB domain](../canonical/level-1/E/)** and the other applicable Level 1 domains
+5. **[Reference layer](../reference/)** only as conforming examples and executable proof, never as hidden Canonical requirements.
 
 ### I want to review or change the Canonical system
 
-1. [`../canonical/CONTRACT.md`](../canonical/CONTRACT.md)
-2. exact current release manifest
-3. affected `canonical/level-1/*/L1-*.md` artifacts
-4. relevant `canonical/decisions/dr/DR-*.md` / `Acanonical/decisions/dr/DR-*.md`
-5. affected machine-readable protocol/scenario files and integrity validators
-6. applicable GitHub Actions integrity workflow.
+1. **[Contract](../canonical/CONTRACT.md)**
+2. **[Exact current release manifest](../canonical_ae_release_manifest.json)**
+3. affected **[Level 1 domains](../canonical/level-1/)**
+4. relevant **[Decision Records](../canonical/decisions/dr/)** / **[ADRs](../canonical/decisions/adr/)**
+5. affected **[protocols](../reference/protocols/)**, **[scenarios](../reference/scenarios/)**, and **[validators](../reference/validators/)**
+6. applicable **[integrity workflow](../.github/workflows/)**.
 
 ## File families
 
 ### Governing Contract
 
-- `canonical/CONTRACT.md`
+- **[canonical/CONTRACT.md](../canonical/CONTRACT.md)**
 
 Part 1 Goal / Spec / Proof and the governing acceptance boundary.
 
-### L1 semantic artifacts
+### Level 1 Canonical semantic domains
 
-- `L1-A_*` through `L1-L_*`
+- **[canonical/level-1/](../canonical/level-1/)** contains `L1-A_*` through `L1-L_*`.
 
-Human-readable Canonical semantics. The L1 letters are design domains, not runtime stages.
+**“L1” means Level 1.** The letters A–L are semantic design domains. They are **not Contract clause numbers** and they are **not sequential runtime stages**. This directory has the largest hierarchy because the Level 1 artifacts contain the detailed human-readable Canonical system semantics beneath the governing Contract.
 
-Broad topic map:
-
-| L1 | Topic |
+| Level 1 domain | Topic |
 |---|---|
-| A | identity, scope, system boundaries |
-| B | logical responsibility architecture |
-| C | domain and artifact model |
-| D | lifecycle and state protocol |
-| E | capability contracts and organization engineering baseline |
-| F | authority, policy, and enforcement |
-| G | knowledge, context, memory, handoff, reconstruction |
-| H | Planning, progressive elaboration, Execution readiness |
-| I | Evidence and independent Validation |
-| J | standards applicability and Engineering Health |
-| K | observability, metrics, experiments, and Learning |
-| L | adoption, distribution, conformance, bootstrap, interface parity |
+| **[A](../canonical/level-1/A/)** | identity, scope, system boundaries |
+| **[B](../canonical/level-1/B/)** | logical responsibility architecture |
+| **[C](../canonical/level-1/C/)** | domain and artifact model |
+| **[D](../canonical/level-1/D/)** | lifecycle and state protocol |
+| **[E](../canonical/level-1/E/)** | capability contracts and organization engineering baseline |
+| **[F](../canonical/level-1/F/)** | authority, policy, and enforcement |
+| **[G](../canonical/level-1/G/)** | knowledge, context, memory, handoff, reconstruction |
+| **[H](../canonical/level-1/H/)** | Planning, progressive elaboration, Execution readiness |
+| **[I](../canonical/level-1/I/)** | Evidence and independent Validation |
+| **[J](../canonical/level-1/J/)** | standards applicability and Engineering Health |
+| **[K](../canonical/level-1/K/)** | observability, metrics, experiments, and Learning |
+| **[L](../canonical/level-1/L/)** | adoption, distribution, conformance, bootstrap, interface parity |
 
 ### Decision Records
 
-- `canonical/decisions/dr/DR-*.md`
+- **[canonical/decisions/dr/](../canonical/decisions/dr/)**
 
 Durable Canonical design decisions and rationale. Read these when you need to understand why a semantic choice exists or what decision superseded an earlier assumption.
 
 ### Architecture Decision Records
 
-- `Acanonical/decisions/dr/DR-*.md`
+- **[canonical/decisions/adr/](../canonical/decisions/adr/)**
 
 Decisions about machine-readable/reference architecture and executable integrity mechanisms. ADRs do not make the selected implementation technology Canonical.
 
 ### Release and adoption entry points
 
-- `canonical_ae_release_manifest.json` — exact release identity, authority layers, selectors, status, and acceptance references.
-- `START_HERE.md` — discoverability and adoption orientation.
-- `adoption/ADOPTION_STARTER_PACK.md` — reusable conforming implementation guidance.
-- `docs/SYSTEM_RATIONALE.md` — explanatory current-state and evolution summary.
-- `canonical/governance/part1_acceptance_authority_decision_20260824.json` — durable Human Owner Part 1 acceptance record.
+- **[Release manifest](../canonical_ae_release_manifest.json)** — exact release identity, authority layers, selectors, status, and acceptance references.
+- **[START HERE](../START_HERE.md)** — discoverability and adoption orientation.
+- **[Adoption Starter Pack](../adoption/ADOPTION_STARTER_PACK.md)** — reusable conforming implementation guidance.
+- **[System Rationale](SYSTEM_RATIONALE.md)** — explanatory current-state and evolution summary.
+- **[Part 1 Acceptance Authority Decision](../canonical/governance/part1_acceptance_authority_decision_20260824.json)** — durable Human Owner Part 1 acceptance record.
 
-### Machine-readable Canonical/reference models
+### Machine-readable reference models
 
-Common families include:
-
-- `reference/protocols/*_protocol.json`
-- `reference/scenarios/*_scenarios.json`
-- `reference/fixtures/*_portability_fixtures.json`
-- `reference/protocols/capability_contracts.json`
-- `reference/fixtures/synthetic_organization_fixture.json`
-- `reference/loops/reference_ae_loops.json`
+- **[Protocols](../reference/protocols/)**
+- **[Scenarios](../reference/scenarios/)**
+- **[Fixtures](../reference/fixtures/)**
+- **[Reference loops](../reference/loops/)**
 
 These provide machine-readable semantics, fixtures, and reference behavior according to their manifest role. Reference artifacts cannot override the Canonical Core.
 
 ### Validators and harnesses
 
-- `reference/validators/validate_*.py`
-- `tools/clean-room/run_clean_room_adoption.py`
-- `tools/assemble_distribution.py`
+- **[Validators](../reference/validators/)**
+- **[Clean-room adoption harness](../tools/clean-room/run_clean_room_adoption.py)**
+- **[Distribution assembler](../tools/assemble_distribution.py)**
 
 These exercise integrity, portability, adoption, and distribution behavior. Passing a script does not independently create Human acceptance or organization conformance.
 
 ### CI integrity suites
 
-- `.github/workflows/*-integrity.yml`
+- **[.github/workflows/](../.github/workflows/)**
 
-Nine integrity domains currently exist:
-
-1. lifecycle
-2. capability
-3. authority
-4. context
-5. Planning / Execution
-6. Validation
-7. standards / Engineering Health
-8. observability / Learning
-9. adoption
+Nine integrity domains currently exist: lifecycle; capability; authority; context; Planning/Execution; Validation; standards/Engineering Health; observability/Learning; and adoption.
 
 Issue #12 tracks actual repository merge-gate enforcement. The workflows exist and function; they are not yet proven as branch-protection-enforced gates.
 
 ## Authority versus convenience
 
-The repository contains different kinds of material side by side. Do not infer authority from:
-
-- file extension;
-- alphabetical order;
-- proximity in the root listing;
-- whether something is machine readable;
-- whether a workflow is green;
-- whether a generated view is easier to read.
-
-Use the release manifest, Contract, artifact status, and decision precedence.
+Do not infer authority from file extension, folder depth, alphabetical order, machine readability, a green workflow, or whether a generated view is easier to read. Use the release manifest, Contract, artifact status, and decision precedence.
 
 ## Representation history
 
-Part 1 was developed with root-level artifact names that became part of the accepted release representation and SHA-256 inventory. Moving those files now would alter artifact paths and require updates to:
-
-- release selectors;
-- inventory/path identity;
-- internal references and links;
-- workflow path filters;
-- executable validators or harness assumptions where applicable;
-- current release representation/reassessment evidence.
-
-For that reason, the first repository-hygiene step is a better navigation layer rather than duplicate files or silent path changes.
+Part 1 was originally accepted with a flat root representation. Distribution revision 4 reorganizes those artifacts for navigation while preserving the historical accepted basis and byte-identical Canonical Contract/L1/DR/ADR content. The representation change updates release selectors, internal references, workflow paths, and executable tooling as required and is revalidated before merge.
 
 ## Current physical layout
-
-The live repository is organized around this shape:
 
 ```text
 /
 ├── README.md
+├── LICENSE
+├── START_HERE.md
+├── canonical_ae_release_manifest.json
 ├── canonical/
-│   ├── canonical/CONTRACT.md
-│   ├── l1/
+│   ├── CONTRACT.md
+│   ├── level-1/
+│   │   ├── A/
+│   │   ├── B/
+│   │   └── ... L/
 │   ├── decisions/
 │   │   ├── dr/
 │   │   └── adr/
-│   └── release/
+│   └── governance/
 ├── adoption/
-│   ├── START_HERE.md
-│   └── adoption/ADOPTION_STARTER_PACK.md
+│   └── ADOPTION_STARTER_PACK.md
 ├── reference/
 │   ├── protocols/
+│   ├── scenarios/
 │   ├── fixtures/
 │   ├── loops/
 │   └── validators/
 ├── tools/
-│   ├── tools/assemble_distribution.py
+│   ├── assemble_distribution.py
 │   └── clean-room/
 ├── docs/
-│   └── explanatory material
 └── .github/
     └── workflows/
 ```
 
-That structure is a repository organization proposal, **not** a new Canonical architecture. A future refactor should preserve semantic identity/history, update the manifest and references deterministically, rerun applicable integrity suites, and publish the resulting representation revision explicitly.
+This is **repository/distribution organization**, not a new Canonical runtime architecture.
