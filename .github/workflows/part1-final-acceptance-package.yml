@@ -1,0 +1,37 @@
+name: Part 1 Final Acceptance Package
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/part1-final-acceptance-package.yml'
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Assemble exact distribution revision
+        run: python assemble_distribution.py --repo . --output /tmp/ae-distribution
+      - name: Verify clean distribution boundary
+        run: |
+          test ! -e /tmp/ae-distribution/clean_room_adoption_baseline.json
+          test -z "$(find /tmp/ae-distribution -path '*/handoffs/*' -print -quit)"
+      - name: Create deterministic transport archive and hashes
+        run: |
+          mkdir -p /tmp/acceptance-package
+          tar --sort=name --mtime='UTC 2026-08-24 00:00:00' --owner=0 --group=0 --numeric-owner -cf - -C /tmp ae-distribution | gzip -n > /tmp/acceptance-package/Canonical_AE_Part1_Candidate_2026-08-23_rev2.tar.gz
+          sha256sum /tmp/acceptance-package/Canonical_AE_Part1_Candidate_2026-08-23_rev2.tar.gz > /tmp/acceptance-package/SHA256SUMS.txt
+          cp /tmp/ae-distribution/RELEASE_INVENTORY.json /tmp/acceptance-package/RELEASE_INVENTORY.json
+          cp canonical_ae_release_manifest.json /tmp/acceptance-package/canonical_ae_release_manifest.json
+          printf 'source_commit=%s\n' "$GITHUB_SHA" > /tmp/acceptance-package/PACKAGE_METADATA.txt
+          printf 'source_base_commit=6c2424d5aea415819b276dfc6988aa9f964c6e62\n' >> /tmp/acceptance-package/PACKAGE_METADATA.txt
+      - name: Upload acceptance package
+        uses: actions/upload-artifact@v4
+        with:
+          name: part1-final-acceptance-package-rev2
+          path: /tmp/acceptance-package/
+          if-no-files-found: error
