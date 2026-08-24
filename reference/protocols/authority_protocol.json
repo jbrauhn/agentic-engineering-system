@@ -13,11 +13,11 @@
   "authority_validity_states": ["NOT_YET_VALID", "ACTIVE", "EXPIRED", "REVOKED", "SUPERSEDED", "CONDITION_INVALID"],
   "authority_basis_types": ["AUTHORITY_ASSIGNMENT", "EXTERNAL_REFERENCE", "DYNAMIC_DERIVATION", "RELATIONSHIP_TASK_RESOURCE_POLICY", "OTHER_AUTHORITATIVE_MECHANISM"],
   "canonical_human_reserved_decision_classes": [
-    {"decision_class":"engineering.intent","source":"CONTRACT.md#Spec-2"},
-    {"decision_class":"risk.material_acceptance","source":"CONTRACT.md#Spec-2"},
-    {"decision_class":"tradeoff.consequential","source":"CONTRACT.md#Spec-2"},
-    {"decision_class":"contract.approval","source":"CONTRACT.md#Spec-2/G1"},
-    {"decision_class":"contract.change.approval","source":"CONTRACT.md#Spec-1-2/G5"}
+    {"decision_class":"engineering.intent","source":"canonical/CONTRACT.md#Spec-2"},
+    {"decision_class":"risk.material_acceptance","source":"canonical/CONTRACT.md#Spec-2"},
+    {"decision_class":"tradeoff.consequential","source":"canonical/CONTRACT.md#Spec-2"},
+    {"decision_class":"contract.approval","source":"canonical/CONTRACT.md#Spec-2/G1"},
+    {"decision_class":"contract.change.approval","source":"canonical/CONTRACT.md#Spec-1-2/G5"}
   ],
   "higher_authority_extension_rule": "Other universally Human-reserved decision classes require explicit higher canonical authority; L1-F does not infer them.",
   "authorization_request_common_core": ["request_id","actor","authenticated_identity","canonical_operation_or_decision_class","target_resource_or_decision_target","organization_product_scope","evaluation_time","capability_binding_or_binding_plan","access_path_if_applicable"],

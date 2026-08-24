@@ -111,7 +111,7 @@ def portability(f):
 
 def main():
  if len(sys.argv)!=11:
-  print('usage: validate_observability_learning.py protocol scenarios portability lifecycle capability authority context planning validation standards_health');return 2
+  print('usage: reference/validators/validate_observability_learning.py protocol scenarios portability lifecycle capability authority context planning validation standards_health');return 2
  protocol,fixtures,port,lifecycle,cap,auth,context,planning,validation,standards=[load(x) for x in sys.argv[1:]]
  errs=cross(protocol,lifecycle,cap,auth,context,planning,validation,standards)
  if errs:

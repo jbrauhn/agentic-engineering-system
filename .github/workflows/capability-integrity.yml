@@ -1,3 +1,4 @@
+# Repository representation revision 4 paths
 name: Capability Integrity
 
 on:
@@ -22,4 +23,4 @@ jobs:
         with:
           python-version: '3.11'
       - name: Validate capability contracts, bindings, runtime semantics, and OEB fixtures
-        run: python validate_capabilities.py capability_contracts.json capability_scenarios.json oeb_fixtures.json
+        run: python reference/validators/validate_capabilities.py reference/protocols/capability_contracts.json reference/scenarios/capability_scenarios.json reference/fixtures/oeb_fixtures.json

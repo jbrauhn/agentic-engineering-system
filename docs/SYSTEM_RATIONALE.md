@@ -18,7 +18,7 @@ Agentic Engineering aims to obtain substantial leverage from capable AI agents w
 
 ## Current Part 1 state
 
-Part 1 has been accepted by the Human Owner against the exact revision-2 acceptance basis recorded in `part1_acceptance_authority_decision_20260824.json`. Distribution revision 3 records that accepted state and current release-facing wording; it does not change Canonical Core semantics or erase the prior candidate history.
+Part 1 has been accepted by the Human Owner against the exact revision-2 acceptance basis recorded in `canonical/governance/part1_acceptance_authority_decision_20260824.json`. Distribution revision 3 records that accepted state and current release-facing wording; it does not change Canonical Core semantics or erase the prior candidate history.
 
 The historical release ID/version retain their candidate-era labels for continuity. Current release status is determined by the Canonical AE Release Manifest together with the Human Owner Authority Decision record.
 
@@ -43,7 +43,7 @@ The broad Canonical interface-parity question tracked by issue #6 was resolved b
 
 ## Detailed authority
 
-This page is a Human-readable rationale/navigation view. `CONTRACT.md`, Decision Records, ADRs, Human semantic L1 artifacts, and applicable durable Authority Decision records remain the detailed authoritative sources. If this page conflicts with them, this page is wrong.
+This page is a Human-readable rationale/navigation view. `canonical/CONTRACT.md`, Decision Records, ADRs, Human semantic L1 artifacts, and applicable durable Authority Decision records remain the detailed authoritative sources. If this page conflicts with them, this page is wrong.
 
 ## Open experiments and follow-ons
 

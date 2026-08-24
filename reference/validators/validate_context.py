@@ -148,7 +148,7 @@ def portability_checks(data):
 
 def main():
     if len(sys.argv)!=7:
-        print('usage: validate_context.py context_protocol.json context_scenarios.json context_portability_fixtures.json capability_contracts.json lifecycle_protocol.json authority_protocol.json')
+        print('usage: reference/validators/validate_context.py reference/protocols/context_protocol.json reference/scenarios/context_scenarios.json reference/fixtures/context_portability_fixtures.json reference/protocols/capability_contracts.json reference/protocols/lifecycle_protocol.json reference/protocols/authority_protocol.json')
         return 2
     protocol, scenarios, ports, caps, life, auth=map(load,sys.argv[1:])
     failures=static_checks(protocol,caps,life,auth)

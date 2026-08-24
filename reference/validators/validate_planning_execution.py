@@ -209,7 +209,7 @@ def validate_portability(fixtures):
 
 def main():
     if len(sys.argv) != 8:
-        print("usage: validate_planning_execution.py protocol scenarios portability lifecycle capabilities authority context")
+        print("usage: reference/validators/validate_planning_execution.py protocol scenarios portability lifecycle capabilities authority context")
         return 2
 
     protocol, scenarios, portability, lifecycle, capabilities, authority, context = map(load, sys.argv[1:])
