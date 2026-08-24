@@ -3,6 +3,7 @@
   "semantic_category": "F",
   "release_id": "CAE-P1-CANDIDATE-2026-08-23",
   "release_version": "part1-candidate-2026.08.23",
+  "distribution_revision": 2,
   "release_status": "CANDIDATE_PENDING_HUMAN_OWNER_PART1_ACCEPTANCE",
   "authority_statement": "Exact release/layer authority is identifiable from this manifest; lower layers cannot override Canonical Core. Artifact status and decision precedence still govern within the Core.",
   "semantic_layers": {
@@ -16,7 +17,7 @@
     },
     "EXECUTABLE_REFERENCE_LAYER": {
       "authority": "CONFORMING_REFERENCE_NON_NORMATIVE",
-      "selectors": ["*_protocol.json", "*_scenarios.json", "*_portability_fixtures.json", "validate_*.py", ".github/workflows/*-integrity.yml", "synthetic_organization_fixture.json", "reference_ae_loops.json", "run_clean_room_adoption.py", "assemble_distribution.py"]
+      "selectors": ["*_protocol.json", "*_scenarios.json", "*_portability_fixtures.json", "capability_contracts.json", "validate_*.py", ".github/workflows/*-integrity.yml", "synthetic_organization_fixture.json", "reference_ae_loops.json", "run_clean_room_adoption.py", "assemble_distribution.py"]
     }
   },
   "supporting_content": {
@@ -36,7 +37,7 @@
   "evolution": {
     "supersedes": null,
     "silent_rebase_prohibited": true,
-    "compatibility_note": "Candidate Part 1 assembly; final Human Owner acceptance not yet granted."
+    "compatibility_note": "Candidate Part 1 assembly; distribution revision 2 corrects executable/reference capability-completeness coverage without changing Canonical Core semantics; final Human Owner acceptance not yet granted."
   },
   "technology_neutrality": {
     "repository_layout_required": false,

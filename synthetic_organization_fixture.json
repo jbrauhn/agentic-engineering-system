@@ -18,6 +18,11 @@
     {"capability":"Knowledge / Memory","binding":"CB-KNOW@2","provider":"DocVault","required":true,"agent_operable":true,"entitleable":true,"enforceable":true,"proven":true,"access_paths":["cli-agent-runtime","ide-broker"]},
     {"capability":"Validation","binding":"CB-VAL@2","provider":"IndependentCheck","required":true,"agent_operable":true,"entitleable":true,"enforceable":true,"proven":true,"access_paths":["cli-agent-runtime","ide-broker"]}
   ],
+  "capability_gaps": [
+    {"capability":"Runtime / Execution","binding":null,"impact":"BLOCK","reason":"required Canonical capability family intentionally omitted from fixture bindings; reference adoption must derive and surface this gap","requirement_source":"capability_contracts.json"},
+    {"capability":"Identity & Access","binding":null,"impact":"BLOCK","reason":"required Canonical capability family intentionally omitted from fixture bindings; reference adoption must derive and surface this gap","requirement_source":"capability_contracts.json"},
+    {"capability":"Governed Tool Access","binding":null,"impact":"BLOCK","reason":"required Canonical capability family intentionally omitted from fixture bindings; reference adoption must derive and surface this gap","requirement_source":"capability_contracts.json"}
+  ],
   "authority": {"identity_source":"CorpIdP","oa_source":"PolicyService","decision_authority":"Human Owner for Contract/material risk","work_management_in_scope":"ALLOWED","work_management_out_of_scope":"DENIED"},
   "standards": {"applicable":[{"standard":"ENG-SEC-1","character":"MANDATORY","revision":"2"},{"standard":"DOC-ARCH","character":"ADVISORY","revision":"1"}]},
   "engineering_health_findings": [{"id":"EHF-SYNTH-1","condition":"service boundaries create high change amplification and architecture decision history is incomplete","impact":"DEGRADE","framework":"NONE_REQUIRED","remediation_candidate":true}],
