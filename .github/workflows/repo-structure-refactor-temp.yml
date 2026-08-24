@@ -1,0 +1,261 @@
+name: Temporary Repository Structure Refactor
+
+on:
+  push:
+    branches:
+      - repo-structure-rev4-20260824
+    paths:
+      - '.github/workflows/repo-structure-refactor-temp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  refactor:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reorganize repository representation
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, os, re, shutil
+
+          root = Path('.').resolve()
+          moves = {}
+
+          def register(src: Path, dst: Path):
+              src = src.resolve()
+              if not src.exists() or not src.is_file():
+                  return
+              rel_src = src.relative_to(root).as_posix()
+              rel_dst = dst.as_posix()
+              if rel_src in moves:
+                  raise SystemExit(f'duplicate move registration: {rel_src}')
+              moves[rel_src] = rel_dst
+
+          # Canonical Core and durable governance representation.
+          register(root / 'CONTRACT.md', Path('canonical/CONTRACT.md'))
+          for p in sorted(root.glob('L1-*.md')):
+              register(p, Path('canonical/l1') / p.name)
+          for p in sorted(root.glob('DR-*.md')):
+              register(p, Path('canonical/decisions/dr') / p.name)
+          for p in sorted(root.glob('ADR-*.md')):
+              register(p, Path('canonical/decisions/adr') / p.name)
+          register(root / 'part1_acceptance_authority_decision_20260824.json', Path('canonical/governance/part1_acceptance_authority_decision_20260824.json'))
+
+          # Adoption and explanatory entry material.
+          register(root / 'ADOPTION_STARTER_PACK.md', Path('adoption/ADOPTION_STARTER_PACK.md'))
+          register(root / 'SYSTEM_RATIONALE.md', Path('docs/SYSTEM_RATIONALE.md'))
+
+          # Executable/reference layer.
+          for p in sorted(root.glob('*_protocol.json')):
+              register(p, Path('reference/protocols') / p.name)
+          register(root / 'capability_contracts.json', Path('reference/protocols/capability_contracts.json'))
+
+          for p in sorted(root.glob('*_scenarios.json')):
+              register(p, Path('reference/scenarios') / p.name)
+
+          for p in sorted(root.glob('*_portability_fixtures.json')):
+              register(p, Path('reference/fixtures') / p.name)
+          for name in ['oeb_fixtures.json', 'synthetic_organization_fixture.json', 'clean_room_adoption_baseline.json']:
+              register(root / name, Path('reference/fixtures') / name)
+
+          register(root / 'reference_ae_loops.json', Path('reference/loops/reference_ae_loops.json'))
+          for p in sorted(root.glob('validate_*.py')):
+              register(p, Path('reference/validators') / p.name)
+          register(root / 'assemble_distribution.py', Path('tools/assemble_distribution.py'))
+          register(root / 'run_clean_room_adoption.py', Path('tools/clean-room/run_clean_room_adoption.py'))
+
+          # Physically move each registered file once.
+          for src_rel, dst_rel in moves.items():
+              src = root / src_rel
+              dst = root / dst_rel
+              dst.parent.mkdir(parents=True, exist_ok=True)
+              if dst.exists():
+                  raise SystemExit(f'destination already exists: {dst_rel}')
+              shutil.move(str(src), str(dst))
+
+          # Update actual Markdown links to moved targets. This changes navigation only.
+          by_old = {k: v for k, v in moves.items()}
+          md_link = re.compile(r'\]\(([^)]+)\)')
+          for md in root.rglob('*.md'):
+              if '.git' in md.parts:
+                  continue
+              text = md.read_text(encoding='utf-8')
+              original = text
+              def repl(match):
+                  target = match.group(1)
+                  if target.startswith(('http://', 'https://', 'mailto:')):
+                      return match.group(0)
+                  path_part, sep, frag = target.partition('#')
+                  normalized = path_part[2:] if path_part.startswith('./') else path_part
+                  if normalized not in by_old:
+                      return match.group(0)
+                  new_abs = root / by_old[normalized]
+                  rel = os.path.relpath(new_abs, md.parent).replace(os.sep, '/')
+                  new_target = rel + (('#' + frag) if sep else '')
+                  return '](' + new_target + ')'
+              text = md_link.sub(repl, text)
+              if text != original:
+                  md.write_text(text, encoding='utf-8')
+
+          # Current tooling/reference/navigation text may contain literal repository paths.
+          text_roots = [root / '.github', root / 'reference', root / 'tools', root / 'adoption', root / 'docs']
+          text_files = [root / 'README.md', root / 'START_HERE.md']
+          for base in text_roots:
+              if base.exists():
+                  for p in base.rglob('*'):
+                      if p.is_file() and p.suffix.lower() in {'.md', '.py', '.json', '.yml', '.yaml'}:
+                          text_files.append(p)
+
+          # Longest first prevents short-name partial replacement surprises.
+          literal_map = dict(sorted(moves.items(), key=lambda kv: len(kv[0]), reverse=True))
+          glob_map = {
+              'L1-*.md': 'canonical/l1/L1-*.md',
+              'DR-*.md': 'canonical/decisions/dr/DR-*.md',
+              'ADR-*.md': 'canonical/decisions/adr/ADR-*.md',
+              '*_protocol.json': 'reference/protocols/*_protocol.json',
+              '*_scenarios.json': 'reference/scenarios/*_scenarios.json',
+              '*_portability_fixtures.json': 'reference/fixtures/*_portability_fixtures.json',
+              'validate_*.py': 'reference/validators/validate_*.py',
+          }
+          for p in sorted(set(text_files)):
+              try:
+                  text = p.read_text(encoding='utf-8')
+              except UnicodeDecodeError:
+                  continue
+              original = text
+              for old, new in literal_map.items():
+                  text = text.replace(old, new)
+              for old, new in glob_map.items():
+                  text = text.replace(old, new)
+              if text != original:
+                  p.write_text(text, encoding='utf-8')
+
+          # Validators and the clean-room harness used their old root location as repo root.
+          for p in list((root / 'reference/validators').glob('validate_*.py')) + [root / 'tools/clean-room/run_clean_room_adoption.py']:
+              text = p.read_text(encoding='utf-8')
+              text = text.replace('Path(__file__).resolve().parent', 'Path(__file__).resolve().parents[2]')
+              text = text.replace('Path(__file__).parent', 'Path(__file__).resolve().parents[2]')
+              p.write_text(text, encoding='utf-8')
+
+          # Update release manifest representation only. Human-accepted rev2 basis remains untouched.
+          manifest_path = root / 'canonical_ae_release_manifest.json'
+          manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+          if manifest.get('distribution_revision') != 3 or manifest.get('release_status') != 'HUMAN_OWNER_ACCEPTED':
+              raise SystemExit('unexpected starting release representation; refusing migration')
+          manifest['distribution_revision'] = 4
+          manifest['semantic_layers']['CANONICAL_CORE']['selectors'] = [
+              'canonical/CONTRACT.md',
+              'canonical/l1/L1-*.md',
+              'canonical/decisions/dr/DR-*.md',
+              'canonical/decisions/adr/ADR-*.md',
+          ]
+          manifest['semantic_layers']['ADOPTION_STARTER_PACK']['selectors'] = [
+              'START_HERE.md',
+              'adoption/ADOPTION_STARTER_PACK.md',
+          ]
+          manifest['semantic_layers']['EXECUTABLE_REFERENCE_LAYER']['selectors'] = [
+              'reference/protocols/*_protocol.json',
+              'reference/scenarios/*_scenarios.json',
+              'reference/fixtures/*_portability_fixtures.json',
+              'reference/protocols/capability_contracts.json',
+              'reference/validators/validate_*.py',
+              '.github/workflows/*-integrity.yml',
+              'reference/fixtures/synthetic_organization_fixture.json',
+              'reference/loops/reference_ae_loops.json',
+              'tools/clean-room/run_clean_room_adoption.py',
+              'tools/assemble_distribution.py',
+          ]
+          manifest['supporting_content']['SYSTEM_RATIONALE']['selectors'] = ['docs/SYSTEM_RATIONALE.md']
+          manifest['supporting_content']['PART1_ACCEPTANCE_AUTHORITY_DECISION']['selectors'] = ['canonical/governance/part1_acceptance_authority_decision_20260824.json']
+          manifest['excluded_from_clean_room_distribution'] = [
+              'reference/fixtures/clean_room_adoption_baseline.json',
+              'prior conversation',
+              'unpublished design context',
+              'previous session memory',
+              'relay handoff state',
+          ]
+          manifest['acceptance']['finalization']['current_distribution_revision'] = 4
+          manifest['acceptance']['finalization']['semantic_change'] = False
+          manifest['acceptance']['finalization']['purpose'] = (
+              'Distribution revision 4 reorganizes repository/distribution artifact paths for human and agent navigation only. '
+              'Canonical Core semantics and the exact Human-accepted revision-2 basis remain unchanged and reconstructable.'
+          )
+          manifest['evolution']['compatibility_note'] = (
+              'Distribution revision 4 is a non-semantic repository/distribution representation reorganization of the '
+              'Human Owner-accepted Part 1 system. Historical revision 3 preserves the prior flat artifact paths. '
+              'The Human-accepted revision-2 basis and Proof O Authority Decision are unchanged; no Canonical Core meaning is rebased.'
+          )
+          manifest_path.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
+
+          # Update the public README's current representation language.
+          readme = root / 'README.md'
+          text = readme.read_text(encoding='utf-8')
+          text = text.replace('distribution revision 3 · `HUMAN_OWNER_ACCEPTED`', 'distribution revision 4 · `HUMAN_OWNER_ACCEPTED`')
+          text = text.replace('distribution revision: `3`;', 'distribution revision: `4`;')
+          text = text.replace('accepted distribution contents: `174` artifacts;', 'current distribution contents: `174` artifacts;')
+          old_note = ('The accepted Part 1 revision preserves many Canonical artifacts at their historical root paths. That makes the raw file list denser than ideal, but moving those accepted paths is not merely cosmetic: it changes release artifact paths, integrity inventories, selectors, references, and workflow assumptions.\n\nThe landing README and **[Repository Map](docs/REPOSITORY_MAP.md)** provide the human navigation layer without changing the accepted distribution. A deeper folder refactor should be handled as an explicit, non-semantic repository/distribution representation revision with integrity and reference updates—not as an untracked cleanup.')
+          new_note = ('Distribution revision 4 organizes the live repository into intentional `canonical/`, `adoption/`, `reference/`, `tools/`, and `docs/` areas while preserving the Human-accepted Part 1 semantics. Historical revision 3 retains the prior flat root paths and exact payload hash, so acceptance history remains reconstructable. The path reorganization is a representation change, not a Canonical architecture change.')
+          text = text.replace(old_note, new_note)
+          readme.write_text(text, encoding='utf-8')
+
+          # Replace repository-map historical proposal text with current-layout wording.
+          repo_map = root / 'docs/REPOSITORY_MAP.md'
+          text = repo_map.read_text(encoding='utf-8')
+          text = text.replace('# Repository Map', '# Repository Map\n\n**Current physical representation:** distribution revision 4 repository organization. Historical accepted revision 3 retained the flat root layout.')
+          text = text.replace('## Why the accepted Part 1 root is still flat', '## Representation history')
+          text = text.replace('Part 1 was developed with root-level artifact names that became part of the accepted release representation and SHA-256 inventory. Moving those files now would alter artifact paths and require updates to:', 'Human-accepted Part 1 revision 3 used root-level artifact paths. Revision 4 reorganizes those paths non-semantically and therefore required updates to:')
+          text = text.replace('For that reason, the first repository-hygiene step is a better navigation layer rather than duplicate files or silent path changes.', 'Revision 3 remains reconstructable in Git history and its accepted payload hash remains unchanged. Revision 4 does not duplicate Canonical sources or rewrite that history.')
+          text = text.replace('## Recommended future physical layout', '## Current physical layout')
+          text = text.replace('If a controlled non-semantic repository/distribution representation revision is authorized, the target shape should be closer to:', 'The live repository is organized around this shape:')
+          text = text.replace('That structure is a repository organization proposal, **not** a new Canonical architecture. A future refactor should preserve semantic identity/history, update the manifest and references deterministically, rerun applicable integrity suites, and publish the resulting representation revision explicitly.', 'This structure is repository organization, **not** Canonical architecture. Semantic authority remains defined by the release manifest and governing Canonical artifacts, not by folders.')
+          repo_map.write_text(text, encoding='utf-8')
+
+          # Root must be intentionally small after migration.
+          allowed_root_files = {'README.md', 'LICENSE', 'START_HERE.md', 'canonical_ae_release_manifest.json'}
+          unexpected = sorted(
+              p.name for p in root.iterdir()
+              if p.is_file() and not p.name.startswith('.') and p.name not in allowed_root_files
+          )
+          if unexpected:
+              raise SystemExit('unclassified root files remain: ' + ', '.join(unexpected))
+
+          print(f'repository path migration prepared: {len(moves)} files moved')
+          print('root files:', ', '.join(sorted(allowed_root_files)))
+          PY
+
+      - name: Verify reorganized distribution assembles
+        shell: bash
+        run: |
+          rm -rf /tmp/ae-rev4
+          python tools/assemble_distribution.py --repo . --output /tmp/ae-rev4
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          inv = json.loads(Path('/tmp/ae-rev4/RELEASE_INVENTORY.json').read_text())
+          manifest = json.loads(Path('canonical_ae_release_manifest.json').read_text())
+          assert manifest['distribution_revision'] == 4
+          assert manifest['release_status'] == 'HUMAN_OWNER_ACCEPTED'
+          assert len(inv['artifacts']) == 174, len(inv['artifacts'])
+          assert not Path('/tmp/ae-rev4/reference/fixtures/clean_room_adoption_baseline.json').exists()
+          print('rev4 pre-commit distribution verification PASS: artifacts=174')
+          PY
+
+      - name: Commit representation refactor
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/repo-structure-refactor-temp.yml
+          git add -A
+          git status --short
+          git commit -m 'Reorganize repository representation as distribution revision 4 [repo-refactor]'
+          git push origin HEAD:repo-structure-rev4-20260824
