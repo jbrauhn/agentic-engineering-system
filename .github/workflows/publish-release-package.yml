@@ -1,0 +1,110 @@
+name: Publish Canonical AE Release Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Git tag / GitHub Release tag to create
+        required: true
+        default: cae-p1-accepted-rev5
+      release_name:
+        description: Human-readable GitHub Release title
+        required: true
+        default: Canonical AE Part 1 — Accepted — Distribution Revision 5
+
+permissions:
+  contents: write
+
+jobs:
+  publish-release:
+    name: publish-release-package
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Assemble manifest-selected distribution
+        run: |
+          rm -rf /tmp/ae-distribution /tmp/ae-release
+          python tools/assemble_distribution.py --repo . --output /tmp/ae-distribution
+          mkdir -p /tmp/ae-release
+
+      - name: Verify accepted rev5 payload
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+
+          repo = Path('.')
+          out = Path('/tmp/ae-distribution')
+          manifest = json.loads((repo / 'canonical_ae_release_manifest.json').read_text())
+          inventory = json.loads((out / 'RELEASE_INVENTORY.json').read_text())
+
+          assert manifest['release_status'] == 'HUMAN_OWNER_ACCEPTED'
+          assert manifest['distribution_revision'] == 5
+          assert manifest['acceptance']['accepted_basis']['distribution_revision'] == 2
+          assert manifest['acceptance']['proof_O'] == 'SATISFIED'
+          assert inventory['distribution_revision'] == 5
+          assert len(inventory['artifacts']) == 174, len(inventory['artifacts'])
+          assert not (out / 'reference/fixtures/clean_room_adoption_baseline.json').exists()
+          assert not any('handoff' in p.as_posix().lower() for p in out.rglob('*'))
+
+          for item in inventory['artifacts']:
+              p = out / item['path']
+              assert p.is_file(), item['path']
+              h = hashlib.sha256(p.read_bytes()).hexdigest()
+              assert h == item['sha256'], item['path']
+
+          print('Accepted rev5 release verification PASS: 174 artifacts')
+          PY
+
+      - name: Build deterministic transport archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          package='Canonical_AE_Part1_Accepted_rev5.tar.gz'
+          tar --sort=name \
+              --mtime='UTC 1970-01-01' \
+              --owner=0 --group=0 --numeric-owner \
+              -C /tmp/ae-distribution -cf /tmp/ae-release/package.tar .
+          gzip -n -9 -c /tmp/ae-release/package.tar > "/tmp/ae-release/${package}"
+          rm /tmp/ae-release/package.tar
+          cp canonical_ae_release_manifest.json /tmp/ae-release/
+          cp /tmp/ae-distribution/RELEASE_INVENTORY.json /tmp/ae-release/
+          cp canonical/governance/part1_acceptance_authority_decision_20260824.json /tmp/ae-release/
+          printf 'source_commit=%s\ndistribution_revision=5\nrelease_status=HUMAN_OWNER_ACCEPTED\n' "$GITHUB_SHA" > /tmp/ae-release/RELEASE_METADATA.txt
+          cd /tmp/ae-release
+          sha256sum "$package" > SHA256SUMS.txt
+          sha256sum -c SHA256SUMS.txt
+
+      - name: Upload Actions copy
+        uses: actions/upload-artifact@v4
+        with:
+          name: canonical-ae-part1-accepted-rev5
+          path: /tmp/ae-release/*
+          if-no-files-found: error
+
+      - name: Publish GitHub Release and tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag }}
+          RELEASE_NAME: ${{ inputs.release_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/ae-release
+          gh release create "$RELEASE_TAG" \
+            Canonical_AE_Part1_Accepted_rev5.tar.gz \
+            SHA256SUMS.txt \
+            canonical_ae_release_manifest.json \
+            RELEASE_INVENTORY.json \
+            part1_acceptance_authority_decision_20260824.json \
+            RELEASE_METADATA.txt \
+            --target "$GITHUB_SHA" \
+            --title "$RELEASE_NAME" \
+            --notes "Human Owner-accepted Canonical Agentic Engineering Part 1 distribution. Canonical acceptance remains grounded in the exact revision-2 basis and Authority Decision; distribution revision 5 is a non-semantic executable/reference repository-hardening representation. Package contents are selected by the release manifest and verified by SHA-256 inventory before publication."
