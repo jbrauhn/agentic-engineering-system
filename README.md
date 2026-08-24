@@ -1,7 +1,7 @@
 # Canonical Agentic Engineering System
 
 **Part 1 status:** Human Owner accepted  
-**Current release representation:** distribution revision 4 · `HUMAN_OWNER_ACCEPTED`
+**Current release representation:** distribution revision 5 · `HUMAN_OWNER_ACCEPTED`
 
 Canonical Agentic Engineering (AE) is a portable, governed socio-technical engineering system for Human–AI engineering. It defines how engineering intent moves through an approved Contract, architecture-aware Planning, bounded Execution, Evidence, independent Validation, and Learning while preserving durable state, explicit authority, and technology portability.
 
@@ -73,17 +73,16 @@ The exact release manifest controls distribution membership and authority classi
 
 Lower layers cannot override higher Canonical authority.
 
-## Current accepted release
+## Accepted release lineage
 
-The current repository representation of accepted Part 1 is based on:
+Part 1 acceptance and later repository representations are deliberately distinct:
 
-- canonical source finalization: `main@2e144d21535f8bf838f9a6c064ebd967f8b491ce`;
-- release status: `HUMAN_OWNER_ACCEPTED`;
-- distribution revision: `4`;
-- current distribution contents: `174` artifacts;
-- Proof A–O: complete, including clean-room adoption, independent whole-system review, and Human Owner acceptance.
+- **Human-accepted basis:** `main@6c2424d5aea415819b276dfc6988aa9f964c6e62`, distribution revision `2`, transport SHA-256 `24131b15f6e960afa5463418bbf99c321c68eae01606aadd44e5dbb9df46887e`.
+- **Acceptance finalization:** distribution revision `3`, represented by merge `2e144d21535f8bf838f9a6c064ebd967f8b491ce`; this recorded the already-issued Human Owner acceptance without changing Canonical Core semantics.
+- **Repository organization:** distribution revision `4`, introduced by merge `214585801cf66e0d7bb2c1713143f273a16115ad`; this reorganized paths for human/agent navigation without changing Contract/L1/DR/ADR content.
+- **Repository hardening:** distribution revision `5`; this standardizes all nine integrity workflows so they are present on every pull request and rerun on every push to `main`. It does not change Canonical Core semantics or the accepted revision-2 basis.
 
-The historical release ID/version retain their candidate-era labels. Current acceptance is established by the [release manifest](canonical_ae_release_manifest.json) plus the durable [Human Owner Authority Decision](canonical/governance/part1_acceptance_authority_decision_20260824.json).
+The historical release ID/version retain their candidate-era labels. Acceptance is established by the [release manifest](canonical_ae_release_manifest.json) plus the durable [Human Owner Authority Decision](canonical/governance/part1_acceptance_authority_decision_20260824.json), not by README prose.
 
 ## Adoption boundary
 
@@ -104,13 +103,15 @@ Canonical AE deliberately does **not** require:
 
 A future Portal can be a separate product that consumes or is engineered through AE. It is not part of the Canonical system and is not required for AE to operate.
 
-## Repository organization note
+## Repository organization
 
-The live revision-4 representation organizes Canonical, adoption, reference, tooling, and explanatory material into dedicated directories. **`level-1/` means Level 1**; its A–L folders are semantic domains, not Contract clause numbers or runtime stages. Historical revision 3 preserves the accepted flat-path representation and exact payload hash. The reorganization changes navigation/path representation only; it does not redefine Canonical architecture or Part 1 semantics.
+The live representation organizes Canonical, adoption, reference, tooling, and explanatory material into dedicated directories. **`level-1/` means Level 1**; its A–L folders are semantic domains, not Contract clause numbers or runtime stages. See the [Repository Map](docs/REPOSITORY_MAP.md).
 
-## Repository governance follow-on
+## Repository governance
 
-The repository has nine machine-verifiable integrity suites. GitHub issue **#12** remains open until actual branch/ruleset enforcement is configured and an intentionally failing applicable check is proven to block merge. Until then, the checks should not be described as repository-enforced merge gates.
+Repository implementation follows branch → pull request → integrity checks → review → merge. The intended process and cleanup rules are documented in **[CONTRIBUTING.md](.github/CONTRIBUTING.md)**.
+
+All nine integrity workflows are configured to run on every pull request and on every push to `main`. GitHub issue **#12** remains open until `main` branch/ruleset protection actually requires those checks and an intentionally failing check is demonstrated to block merge. Until then, the checks are functioning evidence and a detection backstop, but not yet repository-enforced merge gates.
 
 ---
 
