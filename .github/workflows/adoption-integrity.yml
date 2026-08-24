@@ -3,29 +3,31 @@ name: Adoption Integrity
 on:
   pull_request:
     paths:
-      - 'L1-L_*'
       - 'START_HERE.md'
-      - 'SYSTEM_RATIONALE.md'
-      - 'ADOPTION_STARTER_PACK.md'
-      - 'DR-136-*'
-      - 'DR-137-*'
-      - 'DR-138-*'
-      - 'ADR-010-*'
       - 'canonical_ae_release_manifest.json'
-      - 'adoption_*.json'
-      - 'synthetic_organization_fixture.json'
-      - 'clean_room_adoption_baseline.json'
-      - 'reference_ae_loops.json'
-      - 'assemble_distribution.py'
-      - 'run_clean_room_adoption.py'
-      - 'validate_adoption.py'
-      - 'context_protocol.json'
-      - 'capability_contracts.json'
-      - 'authority_protocol.json'
-      - 'lifecycle_protocol.json'
-      - 'validation_protocol.json'
-      - 'standards_health_protocol.json'
-      - 'observability_learning_protocol.json'
+      - 'adoption/**'
+      - 'docs/SYSTEM_RATIONALE.md'
+      - 'canonical/level-1/L/**'
+      - 'canonical/decisions/dr/DR-136-*'
+      - 'canonical/decisions/dr/DR-137-*'
+      - 'canonical/decisions/dr/DR-138-*'
+      - 'canonical/decisions/adr/ADR-010-*'
+      - 'reference/protocols/adoption_distribution_protocol.json'
+      - 'reference/scenarios/adoption_scenarios.json'
+      - 'reference/fixtures/adoption_portability_fixtures.json'
+      - 'reference/fixtures/synthetic_organization_fixture.json'
+      - 'reference/fixtures/clean_room_adoption_baseline.json'
+      - 'reference/loops/reference_ae_loops.json'
+      - 'tools/assemble_distribution.py'
+      - 'tools/clean-room/run_clean_room_adoption.py'
+      - 'reference/validators/validate_adoption.py'
+      - 'reference/protocols/context_protocol.json'
+      - 'reference/protocols/capability_contracts.json'
+      - 'reference/protocols/authority_protocol.json'
+      - 'reference/protocols/lifecycle_protocol.json'
+      - 'reference/protocols/validation_protocol.json'
+      - 'reference/protocols/standards_health_protocol.json'
+      - 'reference/protocols/observability_learning_protocol.json'
       - '.github/workflows/adoption-integrity.yml'
   workflow_dispatch:
 
@@ -38,34 +40,34 @@ jobs:
         with:
           python-version: '3.11'
       - name: Assemble exact reference distribution
-        run: python assemble_distribution.py --repo . --output /tmp/ae-distribution
+        run: python tools/assemble_distribution.py --repo . --output /tmp/ae-distribution
       - name: Prepare isolated clean-room supplied input
         run: |
           mkdir -p /tmp/clean-room-input /tmp/clean-room-run
-          cp clean_room_adoption_baseline.json /tmp/clean-room-input/supplied_baseline.json
+          cp reference/fixtures/clean_room_adoption_baseline.json /tmp/clean-room-input/supplied_baseline.json
       - name: Derive clean-room implementation Plan from distribution plus supplied baseline only
         run: >-
           cd /tmp/clean-room-run &&
-          python /tmp/ae-distribution/run_clean_room_adoption.py
+          python /tmp/ae-distribution/tools/clean-room/run_clean_room_adoption.py
           --distribution /tmp/ae-distribution
           --baseline /tmp/clean-room-input/supplied_baseline.json
           --output /tmp/clean-room-plan.json
       - name: Validate adoption distribution conformance interface parity and integrated Proof
         run: >-
-          python validate_adoption.py
-          adoption_distribution_protocol.json
-          adoption_scenarios.json
-          adoption_portability_fixtures.json
+          python reference/validators/validate_adoption.py
+          reference/protocols/adoption_distribution_protocol.json
+          reference/scenarios/adoption_scenarios.json
+          reference/fixtures/adoption_portability_fixtures.json
           canonical_ae_release_manifest.json
-          synthetic_organization_fixture.json
-          reference_ae_loops.json
+          reference/fixtures/synthetic_organization_fixture.json
+          reference/loops/reference_ae_loops.json
           /tmp/clean-room-plan.json
-          clean_room_adoption_baseline.json
+          reference/fixtures/clean_room_adoption_baseline.json
           /tmp/ae-distribution
-          context_protocol.json
-          capability_contracts.json
-          authority_protocol.json
-          lifecycle_protocol.json
-          validation_protocol.json
-          standards_health_protocol.json
-          observability_learning_protocol.json
+          reference/protocols/context_protocol.json
+          reference/protocols/capability_contracts.json
+          reference/protocols/authority_protocol.json
+          reference/protocols/lifecycle_protocol.json
+          reference/protocols/validation_protocol.json
+          reference/protocols/standards_health_protocol.json
+          reference/protocols/observability_learning_protocol.json
