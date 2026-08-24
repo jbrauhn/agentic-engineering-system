@@ -23,11 +23,11 @@ jobs:
           python-version: '3.11'
       - name: Validate planning execution protocol scenarios portability and cross-domain semantics
         run: >-
-          python validate_planning_execution.py
-          planning_execution_protocol.json
-          planning_execution_scenarios.json
-          planning_execution_portability_fixtures.json
-          lifecycle_protocol.json
-          capability_contracts.json
-          authority_protocol.json
-          context_protocol.json
+          python reference/validators/validate_planning_execution.py
+          reference/protocols/planning_execution_protocol.json
+          reference/scenarios/planning_execution_scenarios.json
+          reference/fixtures/planning_execution_portability_fixtures.json
+          reference/protocols/lifecycle_protocol.json
+          reference/protocols/capability_contracts.json
+          reference/protocols/authority_protocol.json
+          reference/protocols/context_protocol.json
