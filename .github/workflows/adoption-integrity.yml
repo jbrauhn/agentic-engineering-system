@@ -1,39 +1,19 @@
-# Repository representation revision 4 paths
+# Repository hardening revision 5
 name: Adoption Integrity
 
 on:
   pull_request:
-    paths:
-      - 'START_HERE.md'
-      - 'canonical_ae_release_manifest.json'
-      - 'adoption/**'
-      - 'docs/SYSTEM_RATIONALE.md'
-      - 'canonical/level-1/L/**'
-      - 'canonical/decisions/dr/DR-136-*'
-      - 'canonical/decisions/dr/DR-137-*'
-      - 'canonical/decisions/dr/DR-138-*'
-      - 'canonical/decisions/adr/ADR-010-*'
-      - 'reference/protocols/adoption_distribution_protocol.json'
-      - 'reference/scenarios/adoption_scenarios.json'
-      - 'reference/fixtures/adoption_portability_fixtures.json'
-      - 'reference/fixtures/synthetic_organization_fixture.json'
-      - 'reference/fixtures/clean_room_adoption_baseline.json'
-      - 'reference/loops/reference_ae_loops.json'
-      - 'tools/assemble_distribution.py'
-      - 'tools/clean-room/run_clean_room_adoption.py'
-      - 'reference/validators/validate_adoption.py'
-      - 'reference/protocols/context_protocol.json'
-      - 'reference/protocols/capability_contracts.json'
-      - 'reference/protocols/authority_protocol.json'
-      - 'reference/protocols/lifecycle_protocol.json'
-      - 'reference/protocols/validation_protocol.json'
-      - 'reference/protocols/standards_health_protocol.json'
-      - 'reference/protocols/observability_learning_protocol.json'
-      - '.github/workflows/adoption-integrity.yml'
+    branches: [main]
+  push:
+    branches: [main]
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   adoption-integrity:
+    name: adoption-integrity
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
