@@ -3,9 +3,9 @@
   "semantic_category": "F",
   "release_id": "CAE-P1-CANDIDATE-2026-08-23",
   "release_version": "part1-candidate-2026.08.23",
-  "distribution_revision": 2,
-  "release_status": "CANDIDATE_PENDING_HUMAN_OWNER_PART1_ACCEPTANCE",
-  "authority_statement": "Exact release/layer authority is identifiable from this manifest; lower layers cannot override Canonical Core. Artifact status and decision precedence still govern within the Core.",
+  "distribution_revision": 3,
+  "release_status": "HUMAN_OWNER_ACCEPTED",
+  "authority_statement": "Exact release/layer authority is identifiable from this manifest; lower layers cannot override Canonical Core. Artifact status and decision precedence still govern within the Core. Human Owner Part 1 acceptance is established by the referenced Authority Decision record, not by this status field alone.",
   "semantic_layers": {
     "CANONICAL_CORE": {
       "authority": "NORMATIVE_WITH_ARTIFACT_STATUS_AND_PRECEDENCE",
@@ -24,6 +24,10 @@
     "SYSTEM_RATIONALE": {
       "authority": "CANONICAL_EXPLANATORY_NON_NORMATIVE",
       "selectors": ["SYSTEM_RATIONALE.md"]
+    },
+    "PART1_ACCEPTANCE_AUTHORITY_DECISION": {
+      "authority": "AUTHORITATIVE_GOVERNANCE_RECORD_A2",
+      "selectors": ["part1_acceptance_authority_decision_20260824.json"]
     }
   },
   "external_supplied_adoption_inputs": ["OEB exact revision", "Product/System Profile and Baseline as applicable"],
@@ -34,10 +38,28 @@
     "git_or_github_required": false,
     "signing_technology_required": false
   },
+  "acceptance": {
+    "decision_record": "part1_acceptance_authority_decision_20260824.json",
+    "decision": "ACCEPT",
+    "decision_effective_at": "2026-08-24T07:32:00-04:00",
+    "proof_O": "SATISFIED",
+    "accepted_basis": {
+      "source_commit": "6c2424d5aea415819b276dfc6988aa9f964c6e62",
+      "distribution_revision": 2,
+      "transport_artifact": "Canonical_AE_Part1_Candidate_2026-08-23_rev2.tar.gz",
+      "transport_sha256": "24131b15f6e960afa5463418bbf99c321c68eae01606aadd44e5dbb9df46887e",
+      "proof_A_through_N": "COMPLETE_PASS"
+    },
+    "finalization": {
+      "current_distribution_revision": 3,
+      "semantic_change": false,
+      "purpose": "Durably represent the Human Owner acceptance decision and current release-facing status while preserving the exact accepted revision-2 basis and prior candidate history."
+    }
+  },
   "evolution": {
     "supersedes": null,
     "silent_rebase_prohibited": true,
-    "compatibility_note": "Candidate Part 1 assembly; distribution revision 2 corrects executable/reference capability-completeness coverage without changing Canonical Core semantics; final Human Owner acceptance not yet granted."
+    "compatibility_note": "Distribution revision 3 records Human Owner acceptance of the exact revision-2 basis and updates current release-facing representation only. Canonical Core semantics are unchanged. The historical release ID/version retain their candidate-era labels; current acceptance status is determined by this manifest plus the Authority Decision record."
   },
   "technology_neutrality": {
     "repository_layout_required": false,
@@ -50,6 +72,7 @@
     "assembly_semantics": "DR-136",
     "conformance_semantics": "DR-137",
     "reference_proof_semantics": "DR-138",
-    "machine_reference_architecture": "ADR-010"
+    "machine_reference_architecture": "ADR-010",
+    "human_owner_acceptance_record": "part1_acceptance_authority_decision_20260824.json"
   }
 }
