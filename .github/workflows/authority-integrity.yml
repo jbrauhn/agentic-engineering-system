@@ -22,4 +22,4 @@ jobs:
         with:
           python-version: '3.11'
       - name: Validate authority protocol, scenarios, portability, capability coverage, and lifecycle linkage
-        run: python validate_authority.py authority_protocol.json authority_scenarios.json authority_portability_fixtures.json capability_contracts.json lifecycle_protocol.json
+        run: python reference/validators/validate_authority.py reference/protocols/authority_protocol.json reference/scenarios/authority_scenarios.json reference/fixtures/authority_portability_fixtures.json reference/protocols/capability_contracts.json reference/protocols/lifecycle_protocol.json
