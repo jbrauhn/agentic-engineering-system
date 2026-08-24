@@ -11,12 +11,13 @@ This repository contains the **Canonical AE System definition and its executable
 
 If you are new to the project, do **not** work through the repository alphabetically.
 
-1. **[START_HERE.md](START_HERE.md)** — orientation, authority, adoption path, and first actions.
+1. **[START_HERE.md](START_HERE.md)** — orientation, authority, adoption path, and linked first actions.
 2. **[canonical_ae_release_manifest.json](canonical_ae_release_manifest.json)** — exact release identity, status, authority layers, and distribution selectors.
 3. **[canonical/CONTRACT.md](canonical/CONTRACT.md)** — governing Goal / Spec / Proof for Part 1.
-4. **[docs/SYSTEM_RATIONALE.md](docs/SYSTEM_RATIONALE.md)** — concise explanation of how the system fits together and why major decisions were made.
-5. **[adoption/ADOPTION_STARTER_PACK.md](adoption/ADOPTION_STARTER_PACK.md)** — derive an organization-specific implementation Plan from the Canonical system.
-6. **[Repository Map](docs/REPOSITORY_MAP.md)** — what the file families mean and where to look for a specific concern.
+4. **[canonical/level-1/](canonical/level-1/)** — detailed Canonical semantic domains L1-A through L1-L.
+5. **[docs/SYSTEM_RATIONALE.md](docs/SYSTEM_RATIONALE.md)** — concise explanation of how the system fits together and why major decisions were made.
+6. **[adoption/ADOPTION_STARTER_PACK.md](adoption/ADOPTION_STARTER_PACK.md)** — derive an organization-specific implementation Plan from the Canonical system.
+7. **[Repository Map](docs/REPOSITORY_MAP.md)** — what the file families mean and where to look for a specific concern.
 
 ## What Part 1 defines
 
@@ -65,10 +66,10 @@ The exact release manifest controls distribution membership and authority classi
 
 | Layer | Purpose | Typical files |
 |---|---|---|
-| **Canonical Core** | Normative system semantics | `canonical/CONTRACT.md`, `canonical/level-1/*/L1-*.md`, `canonical/decisions/dr/DR-*.md`, `Acanonical/decisions/dr/DR-*.md` |
-| **Adoption Starter Pack** | Conforming implementation guidance | `START_HERE.md`, `adoption/ADOPTION_STARTER_PACK.md` |
-| **Executable Reference Layer** | Replaceable executable proof/reference implementation | `reference/protocols/*_protocol.json`, validators, fixtures, reference loops, integrity workflows |
-| **Supporting explanatory/governance content** | Rationale and durable acceptance state | `docs/SYSTEM_RATIONALE.md`, Part 1 Authority Decision |
+| **Canonical Core** | Normative system semantics | [Contract](canonical/CONTRACT.md), [Level 1 domains](canonical/level-1/), [Decision Records](canonical/decisions/dr/), [ADRs](canonical/decisions/adr/) |
+| **Adoption Starter Pack** | Conforming implementation guidance | [START HERE](START_HERE.md), [Adoption Starter Pack](adoption/ADOPTION_STARTER_PACK.md) |
+| **Executable Reference Layer** | Replaceable executable proof/reference implementation | [protocols](reference/protocols/), [validators](reference/validators/), [fixtures](reference/fixtures/), [reference loops](reference/loops/), [integrity workflows](.github/workflows/) |
+| **Supporting explanatory/governance content** | Rationale and durable acceptance state | [System Rationale](docs/SYSTEM_RATIONALE.md), [Part 1 Authority Decision](canonical/governance/part1_acceptance_authority_decision_20260824.json) |
 
 Lower layers cannot override higher Canonical authority.
 
@@ -82,7 +83,7 @@ The current repository representation of accepted Part 1 is based on:
 - current distribution contents: `174` artifacts;
 - Proof A–O: complete, including clean-room adoption, independent whole-system review, and Human Owner acceptance.
 
-The historical release ID/version retain their candidate-era labels. Current acceptance is established by the release manifest plus the durable Human Owner Authority Decision record.
+The historical release ID/version retain their candidate-era labels. Current acceptance is established by the [release manifest](canonical_ae_release_manifest.json) plus the durable [Human Owner Authority Decision](canonical/governance/part1_acceptance_authority_decision_20260824.json).
 
 ## Adoption boundary
 
@@ -105,7 +106,7 @@ A future Portal can be a separate product that consumes or is engineered through
 
 ## Repository organization note
 
-The live revision-4 representation organizes Canonical, adoption, reference, tooling, and explanatory material into dedicated directories. Historical revision 3 preserves the accepted flat-path representation and exact payload hash. The reorganization changes navigation/path representation only; it does not redefine Canonical architecture or Part 1 semantics.
+The live revision-4 representation organizes Canonical, adoption, reference, tooling, and explanatory material into dedicated directories. **`level-1/` means Level 1**; its A–L folders are semantic domains, not Contract clause numbers or runtime stages. Historical revision 3 preserves the accepted flat-path representation and exact payload hash. The reorganization changes navigation/path representation only; it does not redefine Canonical architecture or Part 1 semantics.
 
 ## Repository governance follow-on
 
