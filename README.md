@@ -65,7 +65,7 @@ The exact release manifest controls distribution membership and authority classi
 
 | Layer | Purpose | Typical files |
 |---|---|---|
-| **Canonical Core** | Normative system semantics | `canonical/CONTRACT.md`, `canonical/l1/*/L1-*.md`, `canonical/decisions/dr/DR-*.md`, `Acanonical/decisions/dr/DR-*.md` |
+| **Canonical Core** | Normative system semantics | `canonical/CONTRACT.md`, `canonical/level-1/*/L1-*.md`, `canonical/decisions/dr/DR-*.md`, `Acanonical/decisions/dr/DR-*.md` |
 | **Adoption Starter Pack** | Conforming implementation guidance | `START_HERE.md`, `adoption/ADOPTION_STARTER_PACK.md` |
 | **Executable Reference Layer** | Replaceable executable proof/reference implementation | `reference/protocols/*_protocol.json`, validators, fixtures, reference loops, integrity workflows |
 | **Supporting explanatory/governance content** | Rationale and durable acceptance state | `docs/SYSTEM_RATIONALE.md`, Part 1 Authority Decision |

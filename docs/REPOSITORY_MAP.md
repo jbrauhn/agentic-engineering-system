@@ -14,7 +14,7 @@ Read in this order:
 1. [`../START_HERE.md`](../START_HERE.md)
 2. [`../docs/SYSTEM_RATIONALE.md`](../docs/SYSTEM_RATIONALE.md)
 3. [`../canonical/CONTRACT.md`](../canonical/CONTRACT.md)
-4. the applicable `canonical/l1/*/L1-*.md` semantic artifacts
+4. the applicable `canonical/level-1/*/L1-*.md` semantic artifacts
 5. supporting `canonical/decisions/dr/DR-*.md` and `Acanonical/decisions/dr/DR-*.md` records when you need the decision history or machine-reference rationale.
 
 ### I want to adopt AE in an organization
@@ -29,7 +29,7 @@ Read in this order:
 
 1. [`../canonical/CONTRACT.md`](../canonical/CONTRACT.md)
 2. exact current release manifest
-3. affected `canonical/l1/*/L1-*.md` artifacts
+3. affected `canonical/level-1/*/L1-*.md` artifacts
 4. relevant `canonical/decisions/dr/DR-*.md` / `Acanonical/decisions/dr/DR-*.md`
 5. affected machine-readable protocol/scenario files and integrity validators
 6. applicable GitHub Actions integrity workflow.

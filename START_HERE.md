@@ -18,7 +18,7 @@ Authority flows from:
 
 1. `canonical/CONTRACT.md`;
 2. approved Decision Records / ADRs within their scope;
-3. Human semantic `canonical/l1/*/L1-*.md` artifacts.
+3. Human semantic `canonical/level-1/*/L1-*.md` artifacts.
 
 Human governance decisions such as Part 1 acceptance are represented by applicable durable Authority Decision records. Starter templates and executable/reference artifacts must conform to Canonical semantics and cannot override them. The Field Guide and generated views are explanatory, not Canonical authority.
 
@@ -57,7 +57,7 @@ An organization-specific implementation is **Candidate** until independent adopt
 - `docs/SYSTEM_RATIONALE.md` — concise evolution/rationale navigation and current-state clarification.
 - `canonical/decisions/dr/DR-*.md` / `Acanonical/decisions/dr/DR-*.md` — authoritative detailed decision history.
 - `canonical/governance/part1_acceptance_authority_decision_20260824.json` — durable Human Owner Part 1 acceptance Authority Decision.
-- `canonical/l1/K/L1-K_EXPERIMENT_MODEL.md` / Learning semantics — experiment/learning model.
+- `canonical/level-1/K/L1-K_EXPERIMENT_MODEL.md` / Learning semantics — experiment/learning model.
 
 ## Implementation-team first actions
 
