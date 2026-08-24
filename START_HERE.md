@@ -1,70 +1,76 @@
 # START HERE — Canonical Agentic Engineering System
 
-## What is AE?
+The **Agentic Engineering System (AE)** is a portable, governed socio-technical engineering system for Human–AI engineering. It defines how intent moves through Contract, architecture-aware Planning, bounded Execution, Evidence, independent Validation, and Learning while preserving Human Decision Authority and engineering discipline.
 
-The **Agentic Engineering System** is a portable, governed socio-technical engineering system for Human–AI engineering. It defines how intent moves through Contract, architecture-aware Planning, bounded Execution, Evidence, independent Validation, and Learning while preserving Human Decision Authority and engineering discipline.
+## 1. Confirm the release
 
-## What release is this?
+Start with the **[Canonical AE Release Manifest](canonical_ae_release_manifest.json)**. It identifies the exact Part 1 release representation, distribution revision, authority layers, and distribution selectors.
 
-Read `canonical_ae_release_manifest.json` first. It identifies the exact Part 1 release representation and classifies distribution content by authority.
+Part 1 has been accepted by the Human Owner. The durable decision is **[Part 1 Acceptance Authority Decision](canonical/governance/part1_acceptance_authority_decision_20260824.json)**. The historical release ID/version retain their candidate-era labels; the manifest's current `release_status` plus the Authority Decision establish the accepted state.
 
-**Part 1 has been accepted by the Human Owner.** The Human Decision is durably recorded in `canonical/governance/part1_acceptance_authority_decision_20260824.json` against the exact accepted source/payload basis. The historical release ID/version retain their candidate-era labels; the manifest's current `release_status` and the Authority Decision record establish the accepted state.
+The current repository representation is **distribution revision 4**. Revision 4 reorganizes repository paths for human/agent navigation; it does not redefine Canonical Core semantics or replace the exact Human-accepted revision-2 basis.
 
-Distribution revision 3 records that accepted state and current release-facing wording without changing Canonical Core semantics. Part 1 acceptance is not external certification, and it does not make any organization-specific implementation automatically Conforming.
+## 2. Understand what is authoritative
 
-## What is authoritative?
+Read these in order:
 
-Authority flows from:
+1. **[Contract](canonical/CONTRACT.md)** — governing Goal / Spec / Proof and Part 1 acceptance boundary.
+2. **[Level 1 Canonical domains](canonical/level-1/)** — human-readable Canonical semantics, organized as L1-A through L1-L.
+3. **[Decision Records](canonical/decisions/dr/)** — durable Canonical design decisions and rationale within their scope.
+4. **[Architecture Decision Records](canonical/decisions/adr/)** — machine-readable/reference architecture decisions; selected technologies do not become Canonical merely because an ADR uses them.
 
-1. `canonical/CONTRACT.md`;
-2. approved Decision Records / ADRs within their scope;
-3. Human semantic `canonical/level-1/*/L1-*.md` artifacts.
+The letters **A–L are Level 1 semantic design domains**, not Contract clause numbers and not sequential runtime stages. For a topic-by-topic map, use the **[Repository Map](docs/REPOSITORY_MAP.md)**.
 
-Human governance decisions such as Part 1 acceptance are represented by applicable durable Authority Decision records. Starter templates and executable/reference artifacts must conform to Canonical semantics and cannot override them. The Field Guide and generated views are explanatory, not Canonical authority.
+For explanatory context, read **[System Rationale](docs/SYSTEM_RATIONALE.md)**. It is useful orientation, but it is not a substitute for Canonical authority.
 
-## What is Starter/template/guidance?
+## 3. If you are adopting AE in an organization
 
-Use `adoption/ADOPTION_STARTER_PACK.md` to establish the organization/product inputs and derive a normal organization-specific `Plan [A1]`.
+Use the **[Adoption Starter Pack](adoption/ADOPTION_STARTER_PACK.md)** to establish organization/product inputs and derive a normal organization-specific `Plan [A1]`.
 
-## What is reference/example only?
+The most useful Canonical areas during adoption are:
 
-JSON protocols, Python validators, GitHub Actions workflows, synthetic fixtures, reference loops, clean-room harnesses and provider examples demonstrate one conforming implementation approach. Their technology choices are replaceable.
+- **[L1-E — Capabilities and OEB](canonical/level-1/E/)** — Canonical capability contracts, bindings, readiness, gaps, and organization engineering baseline semantics.
+- **[Ten Canonical Capability Contracts](canonical/level-1/E/L1-E_TEN_CANONICAL_CAPABILITY_CONTRACTS.md)** — the ten capability families every implementation must account for.
+- **[L1-F — Authority, Policy, and Enforcement](canonical/level-1/F/)** — identity, entitlement, Operational Authority, Decision Authority, policy evaluation, and enforcement.
+- **[L1-G — Knowledge, Context, Memory, and Bootstrap](canonical/level-1/G/)** — context reconstruction, durable state, handoff, and environment-independent bootstrap.
+- **[L1-H — Planning and Execution Coordination](canonical/level-1/H/)** — Plan semantics, progressive elaboration, readiness, work topology, and execution coordination.
+- **[L1-I — Evidence and Validation](canonical/level-1/I/)** — evidence sufficiency and independent Validation.
+- **[L1-J — Standards and Engineering Health](canonical/level-1/J/)** — standards applicability and Engineering Health Findings, kept distinct from Capability gaps.
+- **[L1-L — Adoption, Distribution, and Conformance](canonical/level-1/L/)** — adoption, interface parity, bootstrap, release distribution, and Validation-backed conformance.
 
-## What baseline must I supply?
+At minimum, an adopter must be able to resolve the exact OEB revision, Product/System Profile and Baseline where applicable, capability/provider environment, identity/entitlement/authority/policy context, standards context, architecture expectations, context/knowledge sources, Evidence/Validation expectations, and material constraints or known engineering conditions.
 
-At minimum, establish or supply enough information to resolve:
+## 4. Reference implementation and executable proof
 
-- OEB exact revision;
-- Product/System Profile and Baseline where applicable;
-- organization technology/capability environment;
-- identity, entitlement, authority and policy context;
-- standards/practices context;
-- architecture expectations;
-- context/knowledge sources;
-- Evidence/Validation expectations;
-- material constraints and known engineering conditions.
+Reference artifacts demonstrate one conforming implementation approach; they do **not** override the Canonical Core.
 
-## How do I derive an implementation Plan?
+- **[Protocols](reference/protocols/)** — machine-readable protocol/reference models.
+- **[Canonical Capability Contracts — machine-readable reference](reference/protocols/capability_contracts.json)**.
+- **[Scenarios](reference/scenarios/)** — positive and negative semantic fixtures.
+- **[Fixtures](reference/fixtures/)** — portability, synthetic organization, and clean-room inputs used by the reference layer.
+- **[Reference loops](reference/loops/reference_ae_loops.json)** — integrated happy-path, backward-route, and remediation examples.
+- **[Validators](reference/validators/)** — machine-verifiable integrity checks.
+- **[Integrity workflows](.github/workflows/)** — CI execution of the integrity domains.
+- **[Distribution assembler](tools/assemble_distribution.py)** — assembles the versioned distribution selected by the manifest.
+- **[Clean-room adoption harness](tools/clean-room/run_clean_room_adoption.py)** — reference clean-room adoption execution.
 
-Use the Starter Pack sections to map Canonical Capability Contracts to organization providers/access paths, identify capability and Engineering Health gaps separately, define authority/interface/context readiness, and produce a normal reviewed `Plan [A1]` with Evidence and adoption Validation strategy.
+The reference layer is replaceable. GitHub, Python, JSON, and these specific workflow mechanisms are not required Canonical AE technologies.
 
-## How do I prove adoption/conformance?
+## 5. How adoption/conformance is proven
 
-An organization-specific implementation is **Candidate** until independent adoption Validation evaluates the exact release, declared scope, exact OEB/Product/Profile/Binding revisions and sufficient Evidence. Provider installation success or a manual `conforming=true` flag is not conformance.
+An organization-specific AE implementation begins **Candidate**. It becomes Conforming only when independent adoption Validation evaluates the exact Canonical release, declared scope, exact governing revisions, implemented capability bindings, authority/policy/enforcement, and sufficient Evidence.
 
-## Where are rationale, decisions, experiments and learning?
+Provider installation success, a green CI job, or a manually asserted `conforming=true` value is not conformance.
 
-- `docs/SYSTEM_RATIONALE.md` — concise evolution/rationale navigation and current-state clarification.
-- `canonical/decisions/dr/DR-*.md` / `Acanonical/decisions/dr/DR-*.md` — authoritative detailed decision history.
-- `canonical/governance/part1_acceptance_authority_decision_20260824.json` — durable Human Owner Part 1 acceptance Authority Decision.
-- `canonical/level-1/K/L1-K_EXPERIMENT_MODEL.md` / Learning semantics — experiment/learning model.
+## 6. First actions
 
-## Implementation-team first actions
+1. **[Verify the release manifest](canonical_ae_release_manifest.json)** and the inventory produced by the **[distribution assembler](tools/assemble_distribution.py)**.
+2. Read the **[Contract](canonical/CONTRACT.md)** and browse the **[Level 1 domains](canonical/level-1/)**.
+3. Use the **[Adoption Starter Pack](adoption/ADOPTION_STARTER_PACK.md)** against the organization's exact OEB/Product baseline.
+4. Map all **[ten Canonical capability families](canonical/level-1/E/L1-E_TEN_CANONICAL_CAPABILITY_CONTRACTS.md)** to real providers, agent-accessible operations, entitlements, authority, and enforcement.
+5. Resolve bootstrap/context using **[L1-G](canonical/level-1/G/)** and interface/adoption requirements using **[L1-L](canonical/level-1/L/)**.
+6. Derive and independently review the normal implementation Plan using **[L1-H](canonical/level-1/H/)** and define Evidence/Validation using **[L1-I](canonical/level-1/I/)**.
+7. Keep **Capability gaps** and **Engineering Health Findings** separate using **[L1-E](canonical/level-1/E/)** and **[L1-J](canonical/level-1/J/)**.
+8. Use the **[reference layer](reference/)** and **[integrity workflows](.github/workflows/)** as executable proof/examples, then obtain independent installation/adoption Validation for the organization-specific implementation.
 
-1. Verify the release manifest/inventory.
-2. Read the Contract and this START HERE.
-3. Instantiate the Starter Pack against your OEB/Product baseline.
-4. Resolve bootstrap/interface access from your normal engineering environments.
-5. Derive and independently review the normal implementation Plan.
-6. Implement bindings/gaps using governed AE work.
-7. Run reference/adoption Proof and independent installation Validation.
+If you are unsure where a topic lives, use the **[Repository Map](docs/REPOSITORY_MAP.md)**.
