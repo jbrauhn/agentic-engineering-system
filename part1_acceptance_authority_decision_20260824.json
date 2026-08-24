@@ -1,0 +1,57 @@
+{
+  "canonical_type": "Authority Decision",
+  "semantic_category": "A2",
+  "record_id": "AUTHDEC-PART1-ACCEPTANCE-20260824",
+  "record_status": "ISSUED_IMMUTABLE",
+  "decision_class": "PART1_SYSTEM_ACCEPTANCE_PROOF_O",
+  "actor": {
+    "role": "Human Owner",
+    "kind": "HUMAN"
+  },
+  "decision_authority": {
+    "status": "PERMIT",
+    "basis": [
+      "CONTRACT.md Part 1 Proof O Human Owner acceptance gate",
+      "L1-L_ADOPTION_DISTRIBUTION_CONFORMANCE_MODEL.md Human Owner acceptance boundary"
+    ]
+  },
+  "decision": "ACCEPT",
+  "decision_time": {
+    "reported": "2026-08-24T07:32:00-04:00",
+    "precision": "approximately 07:32 America/New_York as recorded at the Human Owner decision"
+  },
+  "exact_target": {
+    "repository": "jbrauhn/agentic-engineering-system",
+    "accepted_source_commit": "6c2424d5aea415819b276dfc6988aa9f964c6e62",
+    "canonical_release_id": "CAE-P1-CANDIDATE-2026-08-23",
+    "release_version": "part1-candidate-2026.08.23",
+    "accepted_distribution_revision": 2,
+    "accepted_transport_artifact": "Canonical_AE_Part1_Candidate_2026-08-23_rev2.tar.gz",
+    "accepted_transport_sha256": "24131b15f6e960afa5463418bbf99c321c68eae01606aadd44e5dbb9df46887e",
+    "contract_version": "v1.0",
+    "scope": "Canonical AE System Part 1 Proof A-O"
+  },
+  "proof_disposition": {
+    "proof_A_through_N": "COMPLETE_PASS",
+    "proof_O": "SATISFIED_BY_HUMAN_OWNER_ACCEPTANCE"
+  },
+  "decision_effect": {
+    "part1_accepted": true,
+    "release_status_projection": "HUMAN_OWNER_ACCEPTED",
+    "organization_implementation_conformance_unchanged": true,
+    "external_certification_claim": false
+  },
+  "known_non_blocking_follow_ons": [
+    {
+      "reference": "GitHub issue #12",
+      "state_at_decision": "OPEN",
+      "meaning": "repository required-check enforcement follow-on; explicitly not a Part 1 acceptance blocker"
+    }
+  ],
+  "provenance": {
+    "decision_origin": "Direct Human Owner response: Accept.",
+    "recording_rule": "This record represents the already-issued Human decision; it does not create that authority or decision.",
+    "accepted_basis_preserved": true,
+    "prior_candidate_history_rewritten": false
+  }
+}
