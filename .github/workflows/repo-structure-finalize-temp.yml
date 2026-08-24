@@ -155,18 +155,95 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python reference/validators/validate_lifecycle.py
-          python reference/validators/validate_contract_change_gate.py
-          python reference/validators/validate_capabilities.py
-          python reference/validators/validate_authority.py
-          python reference/validators/validate_context.py
-          python reference/validators/validate_planning_execution.py
-          python reference/validators/validate_validation.py
-          python reference/validators/validate_standards_health.py
-          python reference/validators/validate_observability_learning.py
-          python reference/validators/validate_adoption.py
-          rm -rf /tmp/ae-rev4
+          python reference/validators/validate_lifecycle.py \
+            reference/protocols/lifecycle_protocol.json \
+            reference/scenarios/lifecycle_scenarios.json
+          python reference/validators/validate_contract_change_gate.py \
+            reference/protocols/lifecycle_protocol.json \
+            reference/scenarios/contract_change_gate_scenarios.json
+          python reference/validators/validate_capabilities.py \
+            reference/protocols/capability_contracts.json \
+            reference/scenarios/capability_scenarios.json \
+            reference/fixtures/oeb_fixtures.json
+          python reference/validators/validate_authority.py \
+            reference/protocols/authority_protocol.json \
+            reference/scenarios/authority_scenarios.json \
+            reference/fixtures/authority_portability_fixtures.json \
+            reference/protocols/capability_contracts.json \
+            reference/protocols/lifecycle_protocol.json
+          python reference/validators/validate_context.py \
+            reference/protocols/context_protocol.json \
+            reference/scenarios/context_scenarios.json \
+            reference/fixtures/context_portability_fixtures.json \
+            reference/protocols/capability_contracts.json \
+            reference/protocols/lifecycle_protocol.json \
+            reference/protocols/authority_protocol.json
+          python reference/validators/validate_planning_execution.py \
+            reference/protocols/planning_execution_protocol.json \
+            reference/scenarios/planning_execution_scenarios.json \
+            reference/fixtures/planning_execution_portability_fixtures.json \
+            reference/protocols/lifecycle_protocol.json \
+            reference/protocols/capability_contracts.json \
+            reference/protocols/authority_protocol.json \
+            reference/protocols/context_protocol.json
+          python reference/validators/validate_validation.py \
+            reference/protocols/validation_protocol.json \
+            reference/scenarios/validation_scenarios.json \
+            reference/fixtures/validation_portability_fixtures.json \
+            reference/protocols/lifecycle_protocol.json \
+            reference/protocols/capability_contracts.json \
+            reference/protocols/authority_protocol.json \
+            reference/protocols/context_protocol.json \
+            reference/protocols/planning_execution_protocol.json
+          python reference/validators/validate_standards_health.py \
+            reference/protocols/standards_health_protocol.json \
+            reference/scenarios/standards_health_scenarios.json \
+            reference/fixtures/standards_health_portability_fixtures.json \
+            reference/protocols/lifecycle_protocol.json \
+            reference/protocols/capability_contracts.json \
+            reference/protocols/authority_protocol.json \
+            reference/protocols/context_protocol.json \
+            reference/protocols/planning_execution_protocol.json \
+            reference/protocols/validation_protocol.json
+          python reference/validators/validate_observability_learning.py \
+            reference/protocols/observability_learning_protocol.json \
+            reference/scenarios/observability_learning_scenarios.json \
+            reference/fixtures/observability_learning_portability_fixtures.json \
+            reference/protocols/lifecycle_protocol.json \
+            reference/protocols/capability_contracts.json \
+            reference/protocols/authority_protocol.json \
+            reference/protocols/context_protocol.json \
+            reference/protocols/planning_execution_protocol.json \
+            reference/protocols/validation_protocol.json \
+            reference/protocols/standards_health_protocol.json
+
+          rm -rf /tmp/ae-rev4 /tmp/clean-room-input /tmp/clean-room-run
           python tools/assemble_distribution.py --repo . --output /tmp/ae-rev4
+          mkdir -p /tmp/clean-room-input /tmp/clean-room-run
+          cp reference/fixtures/clean_room_adoption_baseline.json /tmp/clean-room-input/supplied_baseline.json
+          cd /tmp/clean-room-run
+          python /tmp/ae-rev4/tools/clean-room/run_clean_room_adoption.py \
+            --distribution /tmp/ae-rev4 \
+            --baseline /tmp/clean-room-input/supplied_baseline.json \
+            --output /tmp/clean-room-plan.json
+          cd "$GITHUB_WORKSPACE"
+          python reference/validators/validate_adoption.py \
+            reference/protocols/adoption_distribution_protocol.json \
+            reference/scenarios/adoption_scenarios.json \
+            reference/fixtures/adoption_portability_fixtures.json \
+            canonical_ae_release_manifest.json \
+            reference/fixtures/synthetic_organization_fixture.json \
+            reference/loops/reference_ae_loops.json \
+            /tmp/clean-room-plan.json \
+            reference/fixtures/clean_room_adoption_baseline.json \
+            /tmp/ae-rev4 \
+            reference/protocols/context_protocol.json \
+            reference/protocols/capability_contracts.json \
+            reference/protocols/authority_protocol.json \
+            reference/protocols/lifecycle_protocol.json \
+            reference/protocols/validation_protocol.json \
+            reference/protocols/standards_health_protocol.json \
+            reference/protocols/observability_learning_protocol.json
           python - <<'PY'
           import json
           from pathlib import Path
@@ -174,6 +251,7 @@ jobs:
           i=json.loads(Path('/tmp/ae-rev4/RELEASE_INVENTORY.json').read_text())
           assert m['distribution_revision']==4
           assert m['release_status']=='HUMAN_OWNER_ACCEPTED'
+          assert m['acceptance']['accepted_basis']['distribution_revision']==2
           assert len(i['artifacts'])==174, len(i['artifacts'])
           assert not Path('/tmp/ae-rev4/reference/fixtures/clean_room_adoption_baseline.json').exists()
           print('rev4 finalizer validation PASS: 174 artifacts')
