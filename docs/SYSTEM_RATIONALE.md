@@ -18,9 +18,15 @@ Agentic Engineering aims to obtain substantial leverage from capable AI agents w
 
 ## Current Part 1 state
 
-Part 1 has been accepted by the Human Owner against the exact revision-2 acceptance basis recorded in `canonical/governance/part1_acceptance_authority_decision_20260824.json`. Distribution revision 3 records that accepted state and current release-facing wording; it does not change Canonical Core semantics or erase the prior candidate history.
+Part 1 has been accepted by the Human Owner against the exact revision-2 acceptance basis recorded in `canonical/governance/part1_acceptance_authority_decision_20260824.json`.
 
-The historical release ID/version retain their candidate-era labels for continuity. Current release status is determined by the Canonical AE Release Manifest together with the Human Owner Authority Decision record.
+Later distribution revisions preserve that acceptance history rather than silently rebasing it:
+
+- revision 3 recorded the accepted release-facing state;
+- revision 4 reorganized repository/distribution paths for human and agent navigation;
+- revision 5 hardens the GitHub executable/reference implementation so all nine integrity workflows are consistently present on pull requests and rerun on pushes to `main`.
+
+Revisions 3–5 do not change Canonical Core semantics or replace the exact Human-accepted revision-2 basis. The historical release ID/version retain their candidate-era labels for continuity. Current release status is determined by the Canonical AE Release Manifest together with the Human Owner Authority Decision record.
 
 ## Evolution
 
@@ -47,4 +53,8 @@ This page is a Human-readable rationale/navigation view. `canonical/CONTRACT.md`
 
 ## Open experiments and follow-ons
 
-Previously recorded experiments such as governed AE vs lighter baselines, model placement, and ASD-STE100 remain experiments rather than predetermined conclusions. Repository required-check enforcement remains a separate follow-on tracked by issue #12; it does not redefine Canonical AE semantics or invalidate the issued Part 1 Human Owner acceptance.
+Previously recorded experiments such as governed AE vs lighter baselines, model placement, and ASD-STE100 remain experiments rather than predetermined conclusions.
+
+A 2026-08-24 repository audit found that some inherited experiment/decision history is referenced but not yet discoverable in the repository: accepted L1-K material names DR-102, DR-103, and DR-104 as open experiments, while those exact records are absent. Issue #2 now tracks recovery/reconciliation of the historical Decision Register and Experiments / Results Ledger. Missing records must not be reconstructed from memory or inference.
+
+Repository required-check enforcement remains a separate follow-on tracked by issue #12. Revision 5 makes the nine GitHub check jobs consistently available on PRs and `main` pushes, but GitHub branch/ruleset protection must still require them and a failing-check merge-block test must still be demonstrated before enforcement can be claimed.

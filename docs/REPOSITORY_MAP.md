@@ -1,6 +1,6 @@
 # Repository Map
 
-**Current physical representation:** distribution revision 4. Historical revision 3 preserves the prior flat-root layout.
+**Current distribution representation:** revision 5. Revision 4 introduced the organized path layout; revision 3 preserves the prior flat-root representation.
 
 This page is a human/agent navigation aid for the Canonical Agentic Engineering repository. It does **not** redefine release authority or Canonical semantics. The **[release manifest](../canonical_ae_release_manifest.json)** remains authoritative for distribution membership and layer classification.
 
@@ -32,6 +32,7 @@ Read in this order:
 4. relevant **[Decision Records](../canonical/decisions/dr/)** / **[ADRs](../canonical/decisions/adr/)**
 5. affected **[protocols](../reference/protocols/)**, **[scenarios](../reference/scenarios/)**, and **[validators](../reference/validators/)**
 6. applicable **[integrity workflow](../.github/workflows/)**.
+7. **[Repository contribution rules](../.github/CONTRIBUTING.md)** for branch, PR, Evidence, Validation, release-impact, and cleanup expectations.
 
 ## File families
 
@@ -67,6 +68,8 @@ Part 1 Goal / Spec / Proof and the governing acceptance boundary.
 - **[canonical/decisions/dr/](../canonical/decisions/dr/)**
 
 Durable Canonical design decisions and rationale. Read these when you need to understand why a semantic choice exists or what decision superseded an earlier assumption.
+
+**Known evolution-traceability debt:** issue #2 tracks missing consolidated Decision Register / Experiments ledger coverage and inherited references such as DR-102/103/104 that are named by accepted artifacts but not yet recoverable from this repository. Do not invent those records from memory.
 
 ### Architecture Decision Records
 
@@ -105,7 +108,7 @@ These exercise integrity, portability, adoption, and distribution behavior. Pass
 
 Nine integrity domains currently exist: lifecycle; capability; authority; context; Planning/Execution; Validation; standards/Engineering Health; observability/Learning; and adoption.
 
-Issue #12 tracks actual repository merge-gate enforcement. The workflows exist and function; they are not yet proven as branch-protection-enforced gates.
+Revision 5 configures all nine to run on every pull request and every push to `main`, giving a stable check set for repository protection and a post-push detection backstop. Issue #12 remains open until GitHub actually enforces those checks before merge and a failing-check block test is demonstrated.
 
 ## Authority versus convenience
 
@@ -113,7 +116,10 @@ Do not infer authority from file extension, folder depth, alphabetical order, ma
 
 ## Representation history
 
-Part 1 was originally accepted with a flat root representation. Distribution revision 4 reorganizes those artifacts for navigation while preserving the historical accepted basis and byte-identical Canonical Contract/L1/DR/ADR content. The representation change updates release selectors, internal references, workflow paths, and executable tooling as required and is revalidated before merge.
+- **Revision 2:** exact Human-accepted basis.
+- **Revision 3:** acceptance finalization / release-facing representation.
+- **Revision 4:** path reorganization for human/agent navigation; Contract/L1/DR/ADR content remained byte-identical.
+- **Revision 5:** repository/executable-reference hardening so all nine integrity suites are consistently present on PRs and rerun on `main` pushes; no Canonical Core semantic change.
 
 ## Current physical layout
 
@@ -146,6 +152,8 @@ Part 1 was originally accepted with a flat root representation. Distribution rev
 │   └── clean-room/
 ├── docs/
 └── .github/
+    ├── CONTRIBUTING.md
+    ├── pull_request_template.md
     └── workflows/
 ```
 

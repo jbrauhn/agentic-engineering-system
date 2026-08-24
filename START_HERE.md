@@ -8,7 +8,7 @@ Start with the **[Canonical AE Release Manifest](canonical_ae_release_manifest.j
 
 Part 1 has been accepted by the Human Owner. The durable decision is **[Part 1 Acceptance Authority Decision](canonical/governance/part1_acceptance_authority_decision_20260824.json)**. The historical release ID/version retain their candidate-era labels; the manifest's current `release_status` plus the Authority Decision establish the accepted state.
 
-The current repository representation is **distribution revision 4**. Revision 4 reorganizes repository paths for human/agent navigation; it does not redefine Canonical Core semantics or replace the exact Human-accepted revision-2 basis.
+The current repository representation is **distribution revision 5**. Revision 5 hardens the GitHub executable/reference implementation so all nine integrity workflows are present on every pull request and rerun on every push to `main`. Revision 4 introduced the organized repository paths. Neither revision changes Canonical Core semantics or replaces the exact Human-accepted revision-2 basis.
 
 ## 2. Understand what is authoritative
 

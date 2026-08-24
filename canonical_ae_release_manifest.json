@@ -3,7 +3,7 @@
   "semantic_category": "F",
   "release_id": "CAE-P1-CANDIDATE-2026-08-23",
   "release_version": "part1-candidate-2026.08.23",
-  "distribution_revision": 4,
+  "distribution_revision": 5,
   "release_status": "HUMAN_OWNER_ACCEPTED",
   "authority_statement": "Exact release/layer authority is identifiable from this manifest; lower layers cannot override Canonical Core. Artifact status and decision precedence still govern within the Core. Human Owner Part 1 acceptance is established by the referenced Authority Decision record, not by this status field alone.",
   "semantic_layers": {
@@ -83,15 +83,15 @@
       "proof_A_through_N": "COMPLETE_PASS"
     },
     "finalization": {
-      "current_distribution_revision": 4,
+      "current_distribution_revision": 5,
       "semantic_change": false,
-      "purpose": "Distribution revision 4 reorganizes repository and distribution artifact paths for navigation only. Canonical Core semantics and the exact Human-accepted revision-2 basis remain unchanged and reconstructable."
+      "purpose": "Distribution revision 5 hardens the GitHub executable/reference implementation by making all nine integrity workflows consistently present on every pull request and rerun on every push to main. Canonical Core semantics and the exact Human-accepted revision-2 basis remain unchanged and reconstructable."
     }
   },
   "evolution": {
     "supersedes": null,
     "silent_rebase_prohibited": true,
-    "compatibility_note": "Distribution revision 4 is a non-semantic repository/distribution path reorganization of the Human Owner-accepted Part 1 system. Revision 3 preserves the prior flat paths. The Human-accepted revision-2 basis and Proof O Authority Decision remain unchanged."
+    "compatibility_note": "Distribution revision 5 is a non-semantic executable/reference and repository-governance hardening of the Human Owner-accepted Part 1 system. Revision 4 preserves the organized path representation; revision 3 preserves the prior flat paths. The Human-accepted revision-2 basis and Proof O Authority Decision remain unchanged."
   },
   "technology_neutrality": {
     "repository_layout_required": false,

@@ -1,32 +1,19 @@
-# Repository representation revision 4 paths
+# Repository hardening revision 5
 name: Observability Learning Integrity
 
 on:
   pull_request:
-    paths:
-      - 'canonical/level-1/K/**'
-      - 'canonical/level-1/L/**'
-      - 'canonical/decisions/dr/DR-133-*'
-      - 'canonical/decisions/dr/DR-134-*'
-      - 'canonical/decisions/dr/DR-135-*'
-      - 'canonical/decisions/adr/ADR-009-*'
-      - 'reference/protocols/observability_learning_protocol.json'
-      - 'reference/scenarios/observability_learning_scenarios.json'
-      - 'reference/fixtures/observability_learning_portability_fixtures.json'
-      - 'reference/validators/validate_observability_learning.py'
-      - 'reference/protocols/lifecycle_protocol.json'
-      - 'reference/protocols/capability_contracts.json'
-      - 'reference/protocols/authority_protocol.json'
-      - 'reference/protocols/context_protocol.json'
-      - 'reference/protocols/planning_execution_protocol.json'
-      - 'reference/protocols/validation_protocol.json'
-      - 'reference/protocols/standards_health_protocol.json'
-      - 'reference/protocols/adoption_distribution_protocol.json'
-      - '.github/workflows/observability-learning-integrity.yml'
+    branches: [main]
+  push:
+    branches: [main]
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   observability-learning-integrity:
+    name: observability-learning-integrity
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
