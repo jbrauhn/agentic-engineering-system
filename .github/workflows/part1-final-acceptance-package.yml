@@ -24,7 +24,7 @@ jobs:
         run: |
           mkdir -p /tmp/acceptance-package
           tar --sort=name --mtime='UTC 2026-08-24 00:00:00' --owner=0 --group=0 --numeric-owner -cf - -C /tmp ae-distribution | gzip -n > /tmp/acceptance-package/Canonical_AE_Part1_Candidate_2026-08-23_rev2.tar.gz
-          sha256sum /tmp/acceptance-package/Canonical_AE_Part1_Candidate_2026-08-23_rev2.tar.gz > /tmp/acceptance-package/SHA256SUMS.txt
+          (cd /tmp/acceptance-package && sha256sum Canonical_AE_Part1_Candidate_2026-08-23_rev2.tar.gz > SHA256SUMS.txt)
           cp /tmp/ae-distribution/RELEASE_INVENTORY.json /tmp/acceptance-package/RELEASE_INVENTORY.json
           cp canonical_ae_release_manifest.json /tmp/acceptance-package/canonical_ae_release_manifest.json
           printf 'source_commit=%s\n' "$GITHUB_SHA" > /tmp/acceptance-package/PACKAGE_METADATA.txt
