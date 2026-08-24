@@ -3,35 +3,67 @@
   "semantic_category": "F",
   "release_id": "CAE-P1-CANDIDATE-2026-08-23",
   "release_version": "part1-candidate-2026.08.23",
-  "distribution_revision": 3,
+  "distribution_revision": 4,
   "release_status": "HUMAN_OWNER_ACCEPTED",
   "authority_statement": "Exact release/layer authority is identifiable from this manifest; lower layers cannot override Canonical Core. Artifact status and decision precedence still govern within the Core. Human Owner Part 1 acceptance is established by the referenced Authority Decision record, not by this status field alone.",
   "semantic_layers": {
     "CANONICAL_CORE": {
       "authority": "NORMATIVE_WITH_ARTIFACT_STATUS_AND_PRECEDENCE",
-      "selectors": ["CONTRACT.md", "L1-*.md", "DR-*.md", "ADR-*.md"]
+      "selectors": [
+        "canonical/CONTRACT.md",
+        "canonical/l1/*/L1-*.md",
+        "canonical/decisions/dr/DR-*.md",
+        "canonical/decisions/adr/ADR-*.md"
+      ]
     },
     "ADOPTION_STARTER_PACK": {
       "authority": "CONFORMING_AID",
-      "selectors": ["START_HERE.md", "ADOPTION_STARTER_PACK.md"]
+      "selectors": [
+        "START_HERE.md",
+        "adoption/ADOPTION_STARTER_PACK.md"
+      ]
     },
     "EXECUTABLE_REFERENCE_LAYER": {
       "authority": "CONFORMING_REFERENCE_NON_NORMATIVE",
-      "selectors": ["*_protocol.json", "*_scenarios.json", "*_portability_fixtures.json", "capability_contracts.json", "validate_*.py", ".github/workflows/*-integrity.yml", "synthetic_organization_fixture.json", "reference_ae_loops.json", "run_clean_room_adoption.py", "assemble_distribution.py"]
+      "selectors": [
+        "reference/protocols/*_protocol.json",
+        "reference/scenarios/*_scenarios.json",
+        "reference/fixtures/*_portability_fixtures.json",
+        "reference/protocols/capability_contracts.json",
+        "reference/validators/validate_*.py",
+        ".github/workflows/*-integrity.yml",
+        "reference/fixtures/synthetic_organization_fixture.json",
+        "reference/loops/reference_ae_loops.json",
+        "tools/clean-room/run_clean_room_adoption.py",
+        "tools/assemble_distribution.py"
+      ]
     }
   },
   "supporting_content": {
     "SYSTEM_RATIONALE": {
       "authority": "CANONICAL_EXPLANATORY_NON_NORMATIVE",
-      "selectors": ["SYSTEM_RATIONALE.md"]
+      "selectors": [
+        "docs/SYSTEM_RATIONALE.md"
+      ]
     },
     "PART1_ACCEPTANCE_AUTHORITY_DECISION": {
       "authority": "AUTHORITATIVE_GOVERNANCE_RECORD_A2",
-      "selectors": ["part1_acceptance_authority_decision_20260824.json"]
+      "selectors": [
+        "canonical/governance/part1_acceptance_authority_decision_20260824.json"
+      ]
     }
   },
-  "external_supplied_adoption_inputs": ["OEB exact revision", "Product/System Profile and Baseline as applicable"],
-  "excluded_from_clean_room_distribution": ["clean_room_adoption_baseline.json", "prior conversation", "unpublished design context", "previous session memory", "relay handoff state"],
+  "external_supplied_adoption_inputs": [
+    "OEB exact revision",
+    "Product/System Profile and Baseline as applicable"
+  ],
+  "excluded_from_clean_room_distribution": [
+    "reference/fixtures/clean_room_adoption_baseline.json",
+    "prior conversation",
+    "unpublished design context",
+    "previous session memory",
+    "relay handoff state"
+  ],
   "integrity": {
     "canonical_requirement": "exact payload identity and provenance verifiable",
     "reference_mechanism": "SHA-256 per-artifact inventory generated at assembly",
@@ -51,15 +83,15 @@
       "proof_A_through_N": "COMPLETE_PASS"
     },
     "finalization": {
-      "current_distribution_revision": 3,
+      "current_distribution_revision": 4,
       "semantic_change": false,
-      "purpose": "Durably represent the Human Owner acceptance decision and current release-facing status while preserving the exact accepted revision-2 basis and prior candidate history."
+      "purpose": "Distribution revision 4 reorganizes repository and distribution artifact paths for navigation only. Canonical Core semantics and the exact Human-accepted revision-2 basis remain unchanged and reconstructable."
     }
   },
   "evolution": {
     "supersedes": null,
     "silent_rebase_prohibited": true,
-    "compatibility_note": "Distribution revision 3 records Human Owner acceptance of the exact revision-2 basis and updates current release-facing representation only. Canonical Core semantics are unchanged. The historical release ID/version retain their candidate-era labels; current acceptance status is determined by this manifest plus the Authority Decision record."
+    "compatibility_note": "Distribution revision 4 is a non-semantic repository/distribution path reorganization of the Human Owner-accepted Part 1 system. Revision 3 preserves the prior flat paths. The Human-accepted revision-2 basis and Proof O Authority Decision remain unchanged."
   },
   "technology_neutrality": {
     "repository_layout_required": false,

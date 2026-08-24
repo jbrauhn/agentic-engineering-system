@@ -224,7 +224,7 @@ def validate_portability(fixtures):
 
 def main():
     if len(sys.argv) != 10:
-        print("usage: validate_standards_health.py standards_health_protocol.json standards_health_scenarios.json standards_health_portability_fixtures.json lifecycle_protocol.json capability_contracts.json authority_protocol.json context_protocol.json planning_execution_protocol.json validation_protocol.json")
+        print("usage: reference/validators/validate_standards_health.py reference/protocols/standards_health_protocol.json reference/scenarios/standards_health_scenarios.json reference/fixtures/standards_health_portability_fixtures.json reference/protocols/lifecycle_protocol.json reference/protocols/capability_contracts.json reference/protocols/authority_protocol.json reference/protocols/context_protocol.json reference/protocols/planning_execution_protocol.json reference/protocols/validation_protocol.json")
         return 2
 
     protocol, fixtures, portability, lifecycle, capabilities, authority, context, planning, validation = [load(p) for p in sys.argv[1:]]

@@ -24,7 +24,7 @@ def main():
  roles={repo/'canonical_ae_release_manifest.json':'RELEASE_AUTHORITY'}
  for layer,info in manifest['semantic_layers'].items():
   for p in resolve(repo, info['selectors']):
-   if p.name=='clean_room_adoption_baseline.json': continue
+   if p.name=='reference/fixtures/clean_room_adoption_baseline.json': continue
    roles.setdefault(p,layer)
  for group,info in manifest.get('supporting_content',{}).items():
   for p in resolve(repo, info['selectors']): roles.setdefault(p,'SUPPORTING_'+group)

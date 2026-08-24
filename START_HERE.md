@@ -8,7 +8,7 @@ The **Agentic Engineering System** is a portable, governed socio-technical engin
 
 Read `canonical_ae_release_manifest.json` first. It identifies the exact Part 1 release representation and classifies distribution content by authority.
 
-**Part 1 has been accepted by the Human Owner.** The Human Decision is durably recorded in `part1_acceptance_authority_decision_20260824.json` against the exact accepted source/payload basis. The historical release ID/version retain their candidate-era labels; the manifest's current `release_status` and the Authority Decision record establish the accepted state.
+**Part 1 has been accepted by the Human Owner.** The Human Decision is durably recorded in `canonical/governance/part1_acceptance_authority_decision_20260824.json` against the exact accepted source/payload basis. The historical release ID/version retain their candidate-era labels; the manifest's current `release_status` and the Authority Decision record establish the accepted state.
 
 Distribution revision 3 records that accepted state and current release-facing wording without changing Canonical Core semantics. Part 1 acceptance is not external certification, and it does not make any organization-specific implementation automatically Conforming.
 
@@ -16,15 +16,15 @@ Distribution revision 3 records that accepted state and current release-facing w
 
 Authority flows from:
 
-1. `CONTRACT.md`;
+1. `canonical/CONTRACT.md`;
 2. approved Decision Records / ADRs within their scope;
-3. Human semantic `L1-*.md` artifacts.
+3. Human semantic `canonical/l1/*/L1-*.md` artifacts.
 
 Human governance decisions such as Part 1 acceptance are represented by applicable durable Authority Decision records. Starter templates and executable/reference artifacts must conform to Canonical semantics and cannot override them. The Field Guide and generated views are explanatory, not Canonical authority.
 
 ## What is Starter/template/guidance?
 
-Use `ADOPTION_STARTER_PACK.md` to establish the organization/product inputs and derive a normal organization-specific `Plan [A1]`.
+Use `adoption/ADOPTION_STARTER_PACK.md` to establish the organization/product inputs and derive a normal organization-specific `Plan [A1]`.
 
 ## What is reference/example only?
 
@@ -54,10 +54,10 @@ An organization-specific implementation is **Candidate** until independent adopt
 
 ## Where are rationale, decisions, experiments and learning?
 
-- `SYSTEM_RATIONALE.md` — concise evolution/rationale navigation and current-state clarification.
-- `DR-*.md` / `ADR-*.md` — authoritative detailed decision history.
-- `part1_acceptance_authority_decision_20260824.json` — durable Human Owner Part 1 acceptance Authority Decision.
-- `L1-K_EXPERIMENT_MODEL.md` / Learning semantics — experiment/learning model.
+- `docs/SYSTEM_RATIONALE.md` — concise evolution/rationale navigation and current-state clarification.
+- `canonical/decisions/dr/DR-*.md` / `Acanonical/decisions/dr/DR-*.md` — authoritative detailed decision history.
+- `canonical/governance/part1_acceptance_authority_decision_20260824.json` — durable Human Owner Part 1 acceptance Authority Decision.
+- `canonical/l1/K/L1-K_EXPERIMENT_MODEL.md` / Learning semantics — experiment/learning model.
 
 ## Implementation-team first actions
 

@@ -245,7 +245,7 @@ def portability_errors(fixtures):
 
 def main():
     if len(sys.argv) != 6:
-        print("usage: validate_authority.py authority_protocol.json authority_scenarios.json authority_portability_fixtures.json capability_contracts.json lifecycle_protocol.json")
+        print("usage: reference/validators/validate_authority.py reference/protocols/authority_protocol.json reference/scenarios/authority_scenarios.json reference/fixtures/authority_portability_fixtures.json reference/protocols/capability_contracts.json reference/protocols/lifecycle_protocol.json")
         return 2
     protocol, scenarios, portability, capabilities, lifecycle = map(load, sys.argv[1:])
     failures = structural_errors(protocol, capabilities, lifecycle)

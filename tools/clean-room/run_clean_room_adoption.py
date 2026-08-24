@@ -18,8 +18,8 @@ def main():
     # from the supplied baseline's list (which may itself be incomplete).
     manifest = json.loads((dist / 'canonical_ae_release_manifest.json').read_text())
     inventory = json.loads((dist / 'RELEASE_INVENTORY.json').read_text())
-    protocol = json.loads((dist / 'adoption_distribution_protocol.json').read_text())
-    capability_contracts = json.loads((dist / 'capability_contracts.json').read_text())
+    protocol = json.loads((dist / 'reference/protocols/adoption_distribution_protocol.json').read_text())
+    capability_contracts = json.loads((dist / 'reference/protocols/capability_contracts.json').read_text())
     baseline = json.loads(baseline_path.read_text())
 
     required_capabilities = [
@@ -40,7 +40,7 @@ def main():
                 'binding': None,
                 'impact': 'BLOCK',
                 'reasons': ['required Canonical capability family absent from supplied baseline'],
-                'requirement_source': 'capability_contracts.json'
+                'requirement_source': 'reference/protocols/capability_contracts.json'
             })
             continue
 
@@ -68,7 +68,7 @@ def main():
                 'binding': c['binding'],
                 'impact': impact,
                 'reasons': reasons,
-                'requirement_source': 'capability_contracts.json'
+                'requirement_source': 'reference/protocols/capability_contracts.json'
             })
 
     health = [
@@ -122,7 +122,7 @@ def main():
             'implementation_profile': baseline['implementation_profile']['revision']
         },
         'canonical_capability_coverage': {
-            'requirement_source': 'capability_contracts.json',
+            'requirement_source': 'reference/protocols/capability_contracts.json',
             'required_count': len(required_capabilities),
             'covered_count': len(covered_capabilities),
             'required_capabilities': [c['name'] for c in required_capabilities]
@@ -160,9 +160,9 @@ def main():
         ],
         'traceability': {
             'release_manifest': 'canonical_ae_release_manifest.json',
-            'capability_contracts': 'capability_contracts.json',
-            'starter': 'ADOPTION_STARTER_PACK.md',
-            'protocol': 'adoption_distribution_protocol.json'
+            'capability_contracts': 'reference/protocols/capability_contracts.json',
+            'starter': 'adoption/ADOPTION_STARTER_PACK.md',
+            'protocol': 'reference/protocols/adoption_distribution_protocol.json'
         },
         'rubric_claims': protocol['fresh_session_rubric']
     }

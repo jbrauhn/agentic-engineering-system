@@ -154,10 +154,10 @@ def verify_distribution(dist, manifest):
         h = hashlib.sha256(p.read_bytes()).hexdigest()
         if h != x['sha256']:
             e.append('digest mismatch ' + x['path'])
-    for req in ['START_HERE.md', 'ADOPTION_STARTER_PACK.md', 'SYSTEM_RATIONALE.md', 'CONTRACT.md', 'canonical_ae_release_manifest.json', 'capability_contracts.json']:
+    for req in ['START_HERE.md', 'adoption/ADOPTION_STARTER_PACK.md', 'docs/SYSTEM_RATIONALE.md', 'canonical/CONTRACT.md', 'canonical_ae_release_manifest.json', 'reference/protocols/capability_contracts.json']:
         if not (dist / req).exists():
             e.append('distribution required file missing ' + req)
-    if (dist / 'clean_room_adoption_baseline.json').exists():
+    if (dist / 'reference/fixtures/clean_room_adoption_baseline.json').exists():
         e.append('clean-room supplied baseline leaked into distribution')
     if any(x['path'].startswith('handoffs/') for x in inv['artifacts']):
         e.append('relay handoff state leaked into distribution')
@@ -205,7 +205,7 @@ def validate_capability_coverage(plan, capability_contracts):
         e.append('cleanroom omitted required capability family not explicit gap: ' + ', '.join(unclassified_omissions))
 
     coverage = plan.get('canonical_capability_coverage', {})
-    if coverage.get('requirement_source') != 'capability_contracts.json':
+    if coverage.get('requirement_source') != 'reference/protocols/capability_contracts.json':
         e.append('cleanroom capability requirement source is not canonical packaged capability semantics')
     if coverage.get('required_count') != len(required):
         e.append('cleanroom canonical capability required count mismatch')
@@ -310,7 +310,7 @@ def portability(f):
 if __name__ == '__main__':
     args = sys.argv[1:]
     if len(args) != 16:
-        print('usage: validate_adoption.py protocol scenarios portability manifest synthetic loops cleanplan baseline distribution context capability authority lifecycle validation standards observability')
+        print('usage: reference/validators/validate_adoption.py protocol scenarios portability manifest synthetic loops cleanplan baseline distribution context capability authority lifecycle validation standards observability')
         raise SystemExit(2)
 
     protocol, fixtures, port, manifest, synthetic, loops, plan, baseline = [load(x) for x in args[:8]]
